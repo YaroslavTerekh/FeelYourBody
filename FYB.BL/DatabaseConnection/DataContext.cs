@@ -1,4 +1,6 @@
 ﻿using FYB.Data.Entities;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -8,10 +10,8 @@ using System.Threading.Tasks;
 
 namespace FYB.BL.DatabaseConnection;
 
-public class DataContext : DbContext
+public class DataContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
 {
     public DataContext(DbContextOptions<DataContext> opts) : base(opts) { }
 
-
-    public DbSet<TestEntity> Tests { get; set; }
 }
