@@ -1,15 +1,26 @@
+using FluentValidation;
+using FYB.API.Middleware;
+using FYB.BL.Behaviors;
+using FYB.BL.Behaviors.Authentication.Registration;
 using FYB.BL.DatabaseConnection;
+using FYB.BL.Services;
 using FYB.Data.Entities;
+using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
+using System.Reflection;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+builder.Services.AddValidatorsFromAssemblies(AppDomain.CurrentDomain.GetAssemblies());
+builder.Services.AddMediatR(AppDomain.CurrentDomain.GetAssemblies());
+builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
 
+// Add services to the container.
 builder.Services.AddDataContext(builder.Configuration);
+builder.Services.AddCustomServices();
 
 // Add authentication
 builder.Services.AddIdentity<User, IdentityRole<Guid>>()
@@ -51,6 +62,8 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
+
+app.UseCustomExceptionHandler();
 
 app.MapControllers();
 
