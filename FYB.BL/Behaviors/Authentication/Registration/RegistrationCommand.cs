@@ -1,13 +1,13 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using MediatR;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FYB.Data.Entities;
+namespace FYB.BL.Behaviors.Authentication.Registration;
 
-public class User : IdentityUser<Guid>
+public class RegistrationCommand : IRequest
 {
     public string FirstName { get; set; }
 
@@ -15,7 +15,7 @@ public class User : IdentityUser<Guid>
 
     public string PhoneNumber { get; set; }
 
-    public DateTime RegisterDate { get; set; } = DateTime.UtcNow;
+    public string Email { get; set; }
 
-    public User() : base() { }
+    public string Password { get; set; }
 }
