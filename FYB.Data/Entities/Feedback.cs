@@ -10,6 +10,8 @@ public class Feedback : BaseEntity
 {
     public string FeedbackText { get; set; }
 
+    public string InstagramLink { get; set; }
+
     public Guid CoachingId { get; set; }
 
     public Coaching Coaching { get; set; }

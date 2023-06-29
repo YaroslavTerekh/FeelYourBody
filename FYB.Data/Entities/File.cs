@@ -13,4 +13,8 @@ public class AppFile : BaseEntity
     public string FileExtension { get; set; }
 
     public string FilePath { get; set; }
+
+    public Guid CoachingId { get; set; }
+
+    public Coaching Coaching { get; set; }
 }

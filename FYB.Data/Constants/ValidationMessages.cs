@@ -18,4 +18,11 @@ public static class ValidationMessages
 
     public const string WrongEmail = "Введіть коректний email";
     public const string EmailRequired = "Необхідно ввести email";
+
+    public const string FAQTooShort = "FAQ занадто коротке";
+    public const string FAQTooLong = "FAQ занадто довге";
+    public const string FAQRequired = "Необхідно ввести FAQ";
+    public const string FAQAnswerTooShort = "Відповідь на питання занадто коротка";
+    public const string FAQAnswerTooLong = "Відповідь на питання занадто довга";
+    public const string FAQAnswerRequired = "Необхідно ввести відповідь на питання";
 }

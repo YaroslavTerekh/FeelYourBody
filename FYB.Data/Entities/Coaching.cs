@@ -22,6 +22,10 @@ public class Coaching : BaseEntity
 
     public Food Food { get; set; }
 
+    public Guid CoachingPhotoId { get; set; }
+
+    public AppFile CoachingPhoto { get; set; }
+
     public List<CoachingVideo> Videos { get; set; } = new();
 
     public List<User> Users { get; set; } = new();
