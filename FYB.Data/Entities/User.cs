@@ -16,6 +16,4 @@ public class User : IdentityUser<Guid>
     public string PhoneNumber { get; set; }
 
     public DateTime RegisterDate { get; set; } = DateTime.UtcNow;
-
-    public User() : base() { }
 }

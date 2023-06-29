@@ -1,5 +1,6 @@
-﻿using FYB.BL.DatabaseConnection;
+﻿
 using FYB.BL.Exceptions;
+using FYB.Data.DbConnection;
 using FYB.Data.Entities;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
