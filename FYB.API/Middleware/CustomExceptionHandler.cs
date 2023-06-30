@@ -1,5 +1,7 @@
 ﻿using FluentValidation;
 using FYB.BL.Exceptions;
+using FYB.Data.Constants;
+using Microsoft.EntityFrameworkCore;
 using System.Net;
 using System.Text.Json;
 
@@ -39,6 +41,16 @@ public class CustomExceptionHandler
             case RegisterException registerException:
                 code = registerException.Code;
                 result = registerException.Errors.Select(e => e.Description).ToList();
+                break;
+
+            case NotFoundException notFoundException:
+                code = HttpStatusCode.NotFound;
+                result = notFoundException.Description;
+                break;
+
+            case DbUpdateException dbUpdateException:
+                code = HttpStatusCode.InternalServerError;
+                result = ErrorMessages.UnknownError;
                 break;
 
             case Exception defaultException:

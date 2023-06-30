@@ -14,6 +14,7 @@ public static class ServicesExtension
     public static IServiceCollection AddCustomServices(this IServiceCollection services)
     {
         services.AddTransient<IJWTService, JWTService>();
+        services.AddTransient<IFileService, FileService>();
 
         return services;
     }

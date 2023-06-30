@@ -1,13 +1,20 @@
-﻿using System;
+﻿using MediatR;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
-namespace FYB.Data.Entities;
+namespace FYB.BL.Behaviors.Admin.Coaches.ModifyCoach;
 
-public class Coach : BaseEntity
+public class ModifyCoachCommand : IRequest
 {
+    [JsonIgnore]
+    public Guid Id { get; set; }
+
+    public Guid AvatarId { get; set; }
+
     public string FirstName { get; set; }
 
     public string LastName { get; set; }
@@ -18,9 +25,5 @@ public class Coach : BaseEntity
 
     public DateTime BirthDate { get; set; }
 
-    public Guid AvatarId { get; set; }
-
-    public AppFile Avatar { get; set; }
-
-    public List<Coaching> Coachings { get; set; } = new();
+    public List<Guid> CoachingIds { get; set; }
 }

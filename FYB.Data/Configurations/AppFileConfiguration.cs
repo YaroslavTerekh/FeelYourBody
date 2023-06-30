@@ -15,6 +15,12 @@ public class AppFileConfiguration : IEntityTypeConfiguration<AppFile>
     {
         builder.HasOne(t => t.Coaching)
             .WithOne(t => t.CoachingPhoto)
+            .HasForeignKey<Coaching>(t => t.CoachingPhotoId)
+            .OnDelete(DeleteBehavior.NoAction);
+
+        builder.HasOne(t => t.Coach)
+            .WithOne(t => t.Avatar)
+            .HasForeignKey<Coach>(t => t.AvatarId)
             .OnDelete(DeleteBehavior.NoAction);
     }
 }

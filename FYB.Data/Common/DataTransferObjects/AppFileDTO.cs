@@ -4,21 +4,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FYB.Data.Entities;
+namespace FYB.Data.Common.DataTransferObjects;
 
-public class AppFile : BaseEntity
+public class AppFileDTO
 {
+    public Guid Id { get; set; } 
+
     public string FileName { get; set; }
 
     public string FileExtension { get; set; }
 
     public string FilePath { get; set; }
-
-    public Guid? CoachingId { get; set; }
-
-    public Coaching? Coaching { get; set; }
-
-    public Guid? CoachId { get; set; }
-
-    public Coach? Coach { get; set; }
 }

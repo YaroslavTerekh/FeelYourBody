@@ -9,5 +9,16 @@ namespace FYB.Data.Constants;
 public static class ErrorMessages
 {
     public const string WrongPassword = "Пароль неправильний";
+
+    public const string FAQNotFound = "FAQ не знайдено";
+    public const string CoachNotFound = "Тренера не знайдено";
+    public const string CoachingNotFound = "Тренування не знайдено";
+    public const string CoachingDetailNotFound = "Деталі тренування не знайдено";
+    public const string FeedbackNotFound = "Відгуку не знайдено";
+    public const string FileNotFound = "Файлу не знайдено";
+    public const string FoodNotFound = "Харчування не знайдено";
+    public const string FoodPointNotFound = "Пункту харчування не знайдено";
     public const string UserNotFound = "Користувача не знайдено";
+
+    public const string UnknownError = "На сервері сталась невідома помилка, або ви вказали невірні дані, спробуйте ще раз";
 }

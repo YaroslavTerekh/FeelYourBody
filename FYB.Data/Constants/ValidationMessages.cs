@@ -8,6 +8,9 @@ namespace FYB.Data.Constants;
 
 public static class ValidationMessages
 {
+    public const string IdRequired = "Необхідно вказати Id";
+    public const string IdWrong = "Вказане Id некоректне";
+
     public const string FirstNameTooShort = "Ім'я занадто коротке";
     public const string FirstNameTooLong = "Ім'я занадто довге";
     public const string FirstNameRequired = "Необхідно ввести ім'я";
@@ -25,4 +28,12 @@ public static class ValidationMessages
     public const string FAQAnswerTooShort = "Відповідь на питання занадто коротка";
     public const string FAQAnswerTooLong = "Відповідь на питання занадто довга";
     public const string FAQAnswerRequired = "Необхідно ввести відповідь на питання";
+
+    public const string DescriptionRequired = "Необхідно ввести опис";
+    public const string DescriptionTooLong = "Опис занадто довгий";
+    public const string DescriptionTooShort = "Опис занадто короткий";
+
+    public const string InstagramLinkRequired = "Необхідно ввести посилання на сторінку Instagram";
+
+    public const string WrongDateTime = "Вказано некоректну дату";
 }

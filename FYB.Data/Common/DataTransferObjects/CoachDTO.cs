@@ -4,10 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FYB.Data.Entities;
+namespace FYB.Data.Common.DataTransferObjects;
 
-public class Coach : BaseEntity
+public class CoachDTO
 {
+    public Guid Id { get; set; }
+
     public string FirstName { get; set; }
 
     public string LastName { get; set; }
@@ -18,9 +20,5 @@ public class Coach : BaseEntity
 
     public DateTime BirthDate { get; set; }
 
-    public Guid AvatarId { get; set; }
-
-    public AppFile Avatar { get; set; }
-
-    public List<Coaching> Coachings { get; set; } = new();
+    public AppFileDTO Avatar { get; set; }
 }

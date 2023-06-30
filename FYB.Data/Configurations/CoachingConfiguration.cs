@@ -15,7 +15,6 @@ public class CoachingConfiguration : IEntityTypeConfiguration<Coaching>
     {
         builder.HasOne(t => t.CoachingPhoto)
             .WithOne(t => t.Coaching)
-            .HasForeignKey<AppFile>(t => t.CoachingId)
             .OnDelete(DeleteBehavior.NoAction);
     }
 }
