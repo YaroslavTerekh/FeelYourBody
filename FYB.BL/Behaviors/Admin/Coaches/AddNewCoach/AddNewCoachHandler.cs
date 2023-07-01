@@ -26,13 +26,6 @@ public class AddNewCoachHandler : IRequestHandler<AddNewCoachCommand>
 
     public async Task<Unit> Handle(AddNewCoachCommand request, CancellationToken cancellationToken)
     {
-        var avatar = await _context.Files.FirstOrDefaultAsync(t => t.Id == request.AvatarId, cancellationToken);
-
-        if (avatar is null)
-        {
-            throw new NotFoundException(ErrorMessages.FileNotFound);
-        }
-
         var newCoach = new Coach
         {
             FirstName = request.FirstName,
@@ -40,9 +33,10 @@ public class AddNewCoachHandler : IRequestHandler<AddNewCoachCommand>
             BirthDate = request.BirthDate,
             InstagramLink = request.InstagramLink,
             Description = request.Description,
-            AvatarId = request.AvatarId,
             Coachings = await _context.Coachings.Where(t => request.CoachingIds.Contains(t.Id)).ToListAsync(cancellationToken)
         };
+
+        newCoach.Avatar = await _fileService.UploadFileAsync(new AppFile { CoachId = newCoach.Id }, request.Avatar, cancellationToken);
 
         await _context.Coaches.AddAsync(newCoach, cancellationToken);
         await _context.SaveChangesAsync(cancellationToken);

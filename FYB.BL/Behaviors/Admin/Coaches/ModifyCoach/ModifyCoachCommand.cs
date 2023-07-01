@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,7 +14,7 @@ public class ModifyCoachCommand : IRequest
     [JsonIgnore]
     public Guid Id { get; set; }
 
-    public Guid AvatarId { get; set; }
+    public IFormFile? Avatar { get; set; }
 
     public string FirstName { get; set; }
 
@@ -24,6 +25,4 @@ public class ModifyCoachCommand : IRequest
     public string InstagramLink { get; set; }
 
     public DateTime BirthDate { get; set; }
-
-    public List<Guid> CoachingIds { get; set; }
 }

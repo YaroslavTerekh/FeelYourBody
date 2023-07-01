@@ -1,4 +1,5 @@
-﻿using FYB.BL.Behaviors.Coaches.GetAllCoaches;
+﻿using FYB.BL.Behaviors.Admin.Coaches.ModifyCoach;
+using FYB.BL.Behaviors.Coaches.GetAllCoaches;
 using FYB.BL.Behaviors.FrequentlyAskedQuestions.GetAllFAQ;
 using MediatR;
 using Microsoft.AspNetCore.Http;

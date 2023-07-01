@@ -18,12 +18,6 @@ public class ModifyCoachCommandValidator : AbstractValidator<ModifyCoachCommand>
             .NotEmpty()
             .WithMessage(ValidationMessages.IdRequired);
 
-        RuleFor(t => t.AvatarId)
-            .NotEqual(Guid.Empty)
-            .WithMessage(ValidationMessages.IdWrong)
-            .NotEmpty()
-            .WithMessage(ValidationMessages.IdRequired);
-
         RuleFor(t => t.FirstName)
             .MinimumLength(2)
             .WithMessage(ValidationMessages.FirstNameTooShort)

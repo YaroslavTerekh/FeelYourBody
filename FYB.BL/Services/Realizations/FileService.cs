@@ -50,7 +50,6 @@ public class FileService : IFileService
             }
 
             await _context.Files.AddAsync(fileModel, cancellationToken);
-            await _context.SaveChangesAsync(cancellationToken);
 
             return fileModel;
         }
@@ -76,5 +75,19 @@ public class FileService : IFileService
         await _context.SaveChangesAsync(cancellationToken);
 
         File.Delete(path);
+    }
+
+    public async Task DeleteFileListAsync(List<Guid> ids, CancellationToken cancellationToken)
+    {
+        var files = await _context.Files.Where(t => ids.Contains(t.Id)).ToListAsync(cancellationToken);
+
+        _context.Files.RemoveRange(files);
+        await _context.SaveChangesAsync(cancellationToken);
+
+        foreach(var file in files)
+        {
+            var path = Path.Combine(_env.ContentRootPath, file.FilePath);
+            File.Delete(path);
+        }   
     }
 }

@@ -29,6 +29,10 @@ public static class ValidationMessages
     public const string FAQAnswerTooLong = "Відповідь на питання занадто довга";
     public const string FAQAnswerRequired = "Необхідно ввести відповідь на питання";
 
+    public const string TitleRequired = "Необхідно ввести назву";
+    public const string TitleTooLong = "Назва занадто довга";
+    public const string TitleTooShort = "Назва занадто коротка";
+
     public const string DescriptionRequired = "Необхідно ввести опис";
     public const string DescriptionTooLong = "Опис занадто довгий";
     public const string DescriptionTooShort = "Опис занадто короткий";
@@ -36,4 +40,5 @@ public static class ValidationMessages
     public const string InstagramLinkRequired = "Необхідно ввести посилання на сторінку Instagram";
 
     public const string WrongDateTime = "Вказано некоректну дату";
+    public const string WrongPrice = "Вказано некоректну ціну";
 }

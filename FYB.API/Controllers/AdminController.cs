@@ -2,6 +2,7 @@
 using FYB.BL.Behaviors.Admin.Coaches.DeleteCoach;
 using FYB.BL.Behaviors.Admin.Coaches.ModifyCoach;
 using FYB.BL.Behaviors.Admin.Coachings.CreateCoaching;
+using FYB.BL.Behaviors.Admin.Coachings.DeleteCoaching;
 using FYB.BL.Behaviors.Admin.FrequentlyAskedQuestions.CreateFAQ;
 using FYB.BL.Behaviors.Admin.FrequentlyAskedQuestions.DeleteFAQ;
 using FYB.BL.Behaviors.Admin.FrequentlyAskedQuestions.ModifyFAQ;
@@ -65,7 +66,7 @@ public class AdminController : ControllerBase
     [HttpPost("coaches/add")]
     public async Task<IActionResult> AddNewCoachAsync
     (
-        [FromBody] AddNewCoachCommand command,
+        [FromForm] AddNewCoachCommand command,
         CancellationToken cancellationToken = default
     )
     {
@@ -75,7 +76,7 @@ public class AdminController : ControllerBase
     [HttpPut("coaches/modify/{id:guid}")]
     public async Task<IActionResult> ModifyCoachAsync
     (
-        [FromBody] ModifyCoachCommand command,
+        [FromForm] ModifyCoachCommand command,
         [FromRoute] Guid id,
         CancellationToken cancellationToken = default
     )
@@ -103,6 +104,16 @@ public class AdminController : ControllerBase
     )
     {
         return Ok(await _mediatr.Send(command, cancellationToken));
+    }
+
+    [HttpDelete("coachings/delete/{id:guid}")]
+    public async Task<IActionResult> DeleteCoachingAsync
+    (
+        [FromRoute] Guid id,
+        CancellationToken cancellationToken = default
+    )
+    {
+        return Ok(await _mediatr.Send(new DeleteCoachingCommand(id), cancellationToken));
     }
 
     [HttpPost("file/add")]

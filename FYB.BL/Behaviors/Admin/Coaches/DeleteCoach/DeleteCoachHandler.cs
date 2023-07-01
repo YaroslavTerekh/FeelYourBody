@@ -1,4 +1,6 @@
-﻿using FYB.BL.Services.Abstractions;
+﻿using FYB.BL.Exceptions;
+using FYB.BL.Services.Abstractions;
+using FYB.Data.Constants;
 using FYB.Data.DbConnection;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -25,10 +27,19 @@ public class DeleteCoachHandler : IRequestHandler<DeleteCoachCommand>
     {
         var coach = await _context.Coaches.FirstOrDefaultAsync(t => t.Id == request.Id, cancellationToken);
 
+        if (coach is null)
+        {
+            throw new NotFoundException(ErrorMessages.CoachNotFound);
+        }
+
         _context.Coaches.Remove(coach);
         await _context.SaveChangesAsync(cancellationToken);
 
-        await _fileService.DeleteFileAsync(coach.AvatarId, cancellationToken);
+        var filesToDelete = new List<Guid>() { coach.AvatarId };
+        filesToDelete.AddRange(coach.Coachings.Select(t => t.CoachingPhotoId).ToList());
+        filesToDelete.AddRange(coach.Coachings.SelectMany(t => t.ExamplePhotos.Select(ep => ep.Id)));
+
+        await _fileService.DeleteFileListAsync(filesToDelete, cancellationToken);
 
         return Unit.Value;
     }

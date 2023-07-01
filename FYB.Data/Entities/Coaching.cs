@@ -18,9 +18,9 @@ public class Coaching : BaseEntity
 
     public Coach Coach { get; set; }
 
-    public Guid FoodId { get; set; }
+    public Guid? FoodId { get; set; }
 
-    public Food Food { get; set; }
+    public Food? Food { get; set; }
 
     public Guid CoachingPhotoId { get; set; }
 

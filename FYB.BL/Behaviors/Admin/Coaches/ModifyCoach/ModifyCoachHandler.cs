@@ -2,6 +2,7 @@
 using FYB.BL.Services.Abstractions;
 using FYB.Data.Constants;
 using FYB.Data.DbConnection;
+using FYB.Data.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -26,34 +27,27 @@ public class ModifyCoachHandler : IRequestHandler<ModifyCoachCommand>
     public async Task<Unit> Handle(ModifyCoachCommand request, CancellationToken cancellationToken)
     {
         var coach = await _context.Coaches.Include(t => t.Coachings).FirstOrDefaultAsync(t => t.Id == request.Id);
-        var oldAvatarId = coach.AvatarId;
 
         if(coach is null)
         {
             throw new NotFoundException(ErrorMessages.CoachNotFound);
         }
 
-        var newAvatar = await _context.Files.FirstOrDefaultAsync(t => t.Id == request.AvatarId, cancellationToken);
-
-        if(newAvatar is null)
+        if(request.Avatar is not null)
         {
-            throw new NotFoundException(ErrorMessages.FileNotFound);
+            var oldAvatar = await _context.Files.FirstOrDefaultAsync(t => t.Id == coach.AvatarId, cancellationToken);
+
+            oldAvatar.CoachId = null;
         }
 
-        coach.AvatarId = coach.AvatarId != request.AvatarId ? request.AvatarId : coach.AvatarId;
+        coach.Avatar = request.Avatar is null ? coach.Avatar : await _fileService.UploadFileAsync(new AppFile { CoachId = coach.Id }, request.Avatar, cancellationToken);
         coach.FirstName = request.FirstName;
         coach.LastName = request.LastName;
         coach.Description = request.Description;
-        coach.Coachings = await _context.Coachings.Where(t => request.CoachingIds.Contains(t.Id)).ToListAsync(cancellationToken);
         coach.InstagramLink = request.InstagramLink;
         coach.BirthDate = request.BirthDate;
 
         await _context.SaveChangesAsync(cancellationToken);
-
-        if (oldAvatarId != request.AvatarId)
-        {
-            await _fileService.DeleteFileAsync(oldAvatarId, cancellationToken);
-        }
 
         return Unit.Value;
     }
