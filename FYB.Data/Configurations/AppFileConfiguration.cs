@@ -22,5 +22,22 @@ public class AppFileConfiguration : IEntityTypeConfiguration<AppFile>
             .WithOne(t => t.Avatar)
             .HasForeignKey<Coach>(t => t.AvatarId)
             .OnDelete(DeleteBehavior.NoAction);
+
+        builder.HasOne(t => t.Feedback)
+            .WithMany(t => t.Photos)
+            .HasForeignKey(t => t.FeedBackId)
+            .OnDelete(DeleteBehavior.NoAction);
+
+        builder.HasCheckConstraint("CK_Files_CoachId_Or_FeedBackId_Or_CoachingListId_Or_CoachingId",
+            "CASE " +
+            "WHEN CoachId IS NOT NULL THEN " +
+            "(CASE WHEN FeedBackId IS NULL AND CoachingListId IS NULL AND CoachingId IS NULL THEN 1 ELSE 0 END) " +
+            "WHEN FeedBackId IS NOT NULL THEN " +
+            "(CASE WHEN CoachingListId IS NULL AND CoachingId IS NULL THEN 1 ELSE 0 END) " +
+            "WHEN CoachingListId IS NOT NULL THEN " +
+            "(CASE WHEN CoachingId IS NULL THEN 1 ELSE 0 END) " +
+            "ELSE " +
+            "1 " +
+            "END = 1");
     }
 }

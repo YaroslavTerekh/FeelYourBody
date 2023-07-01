@@ -26,6 +26,8 @@ public class Coaching : BaseEntity
 
     public AppFile CoachingPhoto { get; set; }
 
+    public List<AppFile> ExamplePhotos { get; set; }
+
     public List<CoachingVideo> Videos { get; set; } = new();
 
     public List<User> Users { get; set; } = new();

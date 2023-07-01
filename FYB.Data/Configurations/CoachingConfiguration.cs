@@ -16,5 +16,10 @@ public class CoachingConfiguration : IEntityTypeConfiguration<Coaching>
         builder.HasOne(t => t.CoachingPhoto)
             .WithOne(t => t.Coaching)
             .OnDelete(DeleteBehavior.NoAction);
+
+        builder.HasMany(t => t.ExamplePhotos)
+            .WithOne(t => t.CoachingList)
+            .HasForeignKey(t => t.CoachingListId)
+            .OnDelete(DeleteBehavior.NoAction);
     }
 }

@@ -1,6 +1,7 @@
 ﻿using FYB.BL.Behaviors.Admin.Coaches.AddNewCoach;
 using FYB.BL.Behaviors.Admin.Coaches.DeleteCoach;
 using FYB.BL.Behaviors.Admin.Coaches.ModifyCoach;
+using FYB.BL.Behaviors.Admin.Coachings.CreateCoaching;
 using FYB.BL.Behaviors.Admin.FrequentlyAskedQuestions.CreateFAQ;
 using FYB.BL.Behaviors.Admin.FrequentlyAskedQuestions.DeleteFAQ;
 using FYB.BL.Behaviors.Admin.FrequentlyAskedQuestions.ModifyFAQ;
@@ -92,6 +93,16 @@ public class AdminController : ControllerBase
     )
     {
         return Ok(await _mediatr.Send(new DeleteCoachCommand(id), cancellationToken));
+    }
+
+    [HttpPost("coachings/add")]
+    public async Task<IActionResult> CreateCoachingAsync
+    (
+        [FromBody] CreateCoachingCommand command,
+        CancellationToken cancellationToken = default
+    )
+    {
+        return Ok(await _mediatr.Send(command, cancellationToken));
     }
 
     [HttpPost("file/add")]

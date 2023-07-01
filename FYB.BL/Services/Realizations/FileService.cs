@@ -72,9 +72,9 @@ public class FileService : IFileService
 
         var path = Path.Combine(_env.ContentRootPath, file.FilePath);
 
-        File.Delete(path);
-
         _context.Files.Remove(file);
         await _context.SaveChangesAsync(cancellationToken);
+
+        File.Delete(path);
     }
 }
