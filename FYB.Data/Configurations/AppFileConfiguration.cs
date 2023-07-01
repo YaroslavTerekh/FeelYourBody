@@ -15,18 +15,24 @@ public class AppFileConfiguration : IEntityTypeConfiguration<AppFile>
     {
         builder.HasOne(t => t.Coaching)
             .WithOne(t => t.CoachingPhoto)
-            .HasForeignKey<Coaching>(t => t.CoachingPhotoId)
-            .OnDelete(DeleteBehavior.NoAction);
+            .HasForeignKey<AppFile>(t => t.CoachingId)
+            .OnDelete(DeleteBehavior.ClientSetNull);
 
         builder.HasOne(t => t.Coach)
             .WithOne(t => t.Avatar)
-            .HasForeignKey<Coach>(t => t.AvatarId)
-            .OnDelete(DeleteBehavior.NoAction);
+            .HasForeignKey<AppFile>(t => t.CoachId)
+            .OnDelete(DeleteBehavior.ClientSetNull);
 
         builder.HasOne(t => t.Feedback)
             .WithMany(t => t.Photos)
             .HasForeignKey(t => t.FeedBackId)
-            .OnDelete(DeleteBehavior.NoAction);
+            .OnDelete(DeleteBehavior.ClientSetNull);
+
+        builder.HasOne(t => t.CoachingList)
+            .WithMany(t => t.ExamplePhotos)
+            .HasForeignKey(t => t.CoachingListId)
+            .OnDelete(DeleteBehavior.ClientSetNull);
+
 
         builder.HasCheckConstraint("CK_Files_CoachId_Or_FeedBackId_Or_CoachingListId_Or_CoachingId",
             "CASE " +
