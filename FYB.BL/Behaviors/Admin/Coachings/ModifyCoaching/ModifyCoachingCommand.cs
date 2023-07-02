@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,6 +14,8 @@ public class ModifyCoachingCommand : IRequest
     [JsonIgnore]
     public Guid Id { get; set; }
 
+    public IFormFile CoachingPhoto { get; set; }
+
     public string Title { get; set; }
 
     public string Description { get; set; }
@@ -20,8 +23,6 @@ public class ModifyCoachingCommand : IRequest
     public long Price { get; set; }
 
     public Guid CoachId { get; set; }
-
-    public Guid CoachingPhotoId { get; set; }
 
     public Guid? FoodId { get; set; }
 }

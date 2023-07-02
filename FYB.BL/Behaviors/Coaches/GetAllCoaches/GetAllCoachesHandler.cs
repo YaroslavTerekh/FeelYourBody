@@ -33,8 +33,7 @@ public class GetAllCoachesHandler : IRequestHandler<GetAllCoachesQuery, List<Coa
                 {
                     Id = t.Avatar.Id,
                     FileName = t.Avatar.FileName,
-                    FileExtension = t.Avatar.FileExtension,
-                    FilePath = t.Avatar.FilePath
+                    FileExtension = t.Avatar.FileExtension
                 },
                 Id = t.Id,
                 BirthDate = t.BirthDate

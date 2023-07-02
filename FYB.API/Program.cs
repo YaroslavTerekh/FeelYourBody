@@ -29,6 +29,7 @@ builder.Services.AddValidatorsFromAssembly(AppDomain.CurrentDomain.GetAssemblies
 builder.Services.AddMediatR(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
 builder.Services.AddCustomServices();
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 
 builder.Services.AddAuthentication(options => {

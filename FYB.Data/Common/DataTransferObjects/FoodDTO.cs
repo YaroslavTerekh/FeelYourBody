@@ -6,11 +6,7 @@ using System.Threading.Tasks;
 
 namespace FYB.Data.Common.DataTransferObjects;
 
-public class AppFileDTO
+public class FoodDTO
 {
-    public Guid Id { get; set; } 
-
-    public string FileName { get; set; }
-
-    public string FileExtension { get; set; }
+    public List<FoodPointDTO> FoodPoints { get; set; } = new();
 }

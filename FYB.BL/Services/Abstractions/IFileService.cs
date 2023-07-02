@@ -12,5 +12,5 @@ public interface IFileService
 {
     public Task<AppFile> UploadFileAsync(AppFile fileModel, IFormFile file, CancellationToken cancellationToken);
     public Task DeleteFileAsync(Guid id, CancellationToken cancellationToken);
-    public Task DeleteFileListAsync(List<Guid> ids, CancellationToken cancellationToken);
+    public Task DeleteFileListAsync(List<Guid> ids, bool saveChanges, CancellationToken cancellationToken);
 }

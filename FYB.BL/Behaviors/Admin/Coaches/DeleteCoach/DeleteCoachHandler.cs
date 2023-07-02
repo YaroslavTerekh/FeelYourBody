@@ -25,21 +25,16 @@ public class DeleteCoachHandler : IRequestHandler<DeleteCoachCommand>
 
     public async Task<Unit> Handle(DeleteCoachCommand request, CancellationToken cancellationToken)
     {
-        var coach = await _context.Coaches.FirstOrDefaultAsync(t => t.Id == request.Id, cancellationToken);
+        var coach = await _context.Coaches.Include(t => t.Avatar).FirstOrDefaultAsync(t => t.Id == request.Id, cancellationToken);
 
         if (coach is null)
         {
             throw new NotFoundException(ErrorMessages.CoachNotFound);
         }
 
+        coach.Avatar.CoachId = null;
         _context.Coaches.Remove(coach);
         await _context.SaveChangesAsync(cancellationToken);
-
-        var filesToDelete = new List<Guid>() { coach.AvatarId };
-        filesToDelete.AddRange(coach.Coachings.Select(t => t.CoachingPhotoId).ToList());
-        filesToDelete.AddRange(coach.Coachings.SelectMany(t => t.ExamplePhotos.Select(ep => ep.Id)));
-
-        await _fileService.DeleteFileListAsync(filesToDelete, cancellationToken);
 
         return Unit.Value;
     }

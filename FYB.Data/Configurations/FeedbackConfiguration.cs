@@ -16,6 +16,11 @@ public class FeedbackConfiguration : IEntityTypeConfiguration<Feedback>
         //builder.HasMany(t => t.Photos)
         //    .WithOne(t => t.Feedback)
         //    .HasForeignKey(t => t.FeedBackId)
-        //    .OnDelete(DeleteBehavior.Restrict);
+        //    .OnDelete(DeleteBehavior.SetNull);
+
+        builder.HasOne(t => t.Coaching)
+            .WithMany(t => t.Feedbacks)
+            .HasForeignKey(t => t.CoachingId)
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }

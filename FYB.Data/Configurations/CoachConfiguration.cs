@@ -16,6 +16,6 @@ public class CoachConfiguration : IEntityTypeConfiguration<Coach>
         //builder.HasOne(t => t.Avatar)
         //    .WithOne(t => t.Coach)
         //    .HasForeignKey<Coach>(t => t.AvatarId)
-        //    .OnDelete(DeleteBehavior.Restrict);
+        //    .OnDelete(DeleteBehavior.SetNull);
     }
 }

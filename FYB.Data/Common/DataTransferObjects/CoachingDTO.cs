@@ -1,13 +1,16 @@
-﻿using System;
+﻿using FYB.Data.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FYB.Data.Entities;
+namespace FYB.Data.Common.DataTransferObjects;
 
-public class Coaching : BaseEntity
+public class CoachingDTO
 {
+    public Guid Id { get; set; }
+
     public string Title { get; set; }
 
     public string Description { get; set; }
@@ -16,21 +19,19 @@ public class Coaching : BaseEntity
 
     public Guid CoachId { get; set; }
 
-    public Coach Coach { get; set; }
+    public CoachDTO Coach { get; set; }
 
     public Guid? FoodId { get; set; }
 
-    public Food? Food { get; set; }
+    public FoodDTO? Food { get; set; }
 
     public Guid CoachingPhotoId { get; set; }
 
-    public AppFile CoachingPhoto { get; set; }
+    public AppFileDTO CoachingPhoto { get; set; }
 
-    public List<Feedback> Feedbacks { get; set; } = new();
+    public List<FeedbackDTO> Feedbacks { get; set; } = new();
 
-    public List<AppFile> ExamplePhotos { get; set; } = new();
+    public List<AppFileDTO> ExamplePhotos { get; set; } = new();
 
     public List<CoachingVideo> Videos { get; set; } = new();
-
-    public List<User> Users { get; set; } = new();
 }

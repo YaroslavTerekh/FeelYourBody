@@ -6,19 +6,19 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FYB.BL.Behaviors.Admin.Coachings.CreateCoaching;
+namespace FYB.BL.Behaviors.Admin.Coachings.ModifyCoaching;
 
-public class CreateCoachingCommandValidator : AbstractValidator<CreateCoachingCommand>
+public class ModifyCoachingCommandValidator : AbstractValidator<ModifyCoachingCommand>
 {
-    public CreateCoachingCommandValidator()
+    public ModifyCoachingCommandValidator()
     {
         RuleFor(t => t.Title)
-            .MinimumLength(3)
-            .WithMessage(ValidationMessages.TitleTooShort)
-            .MaximumLength(40)
-            .WithMessage(ValidationMessages.TitleTooLong)
-            .NotEmpty()
-            .WithMessage(ValidationMessages.TitleRequired);
+           .MinimumLength(3)
+           .WithMessage(ValidationMessages.TitleTooShort)
+           .MaximumLength(40)
+           .WithMessage(ValidationMessages.TitleTooLong)
+           .NotEmpty()
+           .WithMessage(ValidationMessages.TitleRequired);
 
         RuleFor(t => t.Description)
             .MinimumLength(100)

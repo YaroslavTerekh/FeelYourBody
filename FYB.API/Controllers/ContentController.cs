@@ -1,5 +1,6 @@
 ﻿using FYB.BL.Behaviors.Admin.Coaches.ModifyCoach;
 using FYB.BL.Behaviors.Coaches.GetAllCoaches;
+using FYB.BL.Behaviors.Coachings.GetAllCoachings;
 using FYB.BL.Behaviors.FrequentlyAskedQuestions.GetAllFAQ;
 using MediatR;
 using Microsoft.AspNetCore.Http;
@@ -34,5 +35,20 @@ public class ContentController : ControllerBase
     )
     {
         return Ok(await _mediatr.Send(new GetAllFAQQuery(), cancellationToken));
+    }
+
+    [HttpGet("get/coachings/all")]
+    public async Task<IActionResult> GetAllCoachingsAsync
+    (
+        CancellationToken cancellationToken = default
+    )
+    {
+        return Ok(await _mediatr.Send(new GetAllCoachingsQuery(), cancellationToken));
+    } 
+
+    [HttpPost("TEST")]
+    public IActionResult Test([FromForm] List<IFormFile> file)
+    {
+        return Ok();
     }
 }

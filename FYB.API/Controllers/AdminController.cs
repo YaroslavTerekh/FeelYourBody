@@ -1,8 +1,11 @@
 ﻿using FYB.BL.Behaviors.Admin.Coaches.AddNewCoach;
 using FYB.BL.Behaviors.Admin.Coaches.DeleteCoach;
 using FYB.BL.Behaviors.Admin.Coaches.ModifyCoach;
+using FYB.BL.Behaviors.Admin.Coachings.AddPhotosToCoaching;
 using FYB.BL.Behaviors.Admin.Coachings.CreateCoaching;
 using FYB.BL.Behaviors.Admin.Coachings.DeleteCoaching;
+using FYB.BL.Behaviors.Admin.Coachings.DeletePhotosFromCoaching;
+using FYB.BL.Behaviors.Admin.Coachings.ModifyCoaching;
 using FYB.BL.Behaviors.Admin.FrequentlyAskedQuestions.CreateFAQ;
 using FYB.BL.Behaviors.Admin.FrequentlyAskedQuestions.DeleteFAQ;
 using FYB.BL.Behaviors.Admin.FrequentlyAskedQuestions.ModifyFAQ;
@@ -99,10 +102,47 @@ public class AdminController : ControllerBase
     [HttpPost("coachings/add")]
     public async Task<IActionResult> CreateCoachingAsync
     (
-        [FromBody] CreateCoachingCommand command,
+        [FromForm] CreateCoachingCommand command,
         CancellationToken cancellationToken = default
     )
     {
+        return Ok(await _mediatr.Send(command, cancellationToken));
+    }
+
+    [HttpPut("coachings/modify/{id:guid}")]
+    public async Task<IActionResult> ModifyCoachingAsync
+    (
+        [FromRoute] Guid id,
+        [FromForm] ModifyCoachingCommand command,
+        CancellationToken cancellationToken = default
+    )
+    {
+        command.Id = id;
+
+        return Ok(await _mediatr.Send(command, cancellationToken));
+    }
+
+    [HttpPatch("coachings/{id:guid}/examples/add")]
+    public async Task<IActionResult> AddExamplesToCoachingAsync
+    (
+        [FromRoute] Guid id,
+        [FromForm] List<IFormFile> files,
+        CancellationToken cancellationToken = default
+    )
+    {
+        return Ok(await _mediatr.Send(new AddPhotosToCoachingCommand(id, files), cancellationToken));
+    }
+
+    [HttpDelete("coachings/{id:guid}/examples/delete")]
+    public async Task<IActionResult> DeleteExamplesFromCoachingAsync
+    (
+        [FromRoute] Guid id,
+        [FromBody] DeletePhotosFromCoachingCommand command,
+        CancellationToken cancellationToken = default
+    )
+    {
+        command.Id = id;
+
         return Ok(await _mediatr.Send(command, cancellationToken));
     }
 

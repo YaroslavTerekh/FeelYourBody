@@ -77,12 +77,12 @@ public class FileService : IFileService
         File.Delete(path);
     }
 
-    public async Task DeleteFileListAsync(List<Guid> ids, CancellationToken cancellationToken)
+    public async Task DeleteFileListAsync(List<Guid> ids, bool saveChanges, CancellationToken cancellationToken)
     {
         var files = await _context.Files.Where(t => ids.Contains(t.Id)).ToListAsync(cancellationToken);
 
         _context.Files.RemoveRange(files);
-        await _context.SaveChangesAsync(cancellationToken);
+        if(saveChanges) await _context.SaveChangesAsync(cancellationToken);
 
         foreach(var file in files)
         {
