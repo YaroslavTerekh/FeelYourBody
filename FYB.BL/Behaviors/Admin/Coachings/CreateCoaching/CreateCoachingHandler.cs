@@ -28,7 +28,8 @@ internal class CreateCoachingHandler : IRequestHandler<CreateCoachingCommand>
             Title = request.Title,
             Description = request.Description,
             CoachId = request.CoachId,
-            Price = request.Price
+            Price = request.Price,
+            CoachingDetails = request.CoachingDetails
         };
 
         coaching.CoachingPhoto = await _fileService.UploadFileAsync(new AppFile { CoachingId = coaching.Id }, request.CoachingPhoto, cancellationToken);
