@@ -18,5 +18,9 @@ public class User : IdentityUser<Guid>
 
     public Role Role { get; set; }
 
+    public List<Food> Foods { get; set; } = new();
+
+    public List<Coaching> Coachings { get; set; } = new();
+
     public DateTime RegisterDate { get; set; } = DateTime.UtcNow;
 }
