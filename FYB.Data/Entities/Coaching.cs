@@ -6,13 +6,11 @@ using System.Threading.Tasks;
 
 namespace FYB.Data.Entities;
 
-public class Coaching : BaseEntity
+public class Coaching : BaseProduct
 {
     public string Title { get; set; }
 
     public string Description { get; set; }
-
-    public long Price { get; set; }
 
     public Guid CoachId { get; set; }
 
@@ -35,6 +33,4 @@ public class Coaching : BaseEntity
     public List<AppFile> ExamplePhotos { get; set; } = new();
 
     public List<CoachingVideo> Videos { get; set; } = new();
-
-    public List<User> Users { get; set; } = new();
 }

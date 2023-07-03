@@ -21,4 +21,7 @@ public static class ErrorMessages
     public const string UserNotFound = "Користувача не знайдено";
 
     public const string UnknownError = "На сервері сталась невідома помилка, або ви вказали невірні дані, спробуйте ще раз";
+
+    public const string ProductAlreadyBought = "Ви вже придбали цей продукт";
+    public const string ContentAccessForbidden = "Доступ до контенту заборонено";
 }

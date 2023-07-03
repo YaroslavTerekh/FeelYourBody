@@ -6,6 +6,12 @@ using FYB.BL.Behaviors.Admin.Coachings.CreateCoaching;
 using FYB.BL.Behaviors.Admin.Coachings.DeleteCoaching;
 using FYB.BL.Behaviors.Admin.Coachings.DeletePhotosFromCoaching;
 using FYB.BL.Behaviors.Admin.Coachings.ModifyCoaching;
+using FYB.BL.Behaviors.Admin.Foods.AddFoodPoint;
+using FYB.BL.Behaviors.Admin.Foods.CreateFood;
+using FYB.BL.Behaviors.Admin.Foods.DeleteFood;
+using FYB.BL.Behaviors.Admin.Foods.DeleteFoodPoint;
+using FYB.BL.Behaviors.Admin.Foods.ModifyFood;
+using FYB.BL.Behaviors.Admin.Foods.ModifyFoodPoint;
 using FYB.BL.Behaviors.Admin.FrequentlyAskedQuestions.CreateFAQ;
 using FYB.BL.Behaviors.Admin.FrequentlyAskedQuestions.DeleteFAQ;
 using FYB.BL.Behaviors.Admin.FrequentlyAskedQuestions.ModifyFAQ;
@@ -178,5 +184,71 @@ public class AdminController : ControllerBase
         await _fileService.DeleteFileAsync(id, cancellationToken);
 
         return Ok();
+    }
+
+    [HttpPost("food/create")]
+    public async Task<IActionResult> CreateFoodAsync
+    (
+        [FromBody] CreateFoodCommand command,
+        CancellationToken cancellationToken = default
+    )
+    {
+        return Ok(await _mediatr.Send(command, cancellationToken));
+    }
+
+    [HttpPut("food/modify/{id:guid}")]
+    public async Task<IActionResult> ModifyFoodAsync
+    (
+        [FromRoute] Guid id,
+        [FromBody] ModifyFoodCommand command,
+        CancellationToken cancellationToken = default
+    )
+    {
+        command.Id = id;
+
+        return Ok(await _mediatr.Send(command, cancellationToken));
+    }
+
+    [HttpDelete("food/delete/{id:guid}")]
+    public async Task<IActionResult> DeleteFoodAsync
+    (
+        [FromRoute] Guid id,
+        CancellationToken cancellationToken = default
+    )
+    {
+        return Ok(await _mediatr.Send(new DeleteFoodCommand(id), cancellationToken));
+    }
+
+    [HttpPost("food/point/create")]
+    public async Task<IActionResult> CreateFoodPointAsync
+    (
+        [FromBody] AddFoodPointCommand command,
+        CancellationToken cancellationToken = default
+    )
+    {
+        return Ok(await _mediatr.Send(command, cancellationToken));
+    }
+
+    [HttpPut("food/point/modify/{id:guid}")]
+    public async Task<IActionResult> ModifyFoodPointAsync
+    (
+        [FromBody] ModifyFoodPointCommand command,
+        [FromRoute] Guid id,
+        CancellationToken cancellationToken = default
+    )
+    {
+        command.Id = id;
+
+        return Ok(await _mediatr.Send(command, cancellationToken));
+    }
+
+    [HttpDelete("food/point/delete/{id:guid}")]
+    public async Task<IActionResult> DeleteFoodPointAsync
+    (
+        [FromRoute] Guid id,
+        CancellationToken cancellationToken = default
+    )
+    {
+        return Ok(await _mediatr.Send(new DeleteFoodPointCommand(id), cancellationToken));
     }
 }
