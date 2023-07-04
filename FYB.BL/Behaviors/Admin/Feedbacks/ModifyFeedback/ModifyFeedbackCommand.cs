@@ -1,18 +1,19 @@
-﻿using System;
+﻿using MediatR;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
-namespace FYB.Data.Common.DataTransferObjects;
+namespace FYB.BL.Behaviors.Admin.Feedbacks.ModifyFeedback;
 
-public class FeedbackDTO
+public class ModifyFeedbackCommand : IRequest
 {
+    [JsonIgnore]
     public Guid Id { get; set; }
 
     public string FeedbackText { get; set; }
 
     public string InstagramLink { get; set; }
-
-    public List<AppFileDTO> Photos { get; set; }
 }

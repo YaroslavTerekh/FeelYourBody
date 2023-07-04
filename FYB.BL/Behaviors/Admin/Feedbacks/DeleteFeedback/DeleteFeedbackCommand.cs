@@ -5,11 +5,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FYB.BL.Behaviors.Admin.Foods.DeleteFoodPoint;
+namespace FYB.BL.Behaviors.Admin.Feedbacks.DeleteFeedback;
 
-public class DeleteFoodPointCommand : IRequest
+public class DeleteFeedbackCommand : IRequest
 {
     public Guid Id { get; set; }
 
-    public DeleteFoodPointCommand(Guid id) => Id = id;
+    public DeleteFeedbackCommand(Guid id) => Id = id;
 }

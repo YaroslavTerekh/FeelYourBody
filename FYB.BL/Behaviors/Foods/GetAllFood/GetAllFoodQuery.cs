@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using FYB.Data.Common.DataTransferObjects;
+using MediatR;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,6 +8,6 @@ using System.Threading.Tasks;
 
 namespace FYB.BL.Behaviors.Foods.GetAllFood;
 
-public class GetAllFoodQuery : IRequest
+public class GetAllFoodQuery : IRequest<List<FoodDTO>>
 {
 }

@@ -6,6 +6,12 @@ using FYB.BL.Behaviors.Admin.Coachings.CreateCoaching;
 using FYB.BL.Behaviors.Admin.Coachings.DeleteCoaching;
 using FYB.BL.Behaviors.Admin.Coachings.DeletePhotosFromCoaching;
 using FYB.BL.Behaviors.Admin.Coachings.ModifyCoaching;
+using FYB.BL.Behaviors.Admin.Feedbacks.AddFeedback;
+using FYB.BL.Behaviors.Admin.Feedbacks.AddPhotosToFeedback;
+using FYB.BL.Behaviors.Admin.Feedbacks.DeleteFeedback;
+using FYB.BL.Behaviors.Admin.Feedbacks.DeletePhotosFromFeedback;
+using FYB.BL.Behaviors.Admin.Feedbacks.GetFeedback;
+using FYB.BL.Behaviors.Admin.Feedbacks.ModifyFeedback;
 using FYB.BL.Behaviors.Admin.Foods.AddFoodPoint;
 using FYB.BL.Behaviors.Admin.Foods.CreateFood;
 using FYB.BL.Behaviors.Admin.Foods.DeleteFood;
@@ -250,5 +256,68 @@ public class AdminController : ControllerBase
     )
     {
         return Ok(await _mediatr.Send(new DeleteFoodPointCommand(id), cancellationToken));
+    }
+
+    [HttpPost("coaching/feedback/add")]
+    public async Task<IActionResult> AddFeedbackAsync
+    (
+        [FromForm] AddFeedbackCommand command,
+        CancellationToken cancellationToken = default
+    )
+    {
+        return Ok(await _mediatr.Send(command, cancellationToken));
+    }
+
+    [HttpPatch("coaching/feedback/photos/add")]
+    public async Task<IActionResult> AddPhotosToFeedbackAsync
+    (
+        [FromForm] AddPhotosToFeedbackCommand command,
+        CancellationToken cancellationToken = default
+    )
+    {
+        return Ok(await _mediatr.Send(command, cancellationToken));
+    }
+
+    [HttpPut("coaching/feedback/modify/{id:guid}")]
+    public async Task<IActionResult> ModifyFeedbackAsync
+    (
+        [FromRoute] Guid id,
+        [FromBody] ModifyFeedbackCommand command,
+        CancellationToken cancellationToken = default
+    )
+    {
+        command.Id = id;
+
+        return Ok(await _mediatr.Send(command, cancellationToken));
+    }
+
+    [HttpDelete("coaching/feedback/delete/{id:guid}")]
+    public async Task<IActionResult> DeleteFeedbackAsync
+    (
+        [FromRoute] Guid id,
+        CancellationToken cancellationToken = default
+    )
+    {
+        return Ok(await _mediatr.Send(new DeleteFeedbackCommand(id), cancellationToken));
+    }
+
+    [HttpDelete("coaching/feedback/photos/delete")]
+    public async Task<IActionResult> DeletePhotosFromFeedbackAsync
+    (
+        [FromBody] DeletePhotosFromFeedbackCommand command,
+        CancellationToken cancellationToken = default
+    )
+    {
+        return Ok(await _mediatr.Send(command, cancellationToken));
+    }
+
+    [HttpGet("coaching/feedback/{id:guid}")]
+    public async Task<IActionResult> GetFeedbackAsync
+    (
+        [FromRoute] Guid id,
+        CancellationToken cancellationToken = default
+    )
+    {
+        return Ok(await _mediatr.Send(new GetFeedbackCommand(id), cancellationToken));
     }
 }
