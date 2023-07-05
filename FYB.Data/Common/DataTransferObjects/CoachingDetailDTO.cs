@@ -6,13 +6,11 @@ using System.Threading.Tasks;
 
 namespace FYB.Data.Common.DataTransferObjects;
 
-public class FoodPointDTO
+public class CoachingDetailDTO
 {
     public Guid Id { get; set; }
 
-    public string Title { get; set; }
+    public CoachingDetailtsIconEnum Icon { get; set; }
 
-    public string Description { get; set; }
-
-    public long PortionMass { get; set; }
+    public string Detail { get; set; }
 }

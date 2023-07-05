@@ -2,6 +2,7 @@
 using FYB.BL.Behaviors.Coaches.GetAllCoaches;
 using FYB.BL.Behaviors.Coachings.GetAllCoachings;
 using FYB.BL.Behaviors.Coachings.GetCoaching;
+using FYB.BL.Behaviors.Files.GetFile;
 using FYB.BL.Behaviors.Foods.GetAllFood;
 using FYB.BL.Behaviors.Foods.GetFood;
 using FYB.BL.Behaviors.FrequentlyAskedQuestions.GetAllFAQ;
@@ -20,10 +21,18 @@ public class ContentController : BaseController
 {
     private readonly IMediator _mediatr;
     private readonly IProductService<Coaching> _productService;
-    public ContentController(IMediator mediatr, IProductService<Coaching> productService)
+    private readonly IWebHostEnvironment _env;
+
+    public ContentController
+    (
+        IMediator mediatr, 
+        IProductService<Coaching> productService,
+        IWebHostEnvironment env
+    )
     {
         _mediatr = mediatr;
         _productService = productService;
+        _env = env;
     }
 
     [HttpGet("coaches")]
@@ -84,11 +93,15 @@ public class ContentController : BaseController
         return Ok(await _mediatr.Send(new GetFoodQuery(id, CurrentUserId), cancellationToken));
     }
 
-    [HttpPost("TEST")]
-    public async Task<IActionResult> Test()
+    [HttpGet("file/{id:guid}")]
+    public async Task<IActionResult> GetFileAsync
+    (
+        [FromRoute] Guid id,
+        CancellationToken cancellationToken = default
+    )
     {
-        await _productService.AddUserToProduct(Guid.Parse("28021FE8-69B0-4E99-9696-08DB78858870"), Guid.Parse("2DF24136-703B-4547-A687-044761C94F1B"), default);
+        var file = await _mediatr.Send(new GetFileQuery(id), cancellationToken);
 
-        return Ok();
+        return PhysicalFile(Path.Combine(_env.ContentRootPath, file.FilePath), file.FileExtension);
     }
 }

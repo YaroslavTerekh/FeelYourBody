@@ -1,9 +1,11 @@
 ﻿using FYB.BL.Behaviors.Admin.Coaches.AddNewCoach;
 using FYB.BL.Behaviors.Admin.Coaches.DeleteCoach;
 using FYB.BL.Behaviors.Admin.Coaches.ModifyCoach;
+using FYB.BL.Behaviors.Admin.Coachings.AddCoachingDetails;
 using FYB.BL.Behaviors.Admin.Coachings.AddPhotosToCoaching;
 using FYB.BL.Behaviors.Admin.Coachings.CreateCoaching;
 using FYB.BL.Behaviors.Admin.Coachings.DeleteCoaching;
+using FYB.BL.Behaviors.Admin.Coachings.DeleteCoachingDetails;
 using FYB.BL.Behaviors.Admin.Coachings.DeletePhotosFromCoaching;
 using FYB.BL.Behaviors.Admin.Coachings.ModifyCoaching;
 using FYB.BL.Behaviors.Admin.Feedbacks.AddFeedback;
@@ -34,7 +36,7 @@ namespace FYB.API.Controllers;
 [Route("api/admin")]
 [ApiController]
 [Authorize(Policy = Policies.Admin)]
-public class AdminController : ControllerBase
+public class AdminController : BaseController
 {
     private readonly IMediator _mediatr;
     private readonly IFileService _fileService;
@@ -45,12 +47,84 @@ public class AdminController : ControllerBase
         _fileService = fileService;
     }
 
+    [HttpGet("coaching/feedback/{id:guid}")]
+    public async Task<IActionResult> GetFeedbackAsync
+(
+    [FromRoute] Guid id,
+    CancellationToken cancellationToken = default
+)
+    {
+        return Ok(await _mediatr.Send(new GetFeedbackCommand(id), cancellationToken));
+    }
+
+    [HttpPost("coaches/add")]
+    public async Task<IActionResult> AddNewCoachAsync
+    (
+        [FromForm] AddNewCoachCommand command,
+        CancellationToken cancellationToken = default
+    )
+    {
+        return Ok(await _mediatr.Send(command, cancellationToken));
+    }
+
+    [HttpPost("coachings/add")]
+    public async Task<IActionResult> CreateCoachingAsync
+(
+    [FromForm] CreateCoachingCommand command,
+    CancellationToken cancellationToken = default
+)
+    {
+        return Ok(await _mediatr.Send(command, cancellationToken));
+    }
+
     [HttpPost("faq/create")]
     public async Task<IActionResult> CreateFAQAsync
     (
         [FromBody] CreateFAQCommand command,
         CancellationToken cancellationToken = default
     )
+    {
+        return Ok(await _mediatr.Send(command, cancellationToken));
+    }
+
+    [HttpPost("file/add")]
+    public async Task<IActionResult> AddNewFileAsync
+    (
+        IFormFile file,
+        CancellationToken cancellationToken = default
+    )
+    {
+        var appFile = await _fileService.UploadFileAsync(new Data.Entities.AppFile(), file, cancellationToken);
+
+        return Ok(appFile.Id);
+    }
+
+    [HttpPost("food/create")]
+    public async Task<IActionResult> CreateFoodAsync
+(
+    [FromBody] CreateFoodCommand command,
+    CancellationToken cancellationToken = default
+)
+    {
+        return Ok(await _mediatr.Send(command, cancellationToken));
+    }
+
+    [HttpPost("food/point/create")]
+    public async Task<IActionResult> CreateFoodPointAsync
+(
+    [FromBody] AddFoodPointCommand command,
+    CancellationToken cancellationToken = default
+)
+    {
+        return Ok(await _mediatr.Send(command, cancellationToken));
+    }
+
+    [HttpPost("coaching/feedback/add")]
+    public async Task<IActionResult> AddFeedbackAsync
+(
+    [FromForm] AddFeedbackCommand command,
+    CancellationToken cancellationToken = default
+)
     {
         return Ok(await _mediatr.Send(command, cancellationToken));
     }
@@ -68,26 +142,6 @@ public class AdminController : ControllerBase
         return Ok(await _mediatr.Send(command, cancellationToken));
     }
 
-    [HttpDelete("faq/delete/{id:guid}")]
-    public async Task<IActionResult> DeleteFAQAsync
-    (
-        [FromRoute] Guid id,
-        CancellationToken cancellationToken = default
-    )
-    {
-        return Ok(await _mediatr.Send(new DeleteFAQCommand(id), cancellationToken));
-    }
-
-    [HttpPost("coaches/add")]
-    public async Task<IActionResult> AddNewCoachAsync
-    (
-        [FromForm] AddNewCoachCommand command,
-        CancellationToken cancellationToken = default
-    )
-    {
-        return Ok(await _mediatr.Send(command, cancellationToken));
-    }
-
     [HttpPut("coaches/modify/{id:guid}")]
     public async Task<IActionResult> ModifyCoachAsync
     (
@@ -101,31 +155,47 @@ public class AdminController : ControllerBase
         return Ok(await _mediatr.Send(command, cancellationToken));
     }
 
-    [HttpDelete("coaches/delete/{id:guid}")]
-    public async Task<IActionResult> DeleteCoachAsync
+    [HttpPut("coachings/modify")]
+    public async Task<IActionResult> ModifyCoachingAsync
     (
-        [FromRoute] Guid id,
-        CancellationToken cancellationToken = default
-    )
-    {
-        return Ok(await _mediatr.Send(new DeleteCoachCommand(id), cancellationToken));
-    }
-
-    [HttpPost("coachings/add")]
-    public async Task<IActionResult> CreateCoachingAsync
-    (
-        [FromForm] CreateCoachingCommand command,
+        [FromForm] ModifyCoachingCommand command,
         CancellationToken cancellationToken = default
     )
     {
         return Ok(await _mediatr.Send(command, cancellationToken));
     }
 
-    [HttpPut("coachings/modify/{id:guid}")]
-    public async Task<IActionResult> ModifyCoachingAsync
+    [HttpPut("food/modify/{id:guid}")]
+    public async Task<IActionResult> ModifyFoodAsync
     (
         [FromRoute] Guid id,
-        [FromForm] ModifyCoachingCommand command,
+        [FromBody] ModifyFoodCommand command,
+        CancellationToken cancellationToken = default
+    )
+    {
+        command.Id = id;
+
+        return Ok(await _mediatr.Send(command, cancellationToken));
+    }
+
+    [HttpPut("food/point/modify/{id:guid}")]
+    public async Task<IActionResult> ModifyFoodPointAsync
+    (
+        [FromBody] ModifyFoodPointCommand command,
+        [FromRoute] Guid id,
+        CancellationToken cancellationToken = default
+    )
+    {
+        command.Id = id;
+
+        return Ok(await _mediatr.Send(command, cancellationToken));
+    }
+
+    [HttpPut("coaching/feedback/modify/{id:guid}")]
+    public async Task<IActionResult> ModifyFeedbackAsync
+    (
+        [FromRoute] Guid id,
+        [FromBody] ModifyFeedbackCommand command,
         CancellationToken cancellationToken = default
     )
     {
@@ -136,14 +206,54 @@ public class AdminController : ControllerBase
 
     [HttpPatch("coachings/{id:guid}/examples/add")]
     public async Task<IActionResult> AddExamplesToCoachingAsync
-    (
-        [FromRoute] Guid id,
-        [FromForm] List<IFormFile> files,
-        CancellationToken cancellationToken = default
-    )
+(
+    [FromRoute] Guid id,
+    [FromForm] List<IFormFile> files,
+    CancellationToken cancellationToken = default
+)
     {
         return Ok(await _mediatr.Send(new AddPhotosToCoachingCommand(id, files), cancellationToken));
     }
+
+    [HttpPatch("coaching/details/add")]
+    public async Task<IActionResult> AddCoachingDetailAsync
+(
+    [FromBody] AddCoachingDetailsCommand command,
+    CancellationToken cancellationToken = default
+)
+    {
+        return Ok(await _mediatr.Send(command, cancellationToken));
+    }
+
+    [HttpPatch("coaching/feedback/photos/add")]
+    public async Task<IActionResult> AddPhotosToFeedbackAsync
+(
+    [FromForm] AddPhotosToFeedbackCommand command,
+    CancellationToken cancellationToken = default
+)
+    {
+        return Ok(await _mediatr.Send(command, cancellationToken));
+    }
+
+    [HttpDelete("faq/delete/{id:guid}")]
+    public async Task<IActionResult> DeleteFAQAsync
+    (
+        [FromRoute] Guid id,
+        CancellationToken cancellationToken = default
+    )
+    {
+        return Ok(await _mediatr.Send(new DeleteFAQCommand(id), cancellationToken));
+    } 
+
+    [HttpDelete("coaches/delete/{id:guid}")]
+    public async Task<IActionResult> DeleteCoachAsync
+    (
+        [FromRoute] Guid id,
+        CancellationToken cancellationToken = default
+    )
+    {
+        return Ok(await _mediatr.Send(new DeleteCoachCommand(id), cancellationToken));
+    }  
 
     [HttpDelete("coachings/{id:guid}/examples/delete")]
     public async Task<IActionResult> DeleteExamplesFromCoachingAsync
@@ -168,17 +278,15 @@ public class AdminController : ControllerBase
         return Ok(await _mediatr.Send(new DeleteCoachingCommand(id), cancellationToken));
     }
 
-    [HttpPost("file/add")]
-    public async Task<IActionResult> AddNewFileAsync
+    [HttpDelete("coaching/details/remove")]
+    public async Task<IActionResult> DeleteCoachingDetailAsync
     (
-        IFormFile file,
+        [FromBody] DeleteCoachingDetailsCommand command,
         CancellationToken cancellationToken = default
     )
     {
-        var appFile = await _fileService.UploadFileAsync(new Data.Entities.AppFile(), file, cancellationToken);
-
-        return Ok(appFile.Id);
-    }
+        return Ok(await _mediatr.Send(command, cancellationToken));
+    }    
 
     [HttpDelete("file/delete/{id:guid}")]
     public async Task<IActionResult> DeleteFileAsync
@@ -190,30 +298,7 @@ public class AdminController : ControllerBase
         await _fileService.DeleteFileAsync(id, cancellationToken);
 
         return Ok();
-    }
-
-    [HttpPost("food/create")]
-    public async Task<IActionResult> CreateFoodAsync
-    (
-        [FromBody] CreateFoodCommand command,
-        CancellationToken cancellationToken = default
-    )
-    {
-        return Ok(await _mediatr.Send(command, cancellationToken));
-    }
-
-    [HttpPut("food/modify/{id:guid}")]
-    public async Task<IActionResult> ModifyFoodAsync
-    (
-        [FromRoute] Guid id,
-        [FromBody] ModifyFoodCommand command,
-        CancellationToken cancellationToken = default
-    )
-    {
-        command.Id = id;
-
-        return Ok(await _mediatr.Send(command, cancellationToken));
-    }
+    }    
 
     [HttpDelete("food/delete/{id:guid}")]
     public async Task<IActionResult> DeleteFoodAsync
@@ -223,30 +308,7 @@ public class AdminController : ControllerBase
     )
     {
         return Ok(await _mediatr.Send(new DeleteFoodCommand(id), cancellationToken));
-    }
-
-    [HttpPost("food/point/create")]
-    public async Task<IActionResult> CreateFoodPointAsync
-    (
-        [FromBody] AddFoodPointCommand command,
-        CancellationToken cancellationToken = default
-    )
-    {
-        return Ok(await _mediatr.Send(command, cancellationToken));
-    }
-
-    [HttpPut("food/point/modify/{id:guid}")]
-    public async Task<IActionResult> ModifyFoodPointAsync
-    (
-        [FromBody] ModifyFoodPointCommand command,
-        [FromRoute] Guid id,
-        CancellationToken cancellationToken = default
-    )
-    {
-        command.Id = id;
-
-        return Ok(await _mediatr.Send(command, cancellationToken));
-    }
+    }    
 
     [HttpDelete("food/point/delete/{id:guid}")]
     public async Task<IActionResult> DeleteFoodPointAsync
@@ -256,40 +318,7 @@ public class AdminController : ControllerBase
     )
     {
         return Ok(await _mediatr.Send(new DeleteFoodPointCommand(id), cancellationToken));
-    }
-
-    [HttpPost("coaching/feedback/add")]
-    public async Task<IActionResult> AddFeedbackAsync
-    (
-        [FromForm] AddFeedbackCommand command,
-        CancellationToken cancellationToken = default
-    )
-    {
-        return Ok(await _mediatr.Send(command, cancellationToken));
-    }
-
-    [HttpPatch("coaching/feedback/photos/add")]
-    public async Task<IActionResult> AddPhotosToFeedbackAsync
-    (
-        [FromForm] AddPhotosToFeedbackCommand command,
-        CancellationToken cancellationToken = default
-    )
-    {
-        return Ok(await _mediatr.Send(command, cancellationToken));
-    }
-
-    [HttpPut("coaching/feedback/modify/{id:guid}")]
-    public async Task<IActionResult> ModifyFeedbackAsync
-    (
-        [FromRoute] Guid id,
-        [FromBody] ModifyFeedbackCommand command,
-        CancellationToken cancellationToken = default
-    )
-    {
-        command.Id = id;
-
-        return Ok(await _mediatr.Send(command, cancellationToken));
-    }
+    }    
 
     [HttpDelete("coaching/feedback/delete/{id:guid}")]
     public async Task<IActionResult> DeleteFeedbackAsync
@@ -309,15 +338,5 @@ public class AdminController : ControllerBase
     )
     {
         return Ok(await _mediatr.Send(command, cancellationToken));
-    }
-
-    [HttpGet("coaching/feedback/{id:guid}")]
-    public async Task<IActionResult> GetFeedbackAsync
-    (
-        [FromRoute] Guid id,
-        CancellationToken cancellationToken = default
-    )
-    {
-        return Ok(await _mediatr.Send(new GetFeedbackCommand(id), cancellationToken));
     }
 }

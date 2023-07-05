@@ -39,5 +39,7 @@ public class DataContext : IdentityDbContext<User, ApplicationRole, Guid>
         builder.ApplyConfiguration(new CoachingConfiguration());
         builder.ApplyConfiguration(new AppFileConfiguration());
         builder.ApplyConfiguration(new CoachConfiguration());
+        builder.ApplyConfiguration(new CoachingDetailsConfiguration());
+        builder.ApplyConfiguration(new FoodPointConfiguration());
     }
 }

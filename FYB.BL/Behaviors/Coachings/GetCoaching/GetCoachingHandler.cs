@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using FYB.BL.Exceptions;
 using FYB.Data.Common;
 using FYB.Data.Common.DataTransferObjects;
 using FYB.Data.Constants;
@@ -28,6 +29,9 @@ public class GetCoachingHandler : IRequestHandler<GetCoachingQuery, CoachingDTO>
     public async Task<CoachingDTO> Handle(GetCoachingQuery request, CancellationToken cancellationToken)
     {
         var user = await _context.Users.FirstOrDefaultAsync(t => t.Id == request.CurrentUserId, cancellationToken);
+
+        if (user is null) throw new NotFoundException(ErrorMessages.UserNotFound);
+
         var coaching = await _context.Coachings
             .Include(t => t.Coach)
             .Include(t => t.CoachingPhoto)
@@ -39,6 +43,7 @@ public class GetCoachingHandler : IRequestHandler<GetCoachingQuery, CoachingDTO>
             .Include(t => t.Users)
             .FirstOrDefaultAsync(t => t.Id == request.Id, cancellationToken);
 
+        if (coaching is null) throw new NotFoundException(ErrorMessages.CoachingNotFound);
         if (!coaching.Users.Contains(user) && user.Role != Role.Admin) throw new Exception(ErrorMessages.ContentAccessForbidden);
 
         return _mapper.Map<Coaching, CoachingDTO>(coaching);

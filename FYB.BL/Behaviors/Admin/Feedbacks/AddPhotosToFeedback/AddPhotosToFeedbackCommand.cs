@@ -13,10 +13,4 @@ public class AddPhotosToFeedbackCommand : IRequest
     public Guid Id { get; set; }
 
     public List<IFormFile> Photos { get; set; }
-
-    public AddPhotosToFeedbackCommand(Guid id, List<IFormFile> photos)
-    {
-        Id = id;
-        Photos = photos;
-    }
 }

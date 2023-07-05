@@ -26,7 +26,9 @@ public class ModifyCoachingHandler : IRequestHandler<ModifyCoachingCommand>
 
     public async Task<Unit> Handle(ModifyCoachingCommand request, CancellationToken cancellationToken)
     {
-        var coaching = await _context.Coachings.FirstOrDefaultAsync(t => t.Id == request.Id, cancellationToken);
+        var coaching = await _context.Coachings
+            .Include(t => t.CoachingPhoto)
+            .FirstOrDefaultAsync(t => t.Id == request.Id, cancellationToken);
 
         if(coaching is null)
         {
@@ -42,7 +44,7 @@ public class ModifyCoachingHandler : IRequestHandler<ModifyCoachingCommand>
         coaching.Title = request.Title;
         coaching.Description = request.Description;
         coaching.Price = request.Price;
-        coaching.CoachingPhoto = await _fileService.UploadFileAsync(new AppFile { CoachingId = coaching.Id }, request.CoachingPhoto, cancellationToken);
+        coaching.CoachingPhoto = request.CoachingPhoto is not null ? await _fileService.UploadFileAsync(new AppFile { CoachingId = coaching.Id }, request.CoachingPhoto, cancellationToken) : coaching.CoachingPhoto;
         coaching.CoachId = request.CoachId;
         coaching.FoodId = request.FoodId;
 

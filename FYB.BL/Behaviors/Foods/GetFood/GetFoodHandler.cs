@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using FYB.BL.Exceptions;
 using FYB.Data.Common;
 using FYB.Data.Common.DataTransferObjects;
 using FYB.Data.Constants;
@@ -27,11 +28,15 @@ public class GetFoodHandler : IRequestHandler<GetFoodQuery, FoodDTO>
     public async Task<FoodDTO> Handle(GetFoodQuery request, CancellationToken cancellationToken)
     {
         var user = await _context.Users.FirstOrDefaultAsync(t => t.Id == request.CurrentUserId, cancellationToken);
+
+        if (user is null) throw new NotFoundException(ErrorMessages.UserNotFound);
+
         var food = await _context.Food
             .Include(t => t.Users)
             .Include(t => t.FoodPoints)
             .FirstOrDefaultAsync(t => t.Id == request.Id, cancellationToken);
 
+        if (food is null) throw new NotFoundException(ErrorMessages.FoodNotFound);
         if (!food.Users.Contains(user) && user.Role != Role.Admin) throw new Exception(ErrorMessages.ContentAccessForbidden);
 
         return _mapper.Map<FoodDTO>(food);

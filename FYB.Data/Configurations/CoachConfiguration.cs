@@ -13,9 +13,9 @@ public class CoachConfiguration : IEntityTypeConfiguration<Coach>
 {
     public void Configure(EntityTypeBuilder<Coach> builder)
     {
-        //builder.HasOne(t => t.Avatar)
-        //    .WithOne(t => t.Coach)
-        //    .HasForeignKey<Coach>(t => t.AvatarId)
-        //    .OnDelete(DeleteBehavior.SetNull);
+        builder.HasOne(t => t.Avatar)
+            .WithOne(t => t.Coach)
+            .HasForeignKey<Coach>(t => t.AvatarId)
+            .OnDelete(DeleteBehavior.NoAction);
     }
 }

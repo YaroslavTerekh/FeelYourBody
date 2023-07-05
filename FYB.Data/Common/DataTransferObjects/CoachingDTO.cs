@@ -29,6 +29,8 @@ public class CoachingDTO
 
     public AppFileDTO CoachingPhoto { get; set; }
 
+    public List<CoachingDetailDTO> CoachingDetails { get; set; } = new();
+
     public List<FeedbackDTO> Feedbacks { get; set; } = new();
 
     public List<AppFileDTO> ExamplePhotos { get; set; } = new();

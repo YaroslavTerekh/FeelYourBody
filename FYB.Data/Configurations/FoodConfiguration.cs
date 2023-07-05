@@ -15,12 +15,12 @@ public class FoodConfiguration : IEntityTypeConfiguration<Food>
     {
         builder.HasOne(t => t.Coaching)
             .WithOne(t => t.Food)
-            .HasForeignKey<Coaching>(t => t.FoodId)
-            .OnDelete(DeleteBehavior.Restrict);
+            .HasForeignKey<Food>(t => t.CoachingId)
+            .OnDelete(DeleteBehavior.SetNull);
 
         builder.HasMany(t => t.FoodPoints)
             .WithOne(t => t.Food)
             .HasForeignKey(t => t.FoodId)
-            .OnDelete(DeleteBehavior.Restrict);
+            .OnDelete(DeleteBehavior.NoAction);
     }
 }

@@ -11,10 +11,9 @@ namespace FYB.BL.Behaviors.Admin.Coachings.ModifyCoaching;
 
 public class ModifyCoachingCommand : IRequest
 {
-    [JsonIgnore]
     public Guid Id { get; set; }
 
-    public IFormFile CoachingPhoto { get; set; }
+    public IFormFile? CoachingPhoto { get; set; }
 
     public string Title { get; set; }
 

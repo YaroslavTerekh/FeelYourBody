@@ -1,18 +1,16 @@
 ﻿using FluentValidation;
 using FYB.Data.Constants;
-using FYB.Data.DbConnection;
-using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FYB.BL.Behaviors.Admin.Coachings.AddPhotosToCoaching;
+namespace FYB.BL.Behaviors.Admin.Coachings.AddCoachingDetails;
 
-public class AddPhotosToCoachingCommandValidator : AbstractValidator<AddPhotosToCoachingCommand>
+public class AddCoachingDetailsCommandValidator : AbstractValidator<AddCoachingDetailsCommand>
 {
-    public AddPhotosToCoachingCommandValidator(DataContext _context)
+    public AddCoachingDetailsCommandValidator()
     {
         RuleFor(t => t.Id)
             .NotEqual(Guid.Empty)

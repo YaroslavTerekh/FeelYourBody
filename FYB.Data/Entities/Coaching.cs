@@ -24,8 +24,6 @@ public class Coaching : BaseProduct
 
     public AppFile CoachingPhoto { get; set; }
 
-    public Guid CoachingDetailsId { get; set; }
-
     public List<CoachingDetails> CoachingDetails { get; set; }
 
     public List<Feedback> Feedbacks { get; set; } = new();

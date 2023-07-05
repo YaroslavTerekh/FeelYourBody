@@ -35,7 +35,7 @@ public class DeleteCoachingHandler : IRequestHandler<DeleteCoachingCommand>
             throw new NotFoundException(ErrorMessages.CoachingNotFound);
         }
 
-        foreach (var file in coaching.ExamplePhotos) file.CoachingId = null;
+        foreach (var file in coaching.ExamplePhotos) file.CoachingListId = null;
         coaching.CoachingPhoto.CoachingId = null;
         _context.Coachings.Remove(coaching);
         await _context.SaveChangesAsync(cancellationToken);

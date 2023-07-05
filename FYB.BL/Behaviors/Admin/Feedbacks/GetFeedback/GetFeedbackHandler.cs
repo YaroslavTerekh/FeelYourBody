@@ -28,11 +28,10 @@ public class GetFeedbackHandler : IRequestHandler<GetFeedbackCommand, FeedbackDT
     {
         var feedback = await _context.Feedbacks
             .Include(t => t.Photos)
-            .Select(t => _mapper.Map<FeedbackDTO>(t))
             .FirstOrDefaultAsync(t => t.Id == request.Id, cancellationToken);
 
         if (feedback is null) throw new NotFoundException(ErrorMessages.FeedbackNotFound);
 
-        return feedback;
+        return _mapper.Map<FeedbackDTO>(feedback);
     }
 }

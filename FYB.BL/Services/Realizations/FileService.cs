@@ -40,7 +40,7 @@ public class FileService : IFileService
         try
         {
             fileModel.FilePath = path;
-            fileModel.FileExtension = extension;
+            fileModel.FileExtension = file.ContentType;
             fileModel.FileName = fileName;
 
             //Directory.CreateDirectory(uploadPath);

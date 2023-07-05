@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace FYB.BL.Behaviors.Admin.FrequentlyAskedQuestions.CreateFAQ;
 
-public class CreateFAQCommandValidator : AbstractValidator<FAQ>
+public class CreateFAQCommandValidator : AbstractValidator<CreateFAQCommand>
 {
     public CreateFAQCommandValidator()
     {

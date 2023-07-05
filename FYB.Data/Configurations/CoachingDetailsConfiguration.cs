@@ -9,17 +9,12 @@ using System.Threading.Tasks;
 
 namespace FYB.Data.Configurations;
 
-public class FeedbackConfiguration : IEntityTypeConfiguration<Feedback>
+public class CoachingDetailsConfiguration : IEntityTypeConfiguration<CoachingDetails>
 {
-    public void Configure(EntityTypeBuilder<Feedback> builder)
+    public void Configure(EntityTypeBuilder<CoachingDetails> builder)
     {
-        builder.HasMany(t => t.Photos)
-            .WithOne(t => t.Feedback)
-            .HasForeignKey(t => t.FeedBackId)
-            .OnDelete(DeleteBehavior.NoAction);
-
         builder.HasOne(t => t.Coaching)
-            .WithMany(t => t.Feedbacks)
+            .WithMany(t => t.CoachingDetails)
             .HasForeignKey(t => t.CoachingId)
             .OnDelete(DeleteBehavior.Cascade);
     }

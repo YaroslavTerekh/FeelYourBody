@@ -4,6 +4,7 @@ using FYB.Data.DbConnection;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FYB.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20230705111639_AddFoodPointConfig")]
+    partial class AddFoodPointConfig
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -172,6 +174,9 @@ namespace FYB.Data.Migrations
                     b.Property<Guid>("CoachId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid>("CoachingDetailsId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<Guid>("CoachingPhotoId")
                         .HasColumnType("uniqueidentifier");
 
@@ -198,6 +203,10 @@ namespace FYB.Data.Migrations
 
                     b.HasIndex("CoachingPhotoId")
                         .IsUnique();
+
+                    b.HasIndex("FoodId")
+                        .IsUnique()
+                        .HasFilter("[FoodId] IS NOT NULL");
 
                     b.ToTable("Coachings");
                 });
@@ -328,10 +337,6 @@ namespace FYB.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CoachingId")
-                        .IsUnique()
-                        .HasFilter("[CoachingId] IS NOT NULL");
 
                     b.ToTable("Food");
                 });
@@ -622,9 +627,16 @@ namespace FYB.Data.Migrations
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
+                    b.HasOne("FYB.Data.Entities.Food", "Food")
+                        .WithOne("Coaching")
+                        .HasForeignKey("FYB.Data.Entities.Coaching", "FoodId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
                     b.Navigation("Coach");
 
                     b.Navigation("CoachingPhoto");
+
+                    b.Navigation("Food");
                 });
 
             modelBuilder.Entity("FYB.Data.Entities.CoachingDetails", b =>
@@ -654,16 +666,6 @@ namespace FYB.Data.Migrations
                         .HasForeignKey("CoachingId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Coaching");
-                });
-
-            modelBuilder.Entity("FYB.Data.Entities.Food", b =>
-                {
-                    b.HasOne("FYB.Data.Entities.Coaching", "Coaching")
-                        .WithOne("Food")
-                        .HasForeignKey("FYB.Data.Entities.Food", "CoachingId")
-                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.Navigation("Coaching");
                 });
@@ -750,8 +752,6 @@ namespace FYB.Data.Migrations
 
                     b.Navigation("Feedbacks");
 
-                    b.Navigation("Food");
-
                     b.Navigation("Videos");
                 });
 
@@ -762,6 +762,8 @@ namespace FYB.Data.Migrations
 
             modelBuilder.Entity("FYB.Data.Entities.Food", b =>
                 {
+                    b.Navigation("Coaching");
+
                     b.Navigation("FoodPoints");
                 });
 #pragma warning restore 612, 618

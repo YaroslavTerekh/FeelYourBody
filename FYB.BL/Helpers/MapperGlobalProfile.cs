@@ -19,5 +19,6 @@ public class MapperGlobalProfile : Profile
         CreateMap<Feedback, FeedbackDTO> ();
         CreateMap<Food, FoodDTO> ();
         CreateMap<FoodPoint, FoodPointDTO> ();
+        CreateMap<CoachingDetails, CoachingDetailDTO>();
     }
 }

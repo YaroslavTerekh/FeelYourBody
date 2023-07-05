@@ -23,5 +23,5 @@ public class AddNewCoachCommand : IRequest
 
     public DateTime BirthDate { get; set; }
 
-    public List<Guid> CoachingIds { get; set; }
+    public List<Guid>? CoachingIds { get; set; }
 }

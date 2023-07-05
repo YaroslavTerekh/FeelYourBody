@@ -1,4 +1,5 @@
-﻿using FYB.Data.Entities;
+﻿using FYB.Data.Common;
+using FYB.Data.Entities;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using System;
@@ -12,8 +13,6 @@ namespace FYB.BL.Behaviors.Admin.Coachings.CreateCoaching;
 public class CreateCoachingCommand : IRequest
 {
     public IFormFile CoachingPhoto { get; set; }
-
-    public List<CoachingDetails> CoachingDetails { get; set; }
 
     public string Title { get; set; }
 

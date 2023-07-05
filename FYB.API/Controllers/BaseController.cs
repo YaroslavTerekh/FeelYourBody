@@ -5,7 +5,6 @@ using System.Security.Claims;
 
 namespace FYB.API.Controllers;
 
-[Authorize]
 public class BaseController : ControllerBase
 {
     protected Guid CurrentUserId => Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);

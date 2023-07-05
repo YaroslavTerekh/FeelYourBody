@@ -53,6 +53,11 @@ public class CustomExceptionHandler
                 result = ErrorMessages.UnknownError;
                 break;
 
+            case NullReferenceException nullReferenceException:
+                code = HttpStatusCode.InternalServerError;
+                result = ErrorMessages.UnknownError;
+                break;
+
             case Exception defaultException:
                 code = HttpStatusCode.BadRequest;
                 result = defaultException.Message;
