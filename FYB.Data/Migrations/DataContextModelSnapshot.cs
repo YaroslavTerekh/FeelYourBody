@@ -22,14 +22,56 @@ namespace FYB.Data.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
+            modelBuilder.Entity("CoachingUser", b =>
+                {
+                    b.Property<Guid>("CoachingsId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("UsersId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("CoachingsId", "UsersId");
+
+                    b.HasIndex("UsersId");
+
+                    b.ToTable("CoachingUser");
+                });
+
+            modelBuilder.Entity("FoodUser", b =>
+                {
+                    b.Property<Guid>("FoodsId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("UsersId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("FoodsId", "UsersId");
+
+                    b.HasIndex("UsersId");
+
+                    b.ToTable("FoodUser");
+                });
+
             modelBuilder.Entity("FYB.Data.Entities.AppFile", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid?>("CoachId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("CoachingId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("CoachingListId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("FeedBackId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("FileExtension")
                         .IsRequired()
@@ -45,7 +87,13 @@ namespace FYB.Data.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("CoachingListId");
+
+                    b.HasIndex("FeedBackId");
+
                     b.ToTable("Files");
+
+                    b.HasCheckConstraint("CK_Files_CoachId_Or_FeedBackId_Or_CoachingListId_Or_CoachingId", "CASE WHEN CoachId IS NOT NULL THEN (CASE WHEN FeedBackId IS NULL AND CoachingListId IS NULL AND CoachingId IS NULL THEN 1 ELSE 0 END) WHEN FeedBackId IS NOT NULL THEN (CASE WHEN CoachingListId IS NULL AND CoachingId IS NULL THEN 1 ELSE 0 END) WHEN CoachingListId IS NOT NULL THEN (CASE WHEN CoachingId IS NULL THEN 1 ELSE 0 END) ELSE 1 END = 1");
                 });
 
             modelBuilder.Entity("FYB.Data.Entities.ApplicationRole", b =>
@@ -99,13 +147,18 @@ namespace FYB.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("InstagramLink")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("LastName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AvatarId");
+                    b.HasIndex("AvatarId")
+                        .IsUnique();
 
                     b.ToTable("Coaches");
                 });
@@ -119,12 +172,21 @@ namespace FYB.Data.Migrations
                     b.Property<Guid>("CoachId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid>("CoachingPhotoId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid?>("FoodId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<long>("Price")
+                        .HasColumnType("bigint");
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -134,7 +196,36 @@ namespace FYB.Data.Migrations
 
                     b.HasIndex("CoachId");
 
+                    b.HasIndex("CoachingPhotoId")
+                        .IsUnique();
+
                     b.ToTable("Coachings");
+                });
+
+            modelBuilder.Entity("FYB.Data.Entities.CoachingDetails", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("CoachingId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Detail")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Icon")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CoachingId");
+
+                    b.ToTable("CoachingDetails");
                 });
 
             modelBuilder.Entity("FYB.Data.Entities.CoachingVideo", b =>
@@ -164,6 +255,117 @@ namespace FYB.Data.Migrations
                     b.ToTable("CoachingVideos");
                 });
 
+            modelBuilder.Entity("FYB.Data.Entities.FAQ", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Answer")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Question")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("FAQs");
+                });
+
+            modelBuilder.Entity("FYB.Data.Entities.Feedback", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("CoachingId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("FeedbackText")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("InstagramLink")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CoachingId");
+
+                    b.ToTable("Feedbacks");
+                });
+
+            modelBuilder.Entity("FYB.Data.Entities.Food", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("CoachingId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<long>("Price")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CoachingId")
+                        .IsUnique()
+                        .HasFilter("[CoachingId] IS NOT NULL");
+
+                    b.ToTable("Food");
+                });
+
+            modelBuilder.Entity("FYB.Data.Entities.FoodPoint", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("FoodId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<long>("PortionMass")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FoodId");
+
+                    b.ToTable("FoodPoints");
+                });
+
             modelBuilder.Entity("FYB.Data.Entities.User", b =>
                 {
                     b.Property<Guid>("Id")
@@ -172,9 +374,6 @@ namespace FYB.Data.Migrations
 
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
-
-                    b.Property<Guid?>("CoachingId")
-                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
@@ -222,6 +421,9 @@ namespace FYB.Data.Migrations
                     b.Property<DateTime>("RegisterDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<int>("Role")
+                        .HasColumnType("int");
+
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
 
@@ -233,8 +435,6 @@ namespace FYB.Data.Migrations
                         .HasColumnType("nvarchar(256)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CoachingId");
 
                     b.HasIndex("NormalizedEmail")
                         .HasDatabaseName("EmailIndex");
@@ -350,12 +550,59 @@ namespace FYB.Data.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("CoachingUser", b =>
+                {
+                    b.HasOne("FYB.Data.Entities.Coaching", null)
+                        .WithMany()
+                        .HasForeignKey("CoachingsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("FYB.Data.Entities.User", null)
+                        .WithMany()
+                        .HasForeignKey("UsersId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("FoodUser", b =>
+                {
+                    b.HasOne("FYB.Data.Entities.Food", null)
+                        .WithMany()
+                        .HasForeignKey("FoodsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("FYB.Data.Entities.User", null)
+                        .WithMany()
+                        .HasForeignKey("UsersId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("FYB.Data.Entities.AppFile", b =>
+                {
+                    b.HasOne("FYB.Data.Entities.Coaching", "CoachingList")
+                        .WithMany("ExamplePhotos")
+                        .HasForeignKey("CoachingListId")
+                        .OnDelete(DeleteBehavior.NoAction);
+
+                    b.HasOne("FYB.Data.Entities.Feedback", "Feedback")
+                        .WithMany("Photos")
+                        .HasForeignKey("FeedBackId")
+                        .OnDelete(DeleteBehavior.NoAction);
+
+                    b.Navigation("CoachingList");
+
+                    b.Navigation("Feedback");
+                });
+
             modelBuilder.Entity("FYB.Data.Entities.Coach", b =>
                 {
                     b.HasOne("FYB.Data.Entities.AppFile", "Avatar")
-                        .WithMany()
-                        .HasForeignKey("AvatarId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .WithOne("Coach")
+                        .HasForeignKey("FYB.Data.Entities.Coach", "AvatarId")
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Avatar");
@@ -369,7 +616,26 @@ namespace FYB.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("FYB.Data.Entities.AppFile", "CoachingPhoto")
+                        .WithOne("Coaching")
+                        .HasForeignKey("FYB.Data.Entities.Coaching", "CoachingPhotoId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
                     b.Navigation("Coach");
+
+                    b.Navigation("CoachingPhoto");
+                });
+
+            modelBuilder.Entity("FYB.Data.Entities.CoachingDetails", b =>
+                {
+                    b.HasOne("FYB.Data.Entities.Coaching", "Coaching")
+                        .WithMany("CoachingDetails")
+                        .HasForeignKey("CoachingId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Coaching");
                 });
 
             modelBuilder.Entity("FYB.Data.Entities.CoachingVideo", b =>
@@ -381,11 +647,36 @@ namespace FYB.Data.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("FYB.Data.Entities.User", b =>
+            modelBuilder.Entity("FYB.Data.Entities.Feedback", b =>
                 {
-                    b.HasOne("FYB.Data.Entities.Coaching", null)
-                        .WithMany("Users")
-                        .HasForeignKey("CoachingId");
+                    b.HasOne("FYB.Data.Entities.Coaching", "Coaching")
+                        .WithMany("Feedbacks")
+                        .HasForeignKey("CoachingId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Coaching");
+                });
+
+            modelBuilder.Entity("FYB.Data.Entities.Food", b =>
+                {
+                    b.HasOne("FYB.Data.Entities.Coaching", "Coaching")
+                        .WithOne("Food")
+                        .HasForeignKey("FYB.Data.Entities.Food", "CoachingId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.Navigation("Coaching");
+                });
+
+            modelBuilder.Entity("FYB.Data.Entities.FoodPoint", b =>
+                {
+                    b.HasOne("FYB.Data.Entities.Food", "Food")
+                        .WithMany("FoodPoints")
+                        .HasForeignKey("FoodId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Food");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
@@ -439,6 +730,13 @@ namespace FYB.Data.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("FYB.Data.Entities.AppFile", b =>
+                {
+                    b.Navigation("Coach");
+
+                    b.Navigation("Coaching");
+                });
+
             modelBuilder.Entity("FYB.Data.Entities.Coach", b =>
                 {
                     b.Navigation("Coachings");
@@ -446,9 +744,25 @@ namespace FYB.Data.Migrations
 
             modelBuilder.Entity("FYB.Data.Entities.Coaching", b =>
                 {
-                    b.Navigation("Users");
+                    b.Navigation("CoachingDetails");
+
+                    b.Navigation("ExamplePhotos");
+
+                    b.Navigation("Feedbacks");
+
+                    b.Navigation("Food");
 
                     b.Navigation("Videos");
+                });
+
+            modelBuilder.Entity("FYB.Data.Entities.Feedback", b =>
+                {
+                    b.Navigation("Photos");
+                });
+
+            modelBuilder.Entity("FYB.Data.Entities.Food", b =>
+                {
+                    b.Navigation("FoodPoints");
                 });
 #pragma warning restore 612, 618
         }

@@ -1,4 +1,5 @@
-﻿using FYB.BL.Services.Abstractions;
+﻿using FYB.BL.Exceptions;
+using FYB.BL.Services.Abstractions;
 using FYB.Data.Constants;
 using FYB.Data.Entities;
 using FYB.Data.Models;
@@ -35,7 +36,7 @@ public class LoginHandler : IRequestHandler<LoginCommand, JWTResponse>
 
         if (user is null)
         {
-            throw new Exception(ErrorMessages.UserNotFound);
+            throw new NotFoundException(ErrorMessages.UserNotFound);
         }
 
         var result = await _signInManager.CheckPasswordSignInAsync(user, request.Password, false);

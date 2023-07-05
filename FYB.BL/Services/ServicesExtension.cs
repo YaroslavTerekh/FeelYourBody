@@ -1,5 +1,6 @@
 ﻿using FYB.BL.Services.Abstractions;
 using FYB.BL.Services.Realizations;
+using FYB.Data.Entities;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
@@ -14,6 +15,9 @@ public static class ServicesExtension
     public static IServiceCollection AddCustomServices(this IServiceCollection services)
     {
         services.AddTransient<IJWTService, JWTService>();
+        services.AddTransient<IFileService, FileService>();
+        services.AddTransient<IProductService<Food>, FoodProductService>();
+        services.AddTransient<IProductService<Coaching>, CoachingProductService>();
 
         return services;
     }
