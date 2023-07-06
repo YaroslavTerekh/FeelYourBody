@@ -26,6 +26,7 @@ using FYB.BL.Behaviors.Admin.FrequentlyAskedQuestions.ModifyFAQ;
 using FYB.BL.Services.Abstractions;
 using FYB.Data.Common;
 using FYB.Data.Constants;
+using FYB.Data.Entities;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -40,19 +41,26 @@ public class AdminController : BaseController
 {
     private readonly IMediator _mediatr;
     private readonly IFileService _fileService;
+    private readonly IVideoService _videoService;
 
-    public AdminController(IMediator mediatr, IFileService fileService)
+    public AdminController
+    (
+        IMediator mediatr,
+        IFileService fileService,
+        IVideoService videoService
+    )
     {
         _mediatr = mediatr;
         _fileService = fileService;
+        _videoService = videoService;
     }
 
     [HttpGet("coaching/feedback/{id:guid}")]
     public async Task<IActionResult> GetFeedbackAsync
-(
-    [FromRoute] Guid id,
-    CancellationToken cancellationToken = default
-)
+    (
+        [FromRoute] Guid id,
+        CancellationToken cancellationToken = default
+    )
     {
         return Ok(await _mediatr.Send(new GetFeedbackCommand(id), cancellationToken));
     }
@@ -69,10 +77,10 @@ public class AdminController : BaseController
 
     [HttpPost("coachings/add")]
     public async Task<IActionResult> CreateCoachingAsync
-(
-    [FromForm] CreateCoachingCommand command,
-    CancellationToken cancellationToken = default
-)
+    (
+        [FromForm] CreateCoachingCommand command,
+        CancellationToken cancellationToken = default
+    )
     {
         return Ok(await _mediatr.Send(command, cancellationToken));
     }
@@ -94,37 +102,50 @@ public class AdminController : BaseController
         CancellationToken cancellationToken = default
     )
     {
-        var appFile = await _fileService.UploadFileAsync(new Data.Entities.AppFile(), file, cancellationToken);
+        var appFile = await _fileService.UploadFileAsync(new AppFile(), file, cancellationToken);
 
         return Ok(appFile.Id);
     }
 
+    [HttpPost("video/{id:guid}/add")]
+    public async Task<IActionResult> AddNewVideoAsync
+    (
+        IFormFile file,
+        [FromRoute] Guid id,
+        CancellationToken cancellationToken = default
+    )
+    {
+        await _videoService.UploadVideoAsync(file, id, cancellationToken);
+
+        return Ok();
+    }
+
     [HttpPost("food/create")]
     public async Task<IActionResult> CreateFoodAsync
-(
-    [FromBody] CreateFoodCommand command,
-    CancellationToken cancellationToken = default
-)
+    (
+        [FromBody] CreateFoodCommand command,
+        CancellationToken cancellationToken = default
+    )
     {
         return Ok(await _mediatr.Send(command, cancellationToken));
     }
 
     [HttpPost("food/point/create")]
     public async Task<IActionResult> CreateFoodPointAsync
-(
-    [FromBody] AddFoodPointCommand command,
-    CancellationToken cancellationToken = default
-)
+    (
+        [FromBody] AddFoodPointCommand command,
+        CancellationToken cancellationToken = default
+    )
     {
         return Ok(await _mediatr.Send(command, cancellationToken));
     }
 
     [HttpPost("coaching/feedback/add")]
     public async Task<IActionResult> AddFeedbackAsync
-(
-    [FromForm] AddFeedbackCommand command,
-    CancellationToken cancellationToken = default
-)
+    (
+        [FromForm] AddFeedbackCommand command,
+        CancellationToken cancellationToken = default
+    )
     {
         return Ok(await _mediatr.Send(command, cancellationToken));
     }
@@ -206,31 +227,31 @@ public class AdminController : BaseController
 
     [HttpPatch("coachings/{id:guid}/examples/add")]
     public async Task<IActionResult> AddExamplesToCoachingAsync
-(
-    [FromRoute] Guid id,
-    [FromForm] List<IFormFile> files,
-    CancellationToken cancellationToken = default
-)
+    (
+        [FromRoute] Guid id,
+        [FromForm] List<IFormFile> files,
+        CancellationToken cancellationToken = default
+    )
     {
         return Ok(await _mediatr.Send(new AddPhotosToCoachingCommand(id, files), cancellationToken));
     }
 
     [HttpPatch("coaching/details/add")]
     public async Task<IActionResult> AddCoachingDetailAsync
-(
-    [FromBody] AddCoachingDetailsCommand command,
-    CancellationToken cancellationToken = default
-)
+    (
+        [FromBody] AddCoachingDetailsCommand command,
+        CancellationToken cancellationToken = default
+    )
     {
         return Ok(await _mediatr.Send(command, cancellationToken));
     }
 
     [HttpPatch("coaching/feedback/photos/add")]
     public async Task<IActionResult> AddPhotosToFeedbackAsync
-(
-    [FromForm] AddPhotosToFeedbackCommand command,
-    CancellationToken cancellationToken = default
-)
+    (
+        [FromForm] AddPhotosToFeedbackCommand command,
+        CancellationToken cancellationToken = default
+    )
     {
         return Ok(await _mediatr.Send(command, cancellationToken));
     }
@@ -243,7 +264,19 @@ public class AdminController : BaseController
     )
     {
         return Ok(await _mediatr.Send(new DeleteFAQCommand(id), cancellationToken));
-    } 
+    }
+
+    [HttpDelete("coaching/video/delete/{id:guid}")]
+    public async Task<IActionResult> DeleteVideoAsync
+    (
+        [FromRoute] Guid id,
+        CancellationToken cancellationToken = default
+    )
+    {
+        await _videoService.DeleteVideoAsync(id, cancellationToken);
+
+        return Ok();
+    }
 
     [HttpDelete("coaches/delete/{id:guid}")]
     public async Task<IActionResult> DeleteCoachAsync
@@ -253,7 +286,7 @@ public class AdminController : BaseController
     )
     {
         return Ok(await _mediatr.Send(new DeleteCoachCommand(id), cancellationToken));
-    }  
+    }
 
     [HttpDelete("coachings/{id:guid}/examples/delete")]
     public async Task<IActionResult> DeleteExamplesFromCoachingAsync
@@ -286,7 +319,7 @@ public class AdminController : BaseController
     )
     {
         return Ok(await _mediatr.Send(command, cancellationToken));
-    }    
+    }
 
     [HttpDelete("file/delete/{id:guid}")]
     public async Task<IActionResult> DeleteFileAsync
@@ -298,7 +331,7 @@ public class AdminController : BaseController
         await _fileService.DeleteFileAsync(id, cancellationToken);
 
         return Ok();
-    }    
+    }
 
     [HttpDelete("food/delete/{id:guid}")]
     public async Task<IActionResult> DeleteFoodAsync
@@ -308,7 +341,7 @@ public class AdminController : BaseController
     )
     {
         return Ok(await _mediatr.Send(new DeleteFoodCommand(id), cancellationToken));
-    }    
+    }
 
     [HttpDelete("food/point/delete/{id:guid}")]
     public async Task<IActionResult> DeleteFoodPointAsync
@@ -318,7 +351,7 @@ public class AdminController : BaseController
     )
     {
         return Ok(await _mediatr.Send(new DeleteFoodPointCommand(id), cancellationToken));
-    }    
+    }
 
     [HttpDelete("coaching/feedback/delete/{id:guid}")]
     public async Task<IActionResult> DeleteFeedbackAsync
