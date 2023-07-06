@@ -16,6 +16,7 @@ public static class ServicesExtension
     {
         services.AddTransient<IJWTService, JWTService>();
         services.AddTransient<IFileService, FileService>();
+        services.AddTransient<IVideoService, VideoService>();
         services.AddTransient<IProductService<Food>, FoodProductService>();
         services.AddTransient<IProductService<Coaching>, CoachingProductService>();
 

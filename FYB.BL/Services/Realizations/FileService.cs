@@ -31,33 +31,42 @@ public class FileService : IFileService
 
     public async Task<AppFile> UploadFileAsync(AppFile fileModel, IFormFile file, CancellationToken cancellationToken)
     {
-        var fileName = Path.GetFileName(file.FileName);
-        var extension = Path.GetExtension(file.FileName);
-        var filePathName = fileName + DateTime.UtcNow.Millisecond + extension;
-        var path = Path.Combine("uploads", filePathName);
-        var uploadPath = Path.Combine(_env.ContentRootPath, "uploads", filePathName);
+        var extension = Path.GetExtension(file.FileName).ToLower();
 
-        try
+        if (
+            extension == ".jpg" ||
+            extension == ".jpeg" ||
+            extension == ".png"
+        )
         {
-            fileModel.FilePath = path;
-            fileModel.FileExtension = file.ContentType;
-            fileModel.FileName = fileName;
+            var fileName = Path.GetFileName(file.FileName);
+            var filePathName = fileName + DateTime.UtcNow.Millisecond + extension;
+            var path = Path.Combine("uploads", filePathName);
+            var uploadPath = Path.Combine(_env.ContentRootPath, "uploads", filePathName);
 
-            //Directory.CreateDirectory(uploadPath);
-            using(var fs = new FileStream(uploadPath, FileMode.CreateNew))
+            try
             {
-                await file.CopyToAsync(fs, cancellationToken);
+                fileModel.FilePath = path;
+                fileModel.FileExtension = file.ContentType;
+                fileModel.FileName = fileName;
+
+                using (var fs = new FileStream(uploadPath, FileMode.CreateNew))
+                {
+                    await file.CopyToAsync(fs, cancellationToken);
+                }
+
+                await _context.Files.AddAsync(fileModel, cancellationToken);
+
+                return fileModel;
             }
-
-            await _context.Files.AddAsync(fileModel, cancellationToken);
-
-            return fileModel;
+            catch (Exception e)
+            {
+                File.Delete(uploadPath);
+                throw;
+            }
         }
-        catch(Exception e)
-        {
-            File.Delete(uploadPath);
-            throw;
-        }
+
+        throw new Exception(ErrorMessages.UnknownPhotoType);
     }
 
     public async Task DeleteFileAsync(Guid id, CancellationToken cancellationToken)

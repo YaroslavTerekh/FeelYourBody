@@ -23,7 +23,7 @@ public class GetFileHandler : IRequestHandler<GetFileQuery, AppFile>
 
     public async Task<AppFile> Handle(GetFileQuery request, CancellationToken cancellationToken)
     {
-        var file = await _context.Files.FirstOrDefaultAsync(t => t.Id == request.Id);
+        var file = await _context.Files.FirstOrDefaultAsync(t => t.Id == request.Id, cancellationToken);
 
         if (file is null) throw new NotFoundException(ErrorMessages.FileNotFound);
 
