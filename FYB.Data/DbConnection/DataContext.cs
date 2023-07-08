@@ -30,6 +30,10 @@ public class DataContext : IdentityDbContext<User, ApplicationRole, Guid>
 
     public DbSet<FoodPoint> FoodPoints { get; set; }
 
+    public DbSet<Purchase<Coaching>> CoachingPurchases { get; set; }
+
+    public DbSet<Purchase<Food>> FoodPurchases { get; set; }
+
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
@@ -41,5 +45,7 @@ public class DataContext : IdentityDbContext<User, ApplicationRole, Guid>
         builder.ApplyConfiguration(new CoachConfiguration());
         builder.ApplyConfiguration(new CoachingDetailsConfiguration());
         builder.ApplyConfiguration(new FoodPointConfiguration());
+        builder.ApplyConfiguration(new CoachingPurchasesConfiguration());
+        builder.ApplyConfiguration(new FoodPurchasesConfiguration());
     }
 }

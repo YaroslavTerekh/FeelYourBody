@@ -192,6 +192,9 @@ namespace FYB.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<long>("UnixExpireTime")
+                        .HasColumnType("bigint");
+
                     b.HasKey("Id");
 
                     b.HasIndex("CoachId");
@@ -331,6 +334,9 @@ namespace FYB.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<long>("UnixExpireTime")
+                        .HasColumnType("bigint");
+
                     b.HasKey("Id");
 
                     b.HasIndex("CoachingId")
@@ -368,6 +374,80 @@ namespace FYB.Data.Migrations
                     b.HasIndex("FoodId");
 
                     b.ToTable("FoodPoints");
+                });
+
+            modelBuilder.Entity("FYB.Data.Entities.Purchase<FYB.Data.Entities.Coaching>", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("ExpireDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsExpired")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("OrderId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("ProductId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("ProductType")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("CoachingPurchases");
+                });
+
+            modelBuilder.Entity("FYB.Data.Entities.Purchase<FYB.Data.Entities.Food>", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("ExpireDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsExpired")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("OrderId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("ProductId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("ProductType")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("FoodPurchases");
                 });
 
             modelBuilder.Entity("FYB.Data.Entities.User", b =>
@@ -644,11 +724,13 @@ namespace FYB.Data.Migrations
 
             modelBuilder.Entity("FYB.Data.Entities.CoachingVideo", b =>
                 {
-                    b.HasOne("FYB.Data.Entities.Coaching", null)
+                    b.HasOne("FYB.Data.Entities.Coaching", "Coaching")
                         .WithMany("Videos")
                         .HasForeignKey("CoachingId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Coaching");
                 });
 
             modelBuilder.Entity("FYB.Data.Entities.Feedback", b =>
@@ -681,6 +763,44 @@ namespace FYB.Data.Migrations
                         .IsRequired();
 
                     b.Navigation("Food");
+                });
+
+            modelBuilder.Entity("FYB.Data.Entities.Purchase<FYB.Data.Entities.Coaching>", b =>
+                {
+                    b.HasOne("FYB.Data.Entities.Coaching", "Product")
+                        .WithMany()
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("FYB.Data.Entities.User", "User")
+                        .WithMany("CoachingPurchases")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Product");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("FYB.Data.Entities.Purchase<FYB.Data.Entities.Food>", b =>
+                {
+                    b.HasOne("FYB.Data.Entities.Food", "Product")
+                        .WithMany()
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("FYB.Data.Entities.User", "User")
+                        .WithMany("FoodPurchases")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Product");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
@@ -767,6 +887,13 @@ namespace FYB.Data.Migrations
             modelBuilder.Entity("FYB.Data.Entities.Food", b =>
                 {
                     b.Navigation("FoodPoints");
+                });
+
+            modelBuilder.Entity("FYB.Data.Entities.User", b =>
+                {
+                    b.Navigation("CoachingPurchases");
+
+                    b.Navigation("FoodPurchases");
                 });
 #pragma warning restore 612, 618
         }

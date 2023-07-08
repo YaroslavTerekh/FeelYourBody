@@ -21,4 +21,6 @@ public class CreateCoachingCommand : IRequest
     public long Price { get; set; }
 
     public Guid CoachId { get; set; }
+
+    public long AccessDays { get; set; }
 }

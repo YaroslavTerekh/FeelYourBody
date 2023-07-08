@@ -15,8 +15,10 @@ public static class ServicesExtension
     public static IServiceCollection AddCustomServices(this IServiceCollection services)
     {
         services.AddTransient<IJWTService, JWTService>();
+        services.AddTransient<IUnixService, UnixService>();
         services.AddTransient<IFileService, FileService>();
         services.AddTransient<IVideoService, VideoService>();
+        services.AddTransient<ILiqPayService, LiqPayService>();        
         services.AddTransient<IProductService<Food>, FoodProductService>();
         services.AddTransient<IProductService<Coaching>, CoachingProductService>();
 

@@ -11,4 +11,10 @@ public class BaseProduct : BaseEntity
     public List<User> Users { get; set; } = new();
 
     public long Price { get; set; }
+
+    public string Title { get; set; }
+
+    public string Description { get; set; }
+
+    public long UnixExpireTime { get; set; }
 }

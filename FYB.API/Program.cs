@@ -14,6 +14,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using FYB.Data.Common;
 using FYB.Data.Constants;
+using FYB.BL.Settings.Abstractions;
+using FYB.BL.Settings.Realizations;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -27,8 +29,13 @@ builder.Services.AddIdentity<User, ApplicationRole>()
 
 builder.Services.AddValidatorsFromAssembly(AppDomain.CurrentDomain.GetAssemblies().Where(t => t.FullName.Contains("BL")).First());
 builder.Services.AddMediatR(AppDomain.CurrentDomain.GetAssemblies());
+
+var liqPaySettings = new LiqPaySettings(builder.Configuration);
+
 builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
+builder.Services.AddTransient<ILiqPaySettings, LiqPaySettings>(_ => liqPaySettings);
 builder.Services.AddCustomServices();
+
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 
@@ -125,3 +132,9 @@ app.UseCustomExceptionHandler();
 app.MapControllers();
 
 app.Run();
+
+
+// Feel your body - Yaroslav Terekh 
+// Gmail: yarolslavterekh@gmail.com
+// LinkedIn: https://www.linkedin.com/in/yaroslav-terekh-476826266/
+// Github: https://github.com/YaroslavTerekh
