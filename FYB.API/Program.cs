@@ -16,6 +16,9 @@ using FYB.Data.Common;
 using FYB.Data.Constants;
 using FYB.BL.Settings.Abstractions;
 using FYB.BL.Settings.Realizations;
+using Hangfire;
+using Newtonsoft.Json;
+using FYB.BL.Services.Abstractions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -38,6 +41,13 @@ builder.Services.AddCustomServices();
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
+builder.Services.AddHangfire((sp, config) =>
+{
+    config.UseSqlServerStorage(builder.Configuration.GetConnectionString("DefaultConnection"));
+    config.UseSerializerSettings(new JsonSerializerSettings() { ReferenceLoopHandling = ReferenceLoopHandling.Ignore });
+}
+);
+builder.Services.AddHangfireServer();
 
 builder.Services.AddAuthentication(options => {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -111,6 +121,7 @@ builder.Services.AddSwaggerGen(c =>
 
 
 var app = builder.Build();
+var scope = app.Services.CreateScope();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -130,6 +141,12 @@ app.UseAuthorization();
 app.UseCustomExceptionHandler();
 
 app.MapControllers();
+
+app.UseHangfireDashboard();
+
+IHangfireJobsService hangfireJobgsService = scope.ServiceProvider.GetRequiredService<IHangfireJobsService>();
+hangfireJobgsService.CreateFileDeletingJob();
+hangfireJobgsService.CreateInvisibleFilesDeletingJob();
 
 app.Run();
 

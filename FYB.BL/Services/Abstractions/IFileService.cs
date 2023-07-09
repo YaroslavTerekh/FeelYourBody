@@ -14,5 +14,5 @@ public interface IFileService
 
     public Task DeleteFileAsync(Guid id, CancellationToken cancellationToken);
 
-    public Task DeleteFileListAsync(List<Guid> ids, bool saveChanges, CancellationToken cancellationToken);
+    public Task DeleteFileListAsync(List<Guid> ids, bool saveChanges, CancellationToken cancellationToken = default);
 }

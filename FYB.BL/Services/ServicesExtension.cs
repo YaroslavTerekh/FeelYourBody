@@ -18,7 +18,8 @@ public static class ServicesExtension
         services.AddTransient<IUnixService, UnixService>();
         services.AddTransient<IFileService, FileService>();
         services.AddTransient<IVideoService, VideoService>();
-        services.AddTransient<ILiqPayService, LiqPayService>();        
+        services.AddTransient<ILiqPayService, LiqPayService>();
+        services.AddTransient<IHangfireJobsService, HangfireJobsService>();
         services.AddTransient<IProductService<Food>, FoodProductService>();
         services.AddTransient<IProductService<Coaching>, CoachingProductService>();
 
