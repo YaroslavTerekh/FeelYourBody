@@ -86,7 +86,7 @@ public class FileService : IFileService
         File.Delete(path);
     }
 
-    public async Task DeleteFileListAsync(List<Guid> ids, bool saveChanges, CancellationToken cancellationToken)
+    public async Task DeleteFileListAsync(List<Guid> ids, bool saveChanges, CancellationToken cancellationToken = default)
     {
         var files = await _context.Files.Where(t => ids.Contains(t.Id)).ToListAsync(cancellationToken);
 

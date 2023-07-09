@@ -14,11 +14,13 @@ internal class CreateCoachingHandler : IRequestHandler<CreateCoachingCommand>
 {
     private readonly DataContext _context;
     private readonly IFileService _fileService;
+    private readonly IUnixService _unixService;
 
-    public CreateCoachingHandler(DataContext context, IFileService fileService)
+    public CreateCoachingHandler(DataContext context, IFileService fileService, IUnixService unixService)
     {
         _context = context;
         _fileService = fileService;
+        _unixService = unixService;
     }
 
     public async Task<Unit> Handle(CreateCoachingCommand request, CancellationToken cancellationToken)
@@ -28,7 +30,8 @@ internal class CreateCoachingHandler : IRequestHandler<CreateCoachingCommand>
             Title = request.Title,
             Description = request.Description,
             CoachId = request.CoachId,
-            Price = request.Price
+            Price = request.Price,
+            UnixExpireTime = _unixService.GenerateUnix(request.AccessDays)
         };        
 
         coaching.CoachingPhoto = await _fileService.UploadFileAsync(new AppFile { CoachingId = coaching.Id }, request.CoachingPhoto, cancellationToken);

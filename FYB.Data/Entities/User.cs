@@ -23,4 +23,8 @@ public class User : IdentityUser<Guid>
     public List<Coaching> Coachings { get; set; } = new();
 
     public DateTime RegisterDate { get; set; } = DateTime.UtcNow;
+
+    public List<Purchase<Coaching>> CoachingPurchases { get; set; } = new();
+
+    public List<Purchase<Food>> FoodPurchases { get; set; } = new();
 }

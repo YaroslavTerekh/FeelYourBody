@@ -8,10 +8,6 @@ namespace FYB.Data.Entities;
 
 public class Coaching : BaseProduct
 {
-    public string Title { get; set; }
-
-    public string Description { get; set; }
-
     public Guid CoachId { get; set; }
 
     public Coach Coach { get; set; }
@@ -24,7 +20,7 @@ public class Coaching : BaseProduct
 
     public AppFile CoachingPhoto { get; set; }
 
-    public List<CoachingDetails> CoachingDetails { get; set; }
+    public List<CoachingDetails> CoachingDetails { get; set; } = new();
 
     public List<Feedback> Feedbacks { get; set; } = new();
 

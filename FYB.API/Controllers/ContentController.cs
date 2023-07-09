@@ -7,7 +7,10 @@ using FYB.BL.Behaviors.Foods.GetAllFood;
 using FYB.BL.Behaviors.Foods.GetFood;
 using FYB.BL.Behaviors.FrequentlyAskedQuestions.GetAllFAQ;
 using FYB.BL.Services.Abstractions;
+using FYB.Data.Common;
+using FYB.Data.Constants;
 using FYB.Data.Entities;
+using LiqPay.SDK.Dto;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -22,17 +25,20 @@ public class ContentController : BaseController
     private readonly IMediator _mediatr;
     private readonly IProductService<Coaching> _productService;
     private readonly IWebHostEnvironment _env;
+    private readonly ILiqPayService _liqpayService;
 
     public ContentController
     (
         IMediator mediatr, 
         IProductService<Coaching> productService,
-        IWebHostEnvironment env
+        IWebHostEnvironment env,
+        ILiqPayService liqpayService
     )
     {
         _mediatr = mediatr;
         _productService = productService;
         _env = env;
+        _liqpayService = liqpayService;
     }
 
     [HttpGet("coaches")]
@@ -103,5 +109,26 @@ public class ContentController : BaseController
         var file = await _mediatr.Send(new GetFileQuery(id), cancellationToken);
 
         return PhysicalFile(Path.Combine(_env.ContentRootPath, file.FilePath), file.FileExtension);
+    }
+
+    [Authorize(Policy = Policies.Users)]
+    [HttpGet("generate-pay-form/{id:guid}")]
+    public async Task<IActionResult> GenerateForm(
+        [FromRoute] Guid id,
+        [FromQuery] PurchaseProductType productType,
+        CancellationToken cancellationToken = default)
+    {
+        var result = await _liqpayService.GenerateForm(id, CurrentUserId, productType, cancellationToken);
+        return Ok(result);
+    }
+
+    [HttpPost("process-pay-response")]
+    public async Task<IActionResult> ProcessPayResponseAsync(
+        [FromForm] Dictionary<string, string> formData, 
+        CancellationToken cancellationToken = default
+    )
+    {
+        await _liqpayService.ProcessCallbackAsync(formData, cancellationToken);
+        return Ok();
     }
 }

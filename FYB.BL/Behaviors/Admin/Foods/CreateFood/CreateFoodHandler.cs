@@ -25,7 +25,7 @@ public class CreateFoodHandler : IRequestHandler<CreateFoodCommand>
     {
         var coaching = await _context.Coachings.FirstOrDefaultAsync(t => t.Id == request.CoachingId, cancellationToken);
 
-        if (coaching is null) throw new NotFoundException(ErrorMessages.CoachingNotFound);
+        if (coaching is null && request.CoachingId is not null) throw new NotFoundException(ErrorMessages.CoachingNotFound);
 
         var food = new Food
         {
@@ -36,7 +36,7 @@ public class CreateFoodHandler : IRequestHandler<CreateFoodCommand>
             Coaching = coaching
         };
 
-        coaching.FoodId = food.Id;
+        if(coaching is not null) coaching.FoodId = food.Id;
 
         await _context.Food.AddAsync(food, cancellationToken);
         await _context.SaveChangesAsync(cancellationToken);

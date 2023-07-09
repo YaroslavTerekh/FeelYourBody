@@ -20,6 +20,8 @@ public static class ErrorMessages
     public const string FoodNotFound = "Харчування не знайдено";
     public const string FoodPointNotFound = "Пункту харчування не знайдено";
     public const string UserNotFound = "Користувача не знайдено";
+    public const string PurchaseNotFound = "Покупку не знайдено";
+    public static string ProductNotFound(string product) => $"{product} не знайдено";
 
     public const string UnknownError = "На сервері сталась невідома помилка, або ви вказали невірні дані, спробуйте ще раз";
     public const string UnknownVideoType = "Невідомий тип даних (дозволені типи: .mp4)";

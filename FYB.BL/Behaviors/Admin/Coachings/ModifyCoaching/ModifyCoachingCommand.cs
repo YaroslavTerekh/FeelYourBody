@@ -24,4 +24,6 @@ public class ModifyCoachingCommand : IRequest
     public Guid CoachId { get; set; }
 
     public Guid? FoodId { get; set; }
+
+    public long AccessDays { get; set; }
 }
