@@ -1,5 +1,6 @@
 ﻿using FYB.BL.Services.Abstractions;
 using FYB.Data.DbConnection;
+using FYB.Data.Entities;
 using Hangfire;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -38,6 +39,11 @@ public class HangfireJobsService : IHangfireJobsService
         RecurringJob.AddOrUpdate("CheckInvisibleFiles", () => DeleteInvisibleFiles(), Cron.Weekly);
     }
 
+    public void CreateJobForExpiringProduct(BaseProduct product, Guid currentUserId, string orderId)
+    {
+        BackgroundJob.Schedule(() => DeleteUserFromProductUsersList(product, currentUserId, orderId), DateTimeOffset.FromUnixTimeSeconds(product.UnixExpireTime));
+    }
+
     public async Task DeleteAllEmptyFiles()
     {
         var emptyFiles = await _context.Files
@@ -63,5 +69,24 @@ public class HangfireJobsService : IHangfireJobsService
         {
             File.Delete(file);
         }
+    }
+
+    public async Task DeleteUserFromProductUsersList(BaseProduct product, Guid currentUserId, string orderId)
+    {
+        BaseProduct? productEntity = product.GetType() == typeof(Food) ?
+                await _context.Food.Include(t => t.Users).FirstOrDefaultAsync(t => t.Id == product.Id) :
+                await _context.Coachings.Include(t => t.Users).FirstOrDefaultAsync(t => t.Id == product.Id);
+        var user = await _context.Users.FirstOrDefaultAsync(t => t.Id == currentUserId);
+        BasePurchase? purchase = product.GetType() == typeof(Purchase<Food>) ?
+                await _context.FoodPurchases.FirstOrDefaultAsync(t => t.OrderId == orderId) :
+                await _context.CoachingPurchases.FirstOrDefaultAsync(t => t.OrderId == orderId);
+
+        if (user is not null)
+        {
+            productEntity.Users.Remove(user);
+            purchase.IsExpired = true;
+        }
+
+        await _context.SaveChangesAsync();
     }
 }

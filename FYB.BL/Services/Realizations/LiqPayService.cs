@@ -24,12 +24,19 @@ public class LiqPayService : ILiqPayService
     private readonly DataContext _context;
     private readonly ILiqPaySettings _liqPaySettings;
     private readonly IUnixService _unixService;
+    private readonly IHangfireJobsService _hangfireJobsService;
 
-    public LiqPayService(DataContext context, ILiqPaySettings liqPaySettings, IUnixService unixService)
+    public LiqPayService(
+        DataContext context, 
+        ILiqPaySettings liqPaySettings, 
+        IUnixService unixService, 
+        IHangfireJobsService hangfireJobsService
+    )
     {
         _context = context;
         _unixService = unixService;
         _liqPaySettings = liqPaySettings;
+        _hangfireJobsService = hangfireJobsService;
     }
 
     public LiqPayResponse DecodeResponse(Dictionary<string, string> data)
@@ -132,9 +139,8 @@ public class LiqPayService : ILiqPayService
             if (product is null) throw new NotFoundException(ErrorMessages.ProductNotFound("Продукту з замовлення"));
 
             await AssignProductToUserAsync(product, purchase.UserId, cancellationToken);
+            _hangfireJobsService.CreateJobForExpiringProduct(product, purchase.UserId, purchase.OrderId);
         }
-
-        throw new NotImplementedException();
     }
 
     private async Task AssignProductToUserAsync(BaseProduct product, Guid currentUserId, CancellationToken cancellationToken = default)
