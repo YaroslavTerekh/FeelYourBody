@@ -133,6 +133,9 @@ if (app.Environment.IsDevelopment())
 var path = Path.Combine(app.Services.GetRequiredService<IWebHostEnvironment>().ContentRootPath, "uploads", "videos");
 Directory.CreateDirectory(path);
 
+var dataContext = scope.ServiceProvider.GetRequiredService<DataContext>();
+dataContext.Database.Migrate();
+
 app.UseHttpsRedirection();
 
 app.UseAuthentication();
