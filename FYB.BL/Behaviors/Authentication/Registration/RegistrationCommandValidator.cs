@@ -20,14 +20,6 @@ public class RegistrationCommandValidator : AbstractValidator<RegistrationComman
             .NotEmpty()
             .WithMessage(ValidationMessages.FirstNameRequired);
 
-        RuleFor(t => t.LastName)
-            .MinimumLength(2)
-            .WithMessage(ValidationMessages.LastNameTooShort)
-            .MaximumLength(20)
-            .WithMessage(ValidationMessages.LastNameTooLong)
-            .NotEmpty()
-            .WithMessage(ValidationMessages.LastNameRequired);
-
         RuleFor(t => t.Email)
             .EmailAddress()
             .WithMessage(ValidationMessages.WrongEmail)
