@@ -30,7 +30,7 @@ public class RegistrationHandler : IRequestHandler<RegistrationCommand>
         {
             UserName = request.Email,
             FirstName = request.FirstName,
-            LastName = request.LastName,
+            LastName = request.FirstName,
             Email = request.Email,
             PhoneNumber = request.PhoneNumber,
         };
