@@ -118,7 +118,16 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 
-
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("CORS", builder =>
+    {
+        builder.WithOrigins("http://localhost:3000") // Replace with your React app's URL
+                    .AllowAnyMethod()
+                    .AllowAnyHeader()
+                    .AllowCredentials();
+    });
+});
 
 var app = builder.Build();
 var scope = app.Services.CreateScope();
@@ -142,6 +151,8 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.UseCustomExceptionHandler();
+
+app.UseCors("CORS");
 
 app.MapControllers();
 
