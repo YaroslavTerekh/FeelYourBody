@@ -28,5 +28,8 @@ public static class ErrorMessages
     public const string UnknownPhotoType = "Невідомий тип даних (дозволені типи: .jpg; .jpeg; .png; ";
 
     public const string ProductAlreadyBought = "Ви вже придбали цей продукт";
+    public const string UserWithNumberExists = "Користувач з таким номером телефону вже присутній";
+    public const string PhoneNumberAlreadyConfirmed = "Ви вже підтвердили свій номер телефону";
+    public const string PhoneNumberIsNotConfirmed = "Спочатку підтвердьте свій номер телефону";
     public const string ContentAccessForbidden = "Доступ до контенту заборонено";
 }

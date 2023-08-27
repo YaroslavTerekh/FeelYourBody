@@ -43,4 +43,6 @@ public static class ValidationMessages
     public const string WrongPrice = "Вказано некоректну ціну";
 
     public const string WrongPortionMass = "Вказано некоректну вагу порції";
+
+    public static string VerificationCodeInfo(long? code) => $"Ваш код дійсний протягом 10-ти хвилин: {code}";
 }

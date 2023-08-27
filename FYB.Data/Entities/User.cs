@@ -14,7 +14,7 @@ public class User : IdentityUser<Guid>
 
     public string LastName { get; set; }
 
-    public string PhoneNumber { get; set; }
+    public long? TemporaryCode { get; set; }
 
     public Role Role { get; set; }
 

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace FYB.BL.Behaviors.Authentication.Registration;
 
-public class RegistrationCommand : IRequest
+public class RegistrationCommand : IRequest<Guid>
 {
     public string FirstName { get; set; }
 
