@@ -1,19 +1,25 @@
 ﻿
 using FYB.BL.Exceptions;
+using FYB.BL.Settings.Abstractions;
+using FYB.Data.Constants;
 using FYB.Data.DbConnection;
 using FYB.Data.Entities;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using Twilio;
+using Twilio.Rest.Api.V2010.Account;
+using Twilio.Types;
 
 namespace FYB.BL.Behaviors.Authentication.Registration;
 
-public class RegistrationHandler : IRequestHandler<RegistrationCommand>
+public class RegistrationHandler : IRequestHandler<RegistrationCommand, Guid>
 {
     private readonly DataContext _context;
     private readonly UserManager<User> _userManager;
@@ -24,7 +30,7 @@ public class RegistrationHandler : IRequestHandler<RegistrationCommand>
         _userManager = userManager;
     }
 
-    public async Task<Unit> Handle(RegistrationCommand request, CancellationToken cancellationToken)
+    public async Task<Guid> Handle(RegistrationCommand request, CancellationToken cancellationToken)
     {
         var newUser = new User
         {
@@ -33,7 +39,13 @@ public class RegistrationHandler : IRequestHandler<RegistrationCommand>
             LastName = request.FirstName,
             Email = request.Email,
             PhoneNumber = request.PhoneNumber,
+            TemporaryCode = null
         };
+
+        if(await _context.Users.AnyAsync(t => t.PhoneNumber == newUser.PhoneNumber, cancellationToken))
+        {
+            throw new RegisterException(HttpStatusCode.BadRequest, new IdentityError[] { new IdentityError { Code = HttpStatusCode.BadRequest.ToString(), Description = ErrorMessages.UserWithNumberExists } });
+        }
 
         var result = await _userManager.CreateAsync(newUser, request.Password);
 
@@ -41,7 +53,7 @@ public class RegistrationHandler : IRequestHandler<RegistrationCommand>
         {
             throw new RegisterException(HttpStatusCode.BadRequest, result.Errors);
         }
-
-        return Unit.Value;
+        
+        return newUser.Id;
     }
 }

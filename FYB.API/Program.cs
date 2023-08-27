@@ -34,8 +34,10 @@ builder.Services.AddValidatorsFromAssembly(AppDomain.CurrentDomain.GetAssemblies
 builder.Services.AddMediatR(AppDomain.CurrentDomain.GetAssemblies());
 
 var liqPaySettings = new LiqPaySettings(builder.Configuration);
+var twillioSettings = new TwilioSettings(builder.Configuration);
 
 builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
+builder.Services.AddTransient<ITwilioSettings, TwilioSettings>(_ => twillioSettings);
 builder.Services.AddTransient<ILiqPaySettings, LiqPaySettings>(_ => liqPaySettings);
 builder.Services.AddCustomServices();
 

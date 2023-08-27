@@ -35,16 +35,15 @@ public class LoginHandler : IRequestHandler<LoginCommand, JWTResponse>
         var user = await _userManager.FindByEmailAsync(request.Email);
 
         if (user is null)
-        {
             throw new NotFoundException(ErrorMessages.UserNotFound);
-        }
+
+        if (!user.PhoneNumberConfirmed)
+            throw new Exception(ErrorMessages.PhoneNumberIsNotConfirmed);
 
         var result = await _signInManager.CheckPasswordSignInAsync(user, request.Password, false);
 
         if(!result.Succeeded)
-        {
             throw new Exception(ErrorMessages.WrongPassword);
-        }
 
         return _jwtService.GenerateJWT(user);
     }
