@@ -1,8 +1,10 @@
-﻿using FYB.BL.Behaviors.Authentication.Login;
+﻿using FYB.BL.Behaviors.Authentication.GetUser;
+using FYB.BL.Behaviors.Authentication.Login;
 using FYB.BL.Behaviors.Authentication.Registration;
 using FYB.BL.Behaviors.Authentication.SendVerificationCode;
 using FYB.BL.Behaviors.Authentication.VerifyNumber;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,7 +12,7 @@ namespace FYB.API.Controllers;
 
 [Route("api/auth")]
 [ApiController]
-public class AuthController : ControllerBase
+public class AuthController : BaseController
 {
     private readonly IMediator _mediatr;
 
@@ -57,5 +59,15 @@ public class AuthController : ControllerBase
     )
     {
         return Ok(await _mediatr.Send(command, cancellationToken));
+    }
+
+    [Authorize]
+    [HttpGet("get-user")]
+    public async Task<IActionResult> GetUserAsync
+    (
+        CancellationToken cancellationToken = default
+    )
+    {
+        return Ok(await _mediatr.Send(new GetUserQuery(CurrentUserId), cancellationToken));
     }
 }
