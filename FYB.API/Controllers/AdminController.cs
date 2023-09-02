@@ -12,6 +12,7 @@ using FYB.BL.Behaviors.Admin.Feedbacks.AddFeedback;
 using FYB.BL.Behaviors.Admin.Feedbacks.AddPhotosToFeedback;
 using FYB.BL.Behaviors.Admin.Feedbacks.DeleteFeedback;
 using FYB.BL.Behaviors.Admin.Feedbacks.DeletePhotosFromFeedback;
+using FYB.BL.Behaviors.Admin.Feedbacks.GetAllFeedbacks;
 using FYB.BL.Behaviors.Admin.Feedbacks.GetFeedback;
 using FYB.BL.Behaviors.Admin.Feedbacks.ModifyFeedback;
 using FYB.BL.Behaviors.Admin.Foods.AddFoodPoint;
@@ -63,6 +64,15 @@ public class AdminController : BaseController
     )
     {
         return Ok(await _mediatr.Send(new GetFeedbackCommand(id), cancellationToken));
+    }
+
+    [HttpGet("coaching/feedbacks/all")]
+    public async Task<IActionResult> GetAllFeedbacksAsync
+    (
+        CancellationToken cancellationToken = default
+    )
+    {
+        return Ok(await _mediatr.Send(new GetAllFeedbacksQuery(), cancellationToken));
     }
 
     [HttpPost("coaches/add")]
