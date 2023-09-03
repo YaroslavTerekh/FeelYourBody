@@ -17,6 +17,8 @@ public class CoachingDTO
 
     public long Price { get; set; }
 
+    public long AccessDays { get; set; }
+
     public Guid CoachId { get; set; }
 
     public CoachDTO Coach { get; set; }

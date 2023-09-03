@@ -68,7 +68,7 @@ public class LiqPayService : ILiqPayService
             var purchase = new Purchase<Coaching>
             {
                 OrderId = Guid.NewGuid().ToString(),
-                ExpireDate = _unixService.GenerateExpireDate(good.UnixExpireTime),
+                ExpireDate = _unixService.GenerateExpireDate(_unixService.GenerateUnix(good.UnixExpireTime)),
                 ProductId = good.Id,
                 ProductType = productType,
                 UserId = currentUserId
@@ -83,7 +83,7 @@ public class LiqPayService : ILiqPayService
             var purchase = new Purchase<Food>
             {
                 OrderId = Guid.NewGuid().ToString(),
-                ExpireDate = _unixService.GenerateExpireDate(good.UnixExpireTime),
+                ExpireDate = _unixService.GenerateExpireDate(_unixService.GenerateUnix(good.UnixExpireTime)),
                 ProductId = good.Id,
                 ProductType = productType,
                 UserId = currentUserId

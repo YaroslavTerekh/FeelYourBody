@@ -5,6 +5,7 @@ using FYB.BL.Behaviors.Admin.Coachings.AddCoachingDetails;
 using FYB.BL.Behaviors.Admin.Coachings.AddPhotosToCoaching;
 using FYB.BL.Behaviors.Admin.Coachings.CreateCoaching;
 using FYB.BL.Behaviors.Admin.Coachings.DeleteCoaching;
+using FYB.BL.Behaviors.Admin.Coachings.DeleteCoachingDetail;
 using FYB.BL.Behaviors.Admin.Coachings.DeleteCoachingDetails;
 using FYB.BL.Behaviors.Admin.Coachings.DeletePhotosFromCoaching;
 using FYB.BL.Behaviors.Admin.Coachings.ModifyCoaching;
@@ -322,13 +323,23 @@ public class AdminController : BaseController
     }
 
     [HttpDelete("coaching/details/remove")]
-    public async Task<IActionResult> DeleteCoachingDetailAsync
+    public async Task<IActionResult> DeleteCoachingDetailsAsync
     (
         [FromBody] DeleteCoachingDetailsCommand command,
         CancellationToken cancellationToken = default
     )
     {
         return Ok(await _mediatr.Send(command, cancellationToken));
+    }
+
+    [HttpDelete("coaching/details/remove/{id:guid}")]
+    public async Task<IActionResult> DeleteCoachingDetailAsync
+    (
+        [FromRoute] Guid id,
+        CancellationToken cancellationToken = default
+    )
+    {
+        return Ok(await _mediatr.Send(new DeleteCoachingDetailCommand(id), cancellationToken));
     }
 
     [HttpDelete("file/delete/{id:guid}")]

@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using FYB.BL.Services.Abstractions;
+using FYB.BL.Services.Realizations;
 using FYB.Data.Common.DataTransferObjects;
 using FYB.Data.Entities;
 using System;
@@ -15,9 +17,11 @@ public class MapperGlobalProfile : Profile
     {
         CreateMap<AppFile, AppFileDTO>();
         CreateMap<Coach, CoachDTO> ();
-        CreateMap<Coaching, CoachingDTO> ();
+        CreateMap<Coaching, CoachingDTO>()
+            .ForMember(dest => dest.AccessDays, opt => opt.MapFrom(src => src.UnixExpireTime));
         CreateMap<Feedback, FeedbackDTO> ();
-        CreateMap<Food, FoodDTO> ();
+        CreateMap<Food, FoodDTO>()
+            .ForMember(dest => dest.AccessDays, opt => opt.MapFrom(src => src.UnixExpireTime));
         CreateMap<FoodPoint, FoodPointDTO> ();
         CreateMap<CoachingDetails, CoachingDetailDTO>();
     }

@@ -15,18 +15,20 @@ namespace FYB.BL.Services.Realizations;
 public class HangfireJobsService : IHangfireJobsService
 {
     private readonly DataContext _context;
+    private readonly IUnixService _unixService;
     private readonly IFileService _fileService;
     private readonly IWebHostEnvironment _webHostEnvironment;
 
     public HangfireJobsService(
         DataContext context, 
-        IFileService fileService, 
-        IWebHostEnvironment webHostEnvironment
-    )
+        IFileService fileService,
+        IWebHostEnvironment webHostEnvironment,
+        IUnixService unixService)
     {
         _context = context;
         _fileService = fileService;
         _webHostEnvironment = webHostEnvironment;
+        _unixService = unixService;
     }
 
     public void CreateFileDeletingJob()
@@ -41,7 +43,7 @@ public class HangfireJobsService : IHangfireJobsService
 
     public void CreateJobForExpiringProduct(BaseProduct product, Guid currentUserId, string orderId)
     {
-        BackgroundJob.Schedule(() => DeleteUserFromProductUsersList(product, currentUserId, orderId), DateTimeOffset.FromUnixTimeSeconds(product.UnixExpireTime));
+        BackgroundJob.Schedule(() => DeleteUserFromProductUsersList(product, currentUserId, orderId), DateTimeOffset.FromUnixTimeSeconds(_unixService.GenerateUnix(product.UnixExpireTime)));
     }
 
     public async Task DeleteAllEmptyFiles()
