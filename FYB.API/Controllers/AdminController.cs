@@ -8,6 +8,7 @@ using FYB.BL.Behaviors.Admin.Coachings.DeleteCoaching;
 using FYB.BL.Behaviors.Admin.Coachings.DeleteCoachingDetail;
 using FYB.BL.Behaviors.Admin.Coachings.DeleteCoachingDetails;
 using FYB.BL.Behaviors.Admin.Coachings.DeletePhotosFromCoaching;
+using FYB.BL.Behaviors.Admin.Coachings.GetUsersInfo;
 using FYB.BL.Behaviors.Admin.Coachings.ModifyCoaching;
 using FYB.BL.Behaviors.Admin.Feedbacks.AddFeedback;
 using FYB.BL.Behaviors.Admin.Feedbacks.AddPhotosToFeedback;
@@ -55,6 +56,15 @@ public class AdminController : BaseController
         _mediatr = mediatr;
         _fileService = fileService;
         _videoService = videoService;
+    }
+
+    [HttpGet("users/all")]
+    public async Task<IActionResult> GetAllUsersAsync
+    (
+        CancellationToken cancellationToken = default
+    )
+    {
+        return Ok(await _mediatr.Send(new GetUsersInfoQuery(), cancellationToken));
     }
 
     [HttpGet("coaching/feedback/{id:guid}")]
