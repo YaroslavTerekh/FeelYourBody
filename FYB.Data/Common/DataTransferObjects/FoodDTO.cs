@@ -14,6 +14,8 @@ public class FoodDTO
 
     public string Description { get; set; }
 
+    public long Price { get; set; }
+
     public long AccessDays { get; set; }
 
     public Guid? CoachingId { get; set; }
