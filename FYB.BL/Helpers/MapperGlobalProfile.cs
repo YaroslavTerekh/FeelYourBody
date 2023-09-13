@@ -24,5 +24,6 @@ public class MapperGlobalProfile : Profile
             .ForMember(dest => dest.AccessDays, opt => opt.MapFrom(src => src.UnixExpireTime));
         CreateMap<FoodPoint, FoodPointDTO> ();
         CreateMap<CoachingDetails, CoachingDetailDTO>();
+        CreateMap<CoachingDetailsParent, CoachingDetailsParentDTO>();
     }
 }

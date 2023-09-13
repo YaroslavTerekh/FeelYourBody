@@ -40,6 +40,8 @@ public class GetCoachingHandler : IRequestHandler<GetCoachingQuery, CoachingDTO>
                 .ThenInclude(t => t.FoodPoints)
             .Include(t => t.Feedbacks)
             .Include(t => t.Videos)
+            .Include(t => t.CoachingDetailParents)
+                .ThenInclude(t => t.Details)
             .Include(t => t.Users)
             .FirstOrDefaultAsync(t => t.Id == request.Id, cancellationToken);
 

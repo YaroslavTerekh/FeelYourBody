@@ -32,7 +32,8 @@ public class GetAllCoachingsHandler : IRequestHandler<GetAllCoachingsQuery, List
             .Include(t => t.Food)
                 .ThenInclude(t => t.FoodPoints)
             .Include(t => t.Feedbacks)
-            .Include(t => t.CoachingDetails)
+            .Include(t => t.CoachingDetailParents)
+                .ThenInclude(t => t.Details)
             .Select(t => _mapper.Map<Coaching, CoachingDTO>(t))
             .ToListAsync(cancellationToken);
 

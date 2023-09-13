@@ -23,10 +23,10 @@ public class AddCoachingDetailsHandler : IRequestHandler<AddCoachingDetailsComma
 
     public async Task<Unit> Handle(AddCoachingDetailsCommand request, CancellationToken cancellationToken)
     {
-        var coaching = await _context.Coachings
+        var coachingDetailParent = await _context.CoachingDetailParents
             .FirstOrDefaultAsync(t => t.Id == request.Id);
 
-        if (coaching is null) throw new NotFoundException(ErrorMessages.CoachingNotFound);
+        if (coachingDetailParent is null) throw new NotFoundException(ErrorMessages.CoachingDetailParentNotFound);
 
         foreach (var detail in request.CoachingDetails)
         {
@@ -34,7 +34,7 @@ public class AddCoachingDetailsHandler : IRequestHandler<AddCoachingDetailsComma
             {
                 Icon = detail.Icon,
                 Detail = detail.Detail,
-                CoachingId = coaching.Id
+                CoachingDetailsParentId = coachingDetailParent.Id
             };
 
             await _context.CoachingDetails.AddAsync(entity, cancellationToken);

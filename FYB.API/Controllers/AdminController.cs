@@ -2,11 +2,14 @@
 using FYB.BL.Behaviors.Admin.Coaches.DeleteCoach;
 using FYB.BL.Behaviors.Admin.Coaches.ModifyCoach;
 using FYB.BL.Behaviors.Admin.Coachings.AddCoachingDetails;
+using FYB.BL.Behaviors.Admin.Coachings.AddCoachingDetailsParent;
 using FYB.BL.Behaviors.Admin.Coachings.AddPhotosToCoaching;
+using FYB.BL.Behaviors.Admin.Coachings.ChangeDetailsParentTitle;
 using FYB.BL.Behaviors.Admin.Coachings.CreateCoaching;
 using FYB.BL.Behaviors.Admin.Coachings.DeleteCoaching;
 using FYB.BL.Behaviors.Admin.Coachings.DeleteCoachingDetail;
 using FYB.BL.Behaviors.Admin.Coachings.DeleteCoachingDetails;
+using FYB.BL.Behaviors.Admin.Coachings.DeleteCoachingDetailsParent;
 using FYB.BL.Behaviors.Admin.Coachings.DeletePhotosFromCoaching;
 using FYB.BL.Behaviors.Admin.Coachings.GetUsersInfo;
 using FYB.BL.Behaviors.Admin.Coachings.ModifyCoaching;
@@ -403,4 +406,25 @@ public class AdminController : BaseController
     {
         return Ok(await _mediatr.Send(command, cancellationToken));
     }
+
+    [HttpPost("coachings/details/parents/add")]
+    public async Task<IActionResult> AddDetailParent
+    (
+        [FromBody] AddCoachingDetailsParentCommand command,
+        CancellationToken cancellationToken = default
+    ) => Ok(await _mediatr.Send(command, cancellationToken));
+
+    [HttpPatch("coachings/details/parents/title/change")]
+    public async Task<IActionResult> ModifyDetailParent
+    (
+        [FromBody] ChangeDetailsParentTitleCommand command,
+        CancellationToken cancellationToken = default
+    ) => Ok(await _mediatr.Send(command, cancellationToken));
+
+    [HttpDelete("coachings/details/parents/{id:guid}/delete")]
+    public async Task<IActionResult> DeleteDetailParent
+    (
+        [FromRoute] Guid id,
+        CancellationToken cancellationToken = default
+    ) => Ok(await _mediatr.Send(new DeleteCoachingDetailsParentCommand(id), cancellationToken));
 }

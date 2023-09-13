@@ -23,7 +23,7 @@ public class CoachingConfiguration : IEntityTypeConfiguration<Coaching>
             .HasForeignKey(t => t.CoachingListId)
             .OnDelete(DeleteBehavior.NoAction);
 
-        builder.HasMany(t => t.CoachingDetails)
+        builder.HasMany(t => t.CoachingDetailParents)
             .WithOne(t => t.Coaching)
             .HasForeignKey(t => t.CoachingId)
             .OnDelete(DeleteBehavior.NoAction);

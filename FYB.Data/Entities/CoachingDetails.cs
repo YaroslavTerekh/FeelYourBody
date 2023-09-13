@@ -13,7 +13,7 @@ public class CoachingDetails : BaseEntity
 
     public string Detail { get; set; }
 
-    public Guid CoachingId { get; set; }
+    public Guid CoachingDetailsParentId { get; set; }
 
-    public Coaching Coaching { get; set; }
+    public CoachingDetailsParent CoachingDetailsParent { get; set; }
 }

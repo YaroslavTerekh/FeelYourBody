@@ -13,9 +13,9 @@ public class CoachingDetailsConfiguration : IEntityTypeConfiguration<CoachingDet
 {
     public void Configure(EntityTypeBuilder<CoachingDetails> builder)
     {
-        builder.HasOne(t => t.Coaching)
-            .WithMany(t => t.CoachingDetails)
-            .HasForeignKey(t => t.CoachingId)
+        builder.HasOne(t => t.CoachingDetailsParent)
+            .WithMany(t => t.Details)
+            .HasForeignKey(t => t.CoachingDetailsParentId)
             .OnDelete(DeleteBehavior.Cascade);
     }
 }

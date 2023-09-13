@@ -20,7 +20,7 @@ public class Coaching : BaseProduct
 
     public AppFile CoachingPhoto { get; set; }
 
-    public List<CoachingDetails> CoachingDetails { get; set; } = new();
+    public List<CoachingDetailsParent> CoachingDetailParents { get; set; } = new();
 
     public List<Feedback> Feedbacks { get; set; } = new();
 
