@@ -15,6 +15,8 @@ public class CoachingVideo : BaseEntity
 
     public string Path { get; set; }
 
+    public bool IsPreview { get; set; }
+
     public Guid CoachingId { get; set; }
 
     [JsonIgnore]

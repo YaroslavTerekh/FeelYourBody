@@ -25,7 +25,7 @@ public class VideoService : IVideoService
         _env = env;
     }
 
-    public async Task UploadVideoAsync(IFormFile file, Guid coachingId, CancellationToken cancellationToken = default)
+    public async Task UploadVideoAsync(IFormFile file, Guid coachingId, bool isPreview = false, CancellationToken cancellationToken = default)
     {
         var extension = Path.GetExtension(file.FileName);
 
@@ -38,13 +38,21 @@ public class VideoService : IVideoService
 
             try
             {
-                var coaching = await _context.Coachings.FirstOrDefaultAsync(t => t.Id == coachingId, cancellationToken);
-                if (coaching is null) throw new NotFoundException(ErrorMessages.CoachingNotFound);
+                var coaching = await _context.Coachings
+                    .Include(t => t.Videos)
+                    .FirstOrDefaultAsync(t => t.Id == coachingId, cancellationToken);
+
+                if (coaching is null) 
+                    throw new NotFoundException(ErrorMessages.CoachingNotFound);
+
+                if(coaching.Videos.Where(t => t.IsPreview == true).ToList().Count > 0) 
+                    throw new Exception(ErrorMessages.PreviewExists);
 
                 var fileModel = new CoachingVideo
                 {
                     CoachingId = coachingId,
                     ContentFileType = file.ContentType,
+                    IsPreview = isPreview,
                     FileName = fileName,
                     Path = path
                 };

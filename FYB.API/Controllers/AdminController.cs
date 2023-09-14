@@ -136,10 +136,11 @@ public class AdminController : BaseController
     (
         IFormFile file,
         [FromRoute] Guid id,
+        [FromBody] bool isPreview,
         CancellationToken cancellationToken = default
     )
     {
-        await _videoService.UploadVideoAsync(file, id, cancellationToken);
+        await _videoService.UploadVideoAsync(file, id, isPreview, cancellationToken);
 
         return Ok();
     }
