@@ -250,15 +250,14 @@ public class AdminController : BaseController
         return Ok(await _mediatr.Send(command, cancellationToken));
     }
 
-    [HttpPatch("coachings/{id:guid}/examples/add")]
+    [HttpPatch("coachings/examples/add")]
     public async Task<IActionResult> AddExamplesToCoachingAsync
     (
-        [FromRoute] Guid id,
-        [FromForm] List<IFormFile> files,
+        [FromForm] AddPhotosToCoachingCommand command,
         CancellationToken cancellationToken = default
     )
     {
-        return Ok(await _mediatr.Send(new AddPhotosToCoachingCommand(id, files), cancellationToken));
+        return Ok(await _mediatr.Send(command, cancellationToken));
     }
 
     [HttpPatch("coaching/details/add")]

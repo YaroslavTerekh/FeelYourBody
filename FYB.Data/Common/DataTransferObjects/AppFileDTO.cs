@@ -13,4 +13,6 @@ public class AppFileDTO
     public string FileName { get; set; }
 
     public string FileExtension { get; set; }
+
+    public int? OrderId { get; set; }
 }

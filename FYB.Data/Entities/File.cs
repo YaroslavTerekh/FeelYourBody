@@ -14,6 +14,8 @@ public class AppFile : BaseEntity
 
     public string FilePath { get; set; }
 
+    public int? OrderId { get; set; }
+
     public Guid? FeedBackId { get; set; }
 
     public Feedback? Feedback { get; set; }

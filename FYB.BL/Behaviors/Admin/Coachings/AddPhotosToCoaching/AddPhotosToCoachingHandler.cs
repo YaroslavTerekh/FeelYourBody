@@ -38,7 +38,7 @@ public class AddPhotosToCoachingHandler : IRequestHandler<AddPhotosToCoachingCom
 
         foreach (var photo in request.Photos)
         {
-            coaching.ExamplePhotos.Add(await _fileService.UploadFileAsync(new AppFile { CoachingListId = coaching.Id }, photo, cancellationToken));
+            coaching.ExamplePhotos.Add(await _fileService.UploadFileAsync(new AppFile { CoachingListId = coaching.Id, OrderId = photo.OrderId }, photo.PhotoFile, cancellationToken));
         }
 
         await _context.SaveChangesAsync(cancellationToken);
