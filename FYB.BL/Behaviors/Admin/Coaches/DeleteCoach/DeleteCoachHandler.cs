@@ -25,7 +25,12 @@ public class DeleteCoachHandler : IRequestHandler<DeleteCoachCommand>
 
     public async Task<Unit> Handle(DeleteCoachCommand request, CancellationToken cancellationToken)
     {
-        var coach = await _context.Coaches.Include(t => t.Avatar).FirstOrDefaultAsync(t => t.Id == request.Id, cancellationToken);
+        var coach = await _context.Coaches
+            .Include(t => t.Avatar)
+            .Include(t => t.Coachings)
+                .ThenInclude(t => t.Feedbacks)
+                .ThenInclude(t => t.Photos)
+            .FirstOrDefaultAsync(t => t.Id == request.Id, cancellationToken);
 
         if (coach is null)
         {
@@ -33,6 +38,10 @@ public class DeleteCoachHandler : IRequestHandler<DeleteCoachCommand>
         }
 
         coach.Avatar.CoachId = null;
+        foreach (var coaching in coach.Coachings)
+            foreach (var feedback in coaching.Feedbacks)
+                foreach (var photo in feedback.Photos)
+                    photo.FeedBackId = null;
         _context.Coaches.Remove(coach);
         await _context.SaveChangesAsync(cancellationToken);
 

@@ -38,6 +38,7 @@ public class AddNewCoachHandler : IRequestHandler<AddNewCoachCommand>
         };
 
         newCoach.Avatar = await _fileService.UploadFileAsync(new AppFile { CoachId = newCoach.Id }, request.Avatar, cancellationToken);
+        newCoach.AvatarId = newCoach.Avatar.Id;
 
         await _context.Coaches.AddAsync(newCoach, cancellationToken);
         await _context.SaveChangesAsync(cancellationToken);
