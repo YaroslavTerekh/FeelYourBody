@@ -14,7 +14,9 @@ public class FoodPoint : BaseEntity
 
     public long PortionMass { get; set; }
 
-    public Guid FoodId { get; set; }
+    public string CoockingMethod { get; set; }
 
-    public Food Food { get; set; }
+    public FoodPointParent FoodPointsParent { get; set; }
+
+    public Guid FoodPointsParentId { get; set; }
 }

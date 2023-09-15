@@ -37,6 +37,7 @@ public class GetCoachingHandler : IRequestHandler<GetCoachingQuery, CoachingDTO>
             .Include(t => t.CoachingPhoto)
             .Include(t => t.ExamplePhotos)
             .Include(t => t.Food)
+                .ThenInclude(t => t.FoodPointParents)
                 .ThenInclude(t => t.FoodPoints)
             .Include(t => t.Feedbacks)
             .Include(t => t.Videos)

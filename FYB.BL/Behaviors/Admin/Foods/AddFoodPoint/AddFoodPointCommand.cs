@@ -15,5 +15,7 @@ public class AddFoodPointCommand : IRequest
 
     public long PortionMass { get; set; }
 
-    public Guid FoodId { get; set; }
+    public string CoockingMethod { get; set; }
+
+    public Guid FoodPointParentId { get; set; }
 }

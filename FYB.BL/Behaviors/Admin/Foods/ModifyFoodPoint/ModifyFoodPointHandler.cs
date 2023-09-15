@@ -29,6 +29,7 @@ public class ModifyFoodPointHandler : IRequestHandler<ModifyFoodPointCommand>
         foodPoint.Title = request.Title;
         foodPoint.Description = request.Description;
         foodPoint.PortionMass = request.PortionMass;
+        foodPoint.CoockingMethod = request.CoockingMethod;
 
         await _context.SaveChangesAsync(cancellationToken);
 

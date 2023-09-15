@@ -25,7 +25,8 @@ public class GetAllFoodHandler : IRequestHandler<GetAllFoodQuery, List<FoodDTO>>
     public async Task<List<FoodDTO>> Handle(GetAllFoodQuery request, CancellationToken cancellationToken)
     {
         return await _context.Food
-            .Include(t => t.FoodPoints)
+            .Include(t => t.FoodPointParents.OrderBy(t => t.DayNumber))
+                .ThenInclude(t => t.FoodPoints)
             .Select(t => _mapper.Map<FoodDTO>(t))
             .ToListAsync(cancellationToken);
     }

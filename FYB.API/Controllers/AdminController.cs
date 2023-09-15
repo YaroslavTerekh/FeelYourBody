@@ -21,11 +21,15 @@ using FYB.BL.Behaviors.Admin.Feedbacks.GetAllFeedbacks;
 using FYB.BL.Behaviors.Admin.Feedbacks.GetFeedback;
 using FYB.BL.Behaviors.Admin.Feedbacks.ModifyFeedback;
 using FYB.BL.Behaviors.Admin.Foods.AddFoodPoint;
+using FYB.BL.Behaviors.Admin.Foods.AddFoodPointParent;
 using FYB.BL.Behaviors.Admin.Foods.CreateFood;
 using FYB.BL.Behaviors.Admin.Foods.DeleteFood;
 using FYB.BL.Behaviors.Admin.Foods.DeleteFoodPoint;
+using FYB.BL.Behaviors.Admin.Foods.DeleteFoodPointParent;
+using FYB.BL.Behaviors.Admin.Foods.GetFoodPointParents;
 using FYB.BL.Behaviors.Admin.Foods.ModifyFood;
 using FYB.BL.Behaviors.Admin.Foods.ModifyFoodPoint;
+using FYB.BL.Behaviors.Admin.Foods.ModifyFoodPointParent;
 using FYB.BL.Behaviors.Admin.FrequentlyAskedQuestions.CreateFAQ;
 using FYB.BL.Behaviors.Admin.FrequentlyAskedQuestions.DeleteFAQ;
 using FYB.BL.Behaviors.Admin.FrequentlyAskedQuestions.ModifyFAQ;
@@ -427,4 +431,44 @@ public class AdminController : BaseController
         [FromRoute] Guid id,
         CancellationToken cancellationToken = default
     ) => Ok(await _mediatr.Send(new DeleteCoachingDetailsParentCommand(id), cancellationToken));
+
+    [HttpPost("food/{id:guid}/point-parents/add")]
+    public async Task<IActionResult> AddFoodPointParent
+    (
+        [FromRoute] Guid id,
+        [FromBody] AddFoodPointParentCommand command,
+        CancellationToken cancellationToken = default
+    )
+    {
+        command.FoodId = id;
+
+        return Ok(await _mediatr.Send(command, cancellationToken));
+    }
+
+    [HttpPut("food/{id:guid}/point-parents/change")]
+    public async Task<IActionResult> ChangeFoodPointParent
+    (
+        [FromRoute] Guid id,
+        [FromBody] ModifyFoodPointParentCommand command,
+        CancellationToken cancellationToken = default
+    )
+    {
+        command.FoodPointParentId = id;
+
+        return Ok(await _mediatr.Send(command, cancellationToken));
+    }
+
+    [HttpDelete("food/point-parents/{id:guid}")]
+    public async Task<IActionResult> DeleteFoodPointParent
+    (
+        [FromRoute] Guid id,
+        CancellationToken cancellationToken = default
+    ) => Ok(await _mediatr.Send(new DeleteFoodPointParentCommand(id), cancellationToken));
+
+    [HttpGet("food/{id:guid}/point-parents")]
+    public async Task<IActionResult> GetFoodPointParent
+    (
+        [FromRoute] Guid id,
+        CancellationToken cancellationToken = default
+    ) => Ok(await _mediatr.Send(new GetFoodPointParentsQuery(id), cancellationToken));
 }

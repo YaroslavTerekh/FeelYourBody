@@ -17,5 +17,7 @@ public class ModifyFoodPointCommand : IRequest
 
     public string Description { get; set; }
 
+    public string CoockingMethod { get; set; }
+
     public long PortionMass { get; set; }
 }

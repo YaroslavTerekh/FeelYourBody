@@ -30,6 +30,7 @@ public class GetAllCoachingsHandler : IRequestHandler<GetAllCoachingsQuery, List
             .Include(t => t.CoachingPhoto)
             .Include(t => t.ExamplePhotos)
             .Include(t => t.Food)
+                .ThenInclude(t => t.FoodPointParents)
                 .ThenInclude(t => t.FoodPoints)
             .Include(t => t.Feedbacks)
             .Include(t => t.CoachingDetailParents)

@@ -13,9 +13,9 @@ public class FoodPointConfiguration : IEntityTypeConfiguration<FoodPoint>
 {
     public void Configure(EntityTypeBuilder<FoodPoint> builder)
     {
-        builder.HasOne(t => t.Food)
+        builder.HasOne(t => t.FoodPointsParent)
             .WithMany(t => t.FoodPoints)
-            .HasForeignKey(t => t.FoodId)
+            .HasForeignKey(t => t.FoodPointsParentId)
             .OnDelete(DeleteBehavior.Cascade);
     }
 }

@@ -20,5 +20,5 @@ public class FoodDTO
 
     public Guid? CoachingId { get; set; }
 
-    public List<FoodPointDTO> FoodPoints { get; set; } = new();
+    public List<FoodPointsParentDTO> FoodPointParents { get; set; } = new();
 }
