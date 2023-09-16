@@ -15,4 +15,5 @@ public class FoodPointDTO
     public string Description { get; set; }
 
     public long PortionMass { get; set; }
+    public string CoockingMethod { get; set; }
 }
