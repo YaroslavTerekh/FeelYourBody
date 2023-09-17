@@ -34,7 +34,7 @@ internal class CreateCoachingHandler : IRequestHandler<CreateCoachingCommand>
             UnixExpireTime = request.AccessDays
         };
 
-        coaching.CoachingPhoto = await _fileService.UploadFileAsync(new AppFile { CoachingId = coaching.Id }, request.CoachingPhoto, cancellationToken);
+        coaching.CoachingPhoto = await _fileService.UploadFileAsync(new AppFile { CoachingId = coaching.Id, OrderId = 1}, request.CoachingPhoto, cancellationToken);
         await _context.Coachings.AddAsync(coaching, cancellationToken);
         await _context.SaveChangesAsync(cancellationToken);
 
