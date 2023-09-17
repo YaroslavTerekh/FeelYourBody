@@ -1,4 +1,5 @@
 ﻿using FYB.BL.Exceptions;
+using FYB.BL.Services.Abstractions;
 using FYB.Data.Constants;
 using FYB.Data.DbConnection;
 using FYB.Data.Entities;
@@ -16,15 +17,17 @@ namespace FYB.BL.Behaviors.Authentication.VerifyNumber;
 public class VerifyNumberHandler : IRequestHandler<VerifyNumberCommand, bool>
 {
     private readonly DataContext _context;
+    private readonly IPhoneNumberService _phoneNumberService;
 
-    public VerifyNumberHandler(DataContext context)
+    public VerifyNumberHandler(DataContext context, IPhoneNumberService phoneNumberService)
     {
         _context = context;
+        _phoneNumberService = phoneNumberService;
     }
 
     public async Task<bool> Handle(VerifyNumberCommand request, CancellationToken cancellationToken)
     {
-        var user = await _context.Users.FirstOrDefaultAsync(t => t.PhoneNumber == request.PhoneNumber, cancellationToken);
+        var user = await _context.Users.FirstOrDefaultAsync(t => t.PhoneNumber == _phoneNumberService.FormatPhoneNumber(request.PhoneNumber), cancellationToken);
 
         if (user is null)
             throw new NotFoundException(ErrorMessages.UserNotFound);
