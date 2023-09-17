@@ -35,7 +35,7 @@ public class VerifyNumberHandler : IRequestHandler<VerifyNumberCommand, bool>
         if (user.PhoneNumberConfirmed) 
             throw new Exception(ErrorMessages.PhoneNumberAlreadyConfirmed);
 
-        if (user.TemporaryCode != request.Code) return false;
+        if (user.TemporaryCode != request.Code) throw new Exception(ErrorMessages.CodeNotValid);;
 
         user.PhoneNumberConfirmed = true;
         await _context.SaveChangesAsync(cancellationToken);

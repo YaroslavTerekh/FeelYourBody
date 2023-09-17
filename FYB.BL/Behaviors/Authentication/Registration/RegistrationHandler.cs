@@ -20,7 +20,7 @@ using Twilio.Types;
 
 namespace FYB.BL.Behaviors.Authentication.Registration;
 
-public class RegistrationHandler : IRequestHandler<RegistrationCommand, Guid>
+public class RegistrationHandler : IRequestHandler<RegistrationCommand, User>
 {
     private readonly DataContext _context;
     private readonly UserManager<User> _userManager;
@@ -33,7 +33,7 @@ public class RegistrationHandler : IRequestHandler<RegistrationCommand, Guid>
         _phoneNumberService = phoneNumberService;
     }
 
-    public async Task<Guid> Handle(RegistrationCommand request, CancellationToken cancellationToken)
+    public async Task<User> Handle(RegistrationCommand request, CancellationToken cancellationToken)
     {
         var newUser = new User
         {
@@ -57,6 +57,14 @@ public class RegistrationHandler : IRequestHandler<RegistrationCommand, Guid>
             throw new RegisterException(HttpStatusCode.BadRequest, result.Errors);
         }
         
-        return newUser.Id;
+        return new User
+        {
+            UserName = request.Email,
+            FirstName = request.FirstName,
+            LastName = request.FirstName,
+            Email = request.Email,
+            PhoneNumber = _phoneNumberService.FormatPhoneNumber(request.PhoneNumber),
+            TemporaryCode = null,
+        };
     }
 }

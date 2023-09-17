@@ -4,10 +4,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using FYB.Data.Entities;
 
 namespace FYB.BL.Behaviors.Authentication.Registration;
 
-public class RegistrationCommand : IRequest<Guid>
+public class RegistrationCommand : IRequest<User>
 {
     public string FirstName { get; set; }
 
