@@ -19,9 +19,10 @@ public static class ServicesExtension
         services.AddTransient<IFileService, FileService>();
         services.AddTransient<IVideoService, VideoService>();
         services.AddTransient<ILiqPayService, LiqPayService>();
+        services.AddTransient<IPhoneNumberService, PhoneNumberService>();
         services.AddTransient<IHangfireJobsService, HangfireJobsService>();
         services.AddTransient<IProductService<Food>, FoodProductService>();
-        services.AddTransient<IProductService<Coaching>, CoachingProductService>();
+        services.AddTransient<IProductService<Coaching>, CoachingProductService>();        
 
         return services;
     }

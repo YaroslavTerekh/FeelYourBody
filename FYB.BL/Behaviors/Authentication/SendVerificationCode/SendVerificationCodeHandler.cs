@@ -1,4 +1,5 @@
 ﻿using FYB.BL.Exceptions;
+using FYB.BL.Services.Abstractions;
 using FYB.BL.Settings.Abstractions;
 using FYB.Data.Constants;
 using FYB.Data.DbConnection;
@@ -23,17 +24,25 @@ public class SendVerificationCodeHandler : IRequestHandler<SendVerificationCodeC
     private readonly DataContext _context;
     private readonly UserManager<User> _userManager;
     private readonly ITwilioSettings _twilioSettings;
+    private readonly IPhoneNumberService _phoneNumberService;
 
-    public SendVerificationCodeHandler(DataContext context, UserManager<User> userManager, ITwilioSettings twilioSettings)
+    public SendVerificationCodeHandler
+    (
+        DataContext context, 
+        UserManager<User> userManager, 
+        ITwilioSettings twilioSettings,
+        IPhoneNumberService phoneNumberService
+    )
     {
         _context = context;
         _userManager = userManager;
         _twilioSettings = twilioSettings;
+        _phoneNumberService = phoneNumberService;
     }
 
     public async Task<Unit> Handle(SendVerificationCodeCommand request, CancellationToken cancellationToken)
     {
-        var user = await _context.Users.FirstOrDefaultAsync(t => t.PhoneNumber == request.PhoneNumber, cancellationToken);
+        var user = await _context.Users.FirstOrDefaultAsync(t => t.PhoneNumber == _phoneNumberService.FormatPhoneNumber(request.PhoneNumber), cancellationToken);
 
         if (user is null)
             throw new NotFoundException(ErrorMessages.UserNotFound);

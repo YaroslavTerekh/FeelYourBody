@@ -1,5 +1,6 @@
 ﻿
 using FYB.BL.Exceptions;
+using FYB.BL.Services.Abstractions;
 using FYB.BL.Settings.Abstractions;
 using FYB.Data.Constants;
 using FYB.Data.DbConnection;
@@ -23,11 +24,13 @@ public class RegistrationHandler : IRequestHandler<RegistrationCommand, Guid>
 {
     private readonly DataContext _context;
     private readonly UserManager<User> _userManager;
+    private readonly IPhoneNumberService _phoneNumberService;
 
-    public RegistrationHandler(DataContext context, UserManager<User> userManager)
+    public RegistrationHandler(DataContext context, UserManager<User> userManager, IPhoneNumberService phoneNumberService)
     {
         _context = context;
         _userManager = userManager;
+        _phoneNumberService = phoneNumberService;
     }
 
     public async Task<Guid> Handle(RegistrationCommand request, CancellationToken cancellationToken)
@@ -38,11 +41,11 @@ public class RegistrationHandler : IRequestHandler<RegistrationCommand, Guid>
             FirstName = request.FirstName,
             LastName = request.FirstName,
             Email = request.Email,
-            PhoneNumber = request.PhoneNumber,
+            PhoneNumber = _phoneNumberService.FormatPhoneNumber(request.PhoneNumber),
             TemporaryCode = null
         };
 
-        if(await _context.Users.AnyAsync(t => t.PhoneNumber == newUser.PhoneNumber, cancellationToken))
+        if(await _context.Users.AnyAsync(t => t.PhoneNumber == _phoneNumberService.FormatPhoneNumber(newUser.PhoneNumber), cancellationToken))
         {
             throw new RegisterException(HttpStatusCode.BadRequest, new IdentityError[] { new IdentityError { Code = HttpStatusCode.BadRequest.ToString(), Description = ErrorMessages.UserWithNumberExists } });
         }

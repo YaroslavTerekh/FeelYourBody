@@ -34,4 +34,5 @@ public static class ErrorMessages
     public const string PhoneNumberIsNotConfirmed = "Спочатку підтвердьте свій номер телефону";
     public const string ContentAccessForbidden = "Доступ до контенту заборонено";
     public const string PreviewExists = "Прев'ю тренування вже присутнє";
+    public const string WrongPhoneNumber = "Номер телефону некоректний";
 }
