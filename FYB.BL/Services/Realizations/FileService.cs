@@ -31,12 +31,12 @@ public class FileService : IFileService
 
     public async Task<AppFile> UploadFileAsync(AppFile fileModel, IFormFile file, CancellationToken cancellationToken)
     {
-        var extension = Path.GetExtension(file.FileName).ToLower();
+        var extension = Path.GetExtension(file.ContentType).ToLower();
 
         if (
-            extension == ".jpg" ||
-            extension == ".jpeg" ||
-            extension == ".png"
+            extension.Contains(".jpg") ||
+            extension.Contains(".jpeg") ||
+            extension.Contains(".png")
         )
         {
             var fileName = Path.GetFileName(file.FileName);
