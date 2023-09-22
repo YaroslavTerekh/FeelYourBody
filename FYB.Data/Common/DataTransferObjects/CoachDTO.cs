@@ -20,5 +20,7 @@ public class CoachDTO
 
     public DateTime BirthDate { get; set; }
 
-    public AppFileDTO Avatar { get; set; }
+    public List<CoachDetailDTO> Details { get; set; }
+
+    public List<AppFileDTO> Photos { get; set; }
 }

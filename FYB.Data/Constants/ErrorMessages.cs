@@ -13,6 +13,7 @@ public static class ErrorMessages
     public const string FAQNotFound = "FAQ не знайдено";
     public const string CoachNotFound = "Тренера не знайдено";
     public const string CoachingNotFound = "Тренування не знайдено";
+    public const string CoachDetailNotFound = "Деталі тренера не знайдено";
     public const string CoachingDetailNotFound = "Деталі тренування не знайдено";
     public const string CoachingDetailParentNotFound = "Деталі тренування не знайдено";
     public const string CoachingVideoNotFound = "Відео не знайдено";

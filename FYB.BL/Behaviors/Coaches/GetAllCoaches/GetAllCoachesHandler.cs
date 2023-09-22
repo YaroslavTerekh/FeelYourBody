@@ -1,4 +1,5 @@
-﻿using FYB.Data.Common.DataTransferObjects;
+﻿using FYB.BL.Settings.Realizations;
+using FYB.Data.Common.DataTransferObjects;
 using FYB.Data.DbConnection;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -13,28 +14,37 @@ namespace FYB.BL.Behaviors.Coaches.GetAllCoaches;
 public class GetAllCoachesHandler : IRequestHandler<GetAllCoachesQuery, List<CoachDTO>>
 {
     private readonly DataContext _context;
+    private readonly HostSettings _hostSettings;
 
-    public GetAllCoachesHandler(DataContext context)
+    public GetAllCoachesHandler(DataContext context, HostSettings hostSettings)
     {
         _context = context;
+        _hostSettings = hostSettings;
     }
 
     public async Task<List<CoachDTO>> Handle(GetAllCoachesQuery request, CancellationToken cancellationToken)
     {
         var coaches = await _context.Coaches
-            .Include(t => t.Avatar)
+            .Include(t => t.Photos)
             .Select(t => new CoachDTO
             {
                 FirstName = t.FirstName,
                 LastName = t.LastName,
                 InstagramLink = t.InstagramLink,
                 Description = t.Description,
-                Avatar = new AppFileDTO
+                Details = t.CoachDetails.Select(d => new CoachDetailDTO
                 {
-                    Id = t.Avatar.Id,
-                    FileName = t.Avatar.FileName,
-                    FileExtension = t.Avatar.FileExtension
-                },
+                    Id = d.Id,
+                    Detail = d.Detail,
+                    CreatedDate = d.CreatedDate
+                }).ToList(),
+                Photos = t.Photos.Select(p => new AppFileDTO
+                {
+                    Id = p.Id,
+                    FileName = p.FileName,
+                    FileExtension = p.FileExtension,
+                    FilePath = String.Concat(_hostSettings.ApplicationUrl, p.FilePath.Replace(@"\", "/"))
+                }).ToList(),
                 Id = t.Id,
                 BirthDate = t.BirthDate
             })

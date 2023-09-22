@@ -19,9 +19,9 @@ public class AppFileConfiguration : IEntityTypeConfiguration<AppFile>
             .OnDelete(DeleteBehavior.NoAction);
 
         builder.HasOne(t => t.Coach)
-            .WithOne(t => t.Avatar)
-            .HasForeignKey<AppFile>(t => t.CoachId)
-            .OnDelete(DeleteBehavior.NoAction);
+            .WithMany(t => t.Photos)
+            .HasForeignKey(t => t.CoachId)
+            .OnDelete(DeleteBehavior.Cascade);
 
         builder.HasOne(t => t.Feedback)
             .WithMany(t => t.Photos)

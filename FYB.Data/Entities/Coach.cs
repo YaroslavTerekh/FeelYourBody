@@ -16,11 +16,11 @@ public class Coach : BaseEntity
 
     public string InstagramLink { get; set; }
 
+    public List<CoachDetails> CoachDetails { get; set; }
+
     public DateTime BirthDate { get; set; }
 
-    public Guid AvatarId { get; set; }
-
-    public AppFile Avatar { get; set; }
+    public List<AppFile> Photos { get; set; }
 
     public List<Coaching> Coachings { get; set; } = new();
 }

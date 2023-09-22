@@ -13,9 +13,14 @@ public class CoachConfiguration : IEntityTypeConfiguration<Coach>
 {
     public void Configure(EntityTypeBuilder<Coach> builder)
     {
-        builder.HasOne(t => t.Avatar)
+        builder.HasMany(t => t.Photos)
             .WithOne(t => t.Coach)
-            .HasForeignKey<Coach>(t => t.AvatarId)
+            .HasForeignKey(t => t.CoachId)
             .OnDelete(DeleteBehavior.NoAction);
+
+        builder.HasMany(t => t.CoachDetails)
+            .WithOne(t => t.Coach)
+            .HasForeignKey(t => t.CoachId)
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }

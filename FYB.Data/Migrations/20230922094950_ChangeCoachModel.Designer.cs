@@ -4,6 +4,7 @@ using FYB.Data.DbConnection;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FYB.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20230922094950_ChangeCoachModel")]
+    partial class ChangeCoachModel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -168,7 +170,7 @@ namespace FYB.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("CoachId")
+                    b.Property<Guid?>("CoachId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("CreatedDate")
@@ -766,13 +768,9 @@ namespace FYB.Data.Migrations
 
             modelBuilder.Entity("FYB.Data.Entities.CoachDetails", b =>
                 {
-                    b.HasOne("FYB.Data.Entities.Coach", "Coach")
+                    b.HasOne("FYB.Data.Entities.Coach", null)
                         .WithMany("CoachDetails")
-                        .HasForeignKey("CoachId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Coach");
+                        .HasForeignKey("CoachId");
                 });
 
             modelBuilder.Entity("FYB.Data.Entities.Coaching", b =>

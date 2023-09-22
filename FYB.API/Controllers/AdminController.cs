@@ -1,6 +1,9 @@
-﻿using FYB.BL.Behaviors.Admin.Coaches.AddNewCoach;
+﻿using FYB.BL.Behaviors.Admin.Coaches.AddCoachDetails;
+using FYB.BL.Behaviors.Admin.Coaches.AddNewCoach;
 using FYB.BL.Behaviors.Admin.Coaches.DeleteCoach;
+using FYB.BL.Behaviors.Admin.Coaches.DeleteCoachDetail;
 using FYB.BL.Behaviors.Admin.Coaches.ModifyCoach;
+using FYB.BL.Behaviors.Admin.Coaches.ModifyCoachDetail;
 using FYB.BL.Behaviors.Admin.Coachings.AddCoachingDetails;
 using FYB.BL.Behaviors.Admin.Coachings.AddCoachingDetailsParent;
 using FYB.BL.Behaviors.Admin.Coachings.AddPhotosToCoaching;
@@ -471,4 +474,37 @@ public class AdminController : BaseController
         [FromRoute] Guid id,
         CancellationToken cancellationToken = default
     ) => Ok(await _mediatr.Send(new GetFoodPointParentsQuery(id), cancellationToken));
+
+    [HttpPost("coaches/{id:guid}/details/add")]
+    public async Task<IActionResult> AddCoachDetailsAsync
+    (
+        [FromRoute] Guid id,
+        [FromBody] AddCoachDetailsCommand command,
+        CancellationToken cancellationToken = default
+    )
+    {
+        command.CoachId = id;
+
+        return Ok(await _mediatr.Send(command, cancellationToken));
+    }
+
+    [HttpPut("coaches/details/{id:guid}/modify")]
+    public async Task<IActionResult> ModfiyCoachDetailsAsync
+    (
+        [FromRoute] Guid id,
+        [FromBody] ModifyCoachDetailCommand command,
+        CancellationToken cancellationToken = default
+    )
+    {
+        command.DetailId = id;
+
+        return Ok(await _mediatr.Send(command, cancellationToken));
+    }
+
+    [HttpDelete("coaches/details/{id:guid}/delete")]
+    public async Task<IActionResult> DeleteCoachDetailsAsync
+    (
+        [FromRoute] Guid id,
+        CancellationToken cancellationToken = default
+    ) => Ok(await _mediatr.Send(new DeleteCoachDetailCommand(id), cancellationToken));
 }

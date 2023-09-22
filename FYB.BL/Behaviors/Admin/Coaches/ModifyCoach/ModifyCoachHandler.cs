@@ -26,21 +26,28 @@ public class ModifyCoachHandler : IRequestHandler<ModifyCoachCommand>
 
     public async Task<Unit> Handle(ModifyCoachCommand request, CancellationToken cancellationToken)
     {
-        var coach = await _context.Coaches.Include(t => t.Coachings).FirstOrDefaultAsync(t => t.Id == request.Id);
+        var coach = await _context.Coaches.Include(t => t.Photos).Include(t => t.Coachings).FirstOrDefaultAsync(t => t.Id == request.Id);
 
         if(coach is null)
         {
             throw new NotFoundException(ErrorMessages.CoachNotFound);
         }
 
-        if(request.Avatar is not null)
+        if(request.Photos.Count > 0)
         {
-            var oldAvatar = await _context.Files.FirstOrDefaultAsync(t => t.Id == coach.AvatarId, cancellationToken);
+            foreach (var photo in coach.Photos)
+            {
+                var oldAvatar = await _context.Files.FirstOrDefaultAsync(t => t.Id == photo.Id, cancellationToken);
 
-            oldAvatar.CoachId = null;
+                oldAvatar.CoachId = null;                
+            }            
+
+            foreach (var photo in request.Photos)
+            {
+                await _context.Files.AddAsync(await _fileService.UploadFileAsync(new AppFile { CoachId = coach.Id }, photo, cancellationToken), cancellationToken);
+            }
         }
 
-        coach.Avatar = request.Avatar is null ? coach.Avatar : await _fileService.UploadFileAsync(new AppFile { CoachId = coach.Id }, request.Avatar, cancellationToken);
         coach.FirstName = request.FirstName;
         coach.LastName = request.LastName;
         coach.Description = request.Description;

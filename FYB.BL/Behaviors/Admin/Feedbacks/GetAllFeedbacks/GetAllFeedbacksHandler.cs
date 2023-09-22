@@ -24,7 +24,9 @@ public class GetAllFeedbacksHandler : IRequestHandler<GetAllFeedbacksQuery, List
 
     public async Task<List<FeedbackDTO>> Handle(GetAllFeedbacksQuery request, CancellationToken cancellationToken)
     {
-        var feedbacks = await _context.Feedbacks.Select(t => _mapper.Map<FeedbackDTO>(t)).ToListAsync(cancellationToken);
+        var feedbacks = await _context.Feedbacks
+            .Include(t => t.Photos)
+            .Select(t => _mapper.Map<FeedbackDTO>(t)).ToListAsync(cancellationToken);
 
         return feedbacks;
     }

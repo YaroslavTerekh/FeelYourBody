@@ -26,7 +26,7 @@ public class DeleteCoachHandler : IRequestHandler<DeleteCoachCommand>
     public async Task<Unit> Handle(DeleteCoachCommand request, CancellationToken cancellationToken)
     {
         var coach = await _context.Coaches
-            .Include(t => t.Avatar)
+            .Include(t => t.Photos)
             .Include(t => t.Coachings)
                 .ThenInclude(t => t.Feedbacks)
                 .ThenInclude(t => t.Photos)
@@ -37,7 +37,7 @@ public class DeleteCoachHandler : IRequestHandler<DeleteCoachCommand>
             throw new NotFoundException(ErrorMessages.CoachNotFound);
         }
 
-        coach.Avatar.CoachId = null;
+        coach.Photos.ForEach(t => t.CoachId = null);
         foreach (var coaching in coach.Coachings)
             foreach (var feedback in coaching.Feedbacks)
                 foreach (var photo in feedback.Photos)

@@ -14,7 +14,7 @@ public class ModifyCoachCommand : IRequest
     [JsonIgnore]
     public Guid Id { get; set; }
 
-    public IFormFile? Avatar { get; set; }
+    public List<IFormFile> Photos { get; set; } = new();
 
     public string FirstName { get; set; }
 

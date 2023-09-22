@@ -19,6 +19,7 @@ using FYB.BL.Settings.Realizations;
 using Hangfire;
 using Newtonsoft.Json;
 using FYB.BL.Services.Abstractions;
+using Microsoft.Extensions.FileProviders;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -40,6 +41,11 @@ var twillioSettings = new TwilioSettings(builder.Configuration);
 builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
 builder.Services.AddTransient<ITwilioSettings, TwilioSettings>(_ => twillioSettings);
 builder.Services.AddTransient<ILiqPaySettings, LiqPaySettings>(_ => liqPaySettings);
+builder.Services.AddScoped<ContextInitializer>();
+var hostConfig = builder.Configuration
+        .GetSection("HostSettings")
+        .Get<HostSettings>();
+builder.Services.AddSingleton(hostConfig);
 builder.Services.AddCustomServices();
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
@@ -135,6 +141,13 @@ builder.Services.AddCors(options =>
 var app = builder.Build();
 var scope = app.Services.CreateScope();
 
+app.UseFileServer(new FileServerOptions
+{
+    FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "uploads")),
+    RequestPath = "/uploads",
+    EnableDefaultFiles = true
+});
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
@@ -147,6 +160,9 @@ Directory.CreateDirectory(path);
 
 var dataContext = scope.ServiceProvider.GetRequiredService<DataContext>();
 dataContext.Database.Migrate();
+
+var contextInitializer = scope.ServiceProvider.GetRequiredService<ContextInitializer>();
+contextInitializer.Initialize().GetAwaiter().GetResult();
 
 app.UseHttpsRedirection();
 

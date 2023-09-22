@@ -29,12 +29,12 @@ public class VideoService : IVideoService
     {
         var extension = Path.GetExtension(file.FileName);
 
-        if (extension == ".mp4")
-        {
-            var fileName = Path.GetFileName(file.FileName);
+        //if (extension == ".mp4")
+        //{
+        var fileName = Path.GetFileName(file.FileName);
             var filePathName = fileName + "_" + Guid.NewGuid() + extension;
-            var path = Path.Combine("uploads", "videos", filePathName);
-            var uploadPath = Path.Combine(_env.ContentRootPath, "uploads", "videos", filePathName);
+            var path = Path.Combine("uploads", filePathName);
+            var uploadPath = Path.Combine(_env.ContentRootPath, "uploads", filePathName);
 
             try
             {
@@ -70,10 +70,10 @@ public class VideoService : IVideoService
                 File.Delete(uploadPath);
                 throw;
             }
-        } else
-        {
-            throw new Exception(ErrorMessages.UnknownVideoType);
-        }
+        //} else
+        //{
+        //    throw new Exception(ErrorMessages.UnknownVideoType);
+        //}
     }
 
     public async Task DeleteVideoAsync(Guid id, CancellationToken cancellationToken = default)

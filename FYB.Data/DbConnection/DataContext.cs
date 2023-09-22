@@ -14,6 +14,8 @@ public class DataContext : IdentityDbContext<User, ApplicationRole, Guid>
 
     public DbSet<Coach> Coaches { get; set; }
 
+    public DbSet<CoachDetails> CoachDetails { get; set; }
+
     public DbSet<Coaching> Coachings { get; set; }
 
     public DbSet<CoachingVideo> CoachingVideos { get; set; }

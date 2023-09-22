@@ -11,7 +11,7 @@ namespace FYB.BL.Behaviors.Admin.Coaches.AddNewCoach;
 
 public class AddNewCoachCommand : IRequest
 {
-    public IFormFile Avatar { get; set; }
+    public List<IFormFile> Photos { get; set; }
 
     public string FirstName { get; set; }
 

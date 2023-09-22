@@ -33,14 +33,14 @@ public class FileService : IFileService
     {
         var extension = Path.GetExtension(file.ContentType).ToLower();
 
-        if (
-            extension.Contains(".jpg") ||
-            extension.Contains(".jpeg") ||
-            extension.Contains(".png")
-        )
-        {
+        //if (
+        //    extension.Contains(".jpg") ||
+        //    extension.Contains(".jpeg") ||
+        //    extension.Contains(".png")
+        //)
+        //{
             var fileName = Path.GetFileName(file.FileName);
-            var filePathName = fileName + DateTime.UtcNow.Millisecond + extension;
+            var filePathName = fileName + DateTime.UtcNow.Millisecond + Path.GetExtension(file.FileName);
             var path = Path.Combine("uploads", filePathName);
             var uploadPath = Path.Combine(_env.ContentRootPath, "uploads", filePathName);
 
@@ -66,8 +66,8 @@ public class FileService : IFileService
             }
         }
 
-        throw new Exception(ErrorMessages.UnknownPhotoType);
-    }
+        //throw new Exception(ErrorMessages.UnknownPhotoType);
+    //}
 
     public async Task DeleteFileAsync(Guid id, CancellationToken cancellationToken)
     {

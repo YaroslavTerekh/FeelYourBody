@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using FYB.BL.Services.Abstractions;
 using FYB.BL.Services.Realizations;
+using FYB.BL.Settings.Realizations;
 using FYB.Data.Common.DataTransferObjects;
 using FYB.Data.Entities;
 using System;
@@ -13,9 +14,10 @@ namespace FYB.BL.Helpers;
 
 public class MapperGlobalProfile : Profile
 {
-    public MapperGlobalProfile()
+    public MapperGlobalProfile(HostSettings hostSettings)
     {
-        CreateMap<AppFile, AppFileDTO>();
+        CreateMap<AppFile, AppFileDTO>()
+            .ForMember(dest => dest.FilePath, opt => opt.MapFrom(src => String.Concat(hostSettings.ApplicationUrl, src.FilePath.Replace(@"\", "/"))));
         CreateMap<Coach, CoachDTO> ();
         CreateMap<Coaching, CoachingDTO>()
             .ForMember(dest => dest.AccessDays, opt => opt.MapFrom(src => src.UnixExpireTime));
