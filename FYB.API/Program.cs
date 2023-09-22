@@ -20,6 +20,8 @@ using Hangfire;
 using Newtonsoft.Json;
 using FYB.BL.Services.Abstractions;
 using Microsoft.Extensions.FileProviders;
+using AutoMapper;
+using FYB.BL.Helpers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -48,7 +50,12 @@ var hostConfig = builder.Configuration
 builder.Services.AddSingleton(hostConfig);
 builder.Services.AddCustomServices();
 
-builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+builder.Services.AddSingleton(provider => new MapperConfiguration(cfg =>
+{
+    cfg.AddProfile(new MapperGlobalProfile(provider.GetRequiredService<HostSettings>()));
+}).CreateMapper());
+
+//builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 builder.Services.AddHangfire((sp, config) =>
 {
