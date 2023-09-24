@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace FYB.BL.Behaviors.Admin.Coachings.AddCoachingDetailsParent;
 
-public class AddCoachingDetailsParentHandler : IRequestHandler<AddCoachingDetailsParentCommand>
+public class AddCoachingDetailsParentHandler : IRequestHandler<AddCoachingDetailsParentCommand, Guid>
 {
     private readonly DataContext _context;
 
@@ -18,7 +18,7 @@ public class AddCoachingDetailsParentHandler : IRequestHandler<AddCoachingDetail
         _context = context;
     }
 
-    public async Task<Unit> Handle(AddCoachingDetailsParentCommand request, CancellationToken cancellationToken)
+    public async Task<Guid> Handle(AddCoachingDetailsParentCommand request, CancellationToken cancellationToken)
     {
         var parent = new CoachingDetailsParent
         {
@@ -29,6 +29,6 @@ public class AddCoachingDetailsParentHandler : IRequestHandler<AddCoachingDetail
         await _context.CoachingDetailParents.AddAsync(parent, cancellationToken);
         await _context.SaveChangesAsync(cancellationToken);
 
-        return Unit.Value;
+        return parent.Id;
     }
 }
