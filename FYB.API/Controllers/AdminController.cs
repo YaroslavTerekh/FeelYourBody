@@ -1,4 +1,5 @@
-﻿using FYB.BL.Behaviors.Admin.Coaches.AddCoachDetails;
+﻿using FYB.BL.Behaviors.Admin;
+using FYB.BL.Behaviors.Admin.Coaches.AddCoachDetails;
 using FYB.BL.Behaviors.Admin.Coaches.AddNewCoach;
 using FYB.BL.Behaviors.Admin.Coaches.DeleteCoach;
 using FYB.BL.Behaviors.Admin.Coaches.DeleteCoachDetail;
@@ -141,13 +142,12 @@ public class AdminController : BaseController
     [HttpPost("video/{id:guid}/add")]
     public async Task<IActionResult> AddNewVideoAsync
     (
-        IFormFile file,
+        [FromForm] UploadVideoModel command,
         [FromRoute] Guid id,
-        [FromBody] bool isPreview,
         CancellationToken cancellationToken = default
     )
     {
-        await _videoService.UploadVideoAsync(file, id, isPreview, cancellationToken);
+        await _videoService.UploadVideoAsync(command.File, id, command.IsPreview, cancellationToken);
 
         return Ok();
     }
