@@ -30,11 +30,12 @@ public class GetAllCoachingsHandler : IRequestHandler<GetAllCoachingsQuery, List
             .Include(t => t.CoachingPhoto)
             .Include(t => t.ExamplePhotos)
             .Include(t => t.Food)
-                .ThenInclude(t => t.FoodPointParents)
-                .ThenInclude(t => t.FoodPoints)
+            .ThenInclude(t => t.FoodPointParents)
+            .ThenInclude(t => t.FoodPoints)
             .Include(t => t.Feedbacks)
             .Include(t => t.CoachingDetailParents)
-                .ThenInclude(t => t.Details)
+            .ThenInclude(t => t.Details)
+            .Include(t=> t.Videos)
             .Select(t => _mapper.Map<Coaching, CoachingDTO>(t))
             .ToListAsync(cancellationToken);
 
