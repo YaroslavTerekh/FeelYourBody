@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FYB.Data.Common;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -19,6 +20,8 @@ public class Coaching : BaseProduct
     public Guid CoachingPhotoId { get; set; }
 
     public AppFile CoachingPhoto { get; set; }
+
+    public CoachingIcon AdditionalIcon { get; set; }
 
     public List<CoachingDetailsParent> CoachingDetailParents { get; set; } = new();
 

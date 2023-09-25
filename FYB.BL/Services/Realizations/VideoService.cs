@@ -31,7 +31,7 @@ public class VideoService : IVideoService
 
         //if (extension == ".mp4")
         //{
-        var fileName = Path.GetFileName(file.FileName);
+            var fileName = Path.GetFileName(file.FileName);
             var filePathName = fileName + "_" + Guid.NewGuid() + extension;
             var path = Path.Combine("uploads", filePathName);
             var uploadPath = Path.Combine(_env.ContentRootPath, "uploads", filePathName);
@@ -45,7 +45,7 @@ public class VideoService : IVideoService
                 if (coaching is null) 
                     throw new NotFoundException(ErrorMessages.CoachingNotFound);
 
-                if(coaching.Videos.Where(t => t.IsPreview == true).ToList().Count > 0) 
+                if(coaching.Videos.Where(t => t.IsPreview == true).ToList().Count > 0 && isPreview) 
                     throw new Exception(ErrorMessages.PreviewExists);
 
                 var fileModel = new CoachingVideo

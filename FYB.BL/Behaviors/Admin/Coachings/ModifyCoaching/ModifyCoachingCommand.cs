@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using FYB.Data.Common;
+using MediatR;
 using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
@@ -12,6 +13,8 @@ namespace FYB.BL.Behaviors.Admin.Coachings.ModifyCoaching;
 public class ModifyCoachingCommand : IRequest
 {
     public Guid Id { get; set; }
+
+    public CoachingIcon Icon { get; set; }
 
     public IFormFile? CoachingPhoto { get; set; }
 

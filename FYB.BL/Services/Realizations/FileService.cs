@@ -40,7 +40,7 @@ public class FileService : IFileService
         //)
         //{
             var fileName = Path.GetFileName(file.FileName);
-            var filePathName = fileName + DateTime.UtcNow.Millisecond + Path.GetExtension(file.FileName);
+            var filePathName = Guid.NewGuid() + Path.GetExtension(file.FileName);
             var path = Path.Combine("uploads", filePathName);
             var uploadPath = Path.Combine(_env.ContentRootPath, "uploads", filePathName);
 

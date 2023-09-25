@@ -31,11 +31,13 @@ public class CoachingDTO
 
     public AppFileDTO CoachingPhoto { get; set; }
 
+    public CoachingIcon AdditionalIcon { get; set; }
+
     public List<CoachingDetailsParentDTO> CoachingDetailParents { get; set; } = new();
 
     public List<FeedbackDTO> Feedbacks { get; set; } = new();
 
     public List<AppFileDTO> ExamplePhotos { get; set; } = new();
 
-    public List<CoachingVideo> Videos { get; set; } = new();
+    public List<CoachingVideoDTO> Videos { get; set; } = new();
 }

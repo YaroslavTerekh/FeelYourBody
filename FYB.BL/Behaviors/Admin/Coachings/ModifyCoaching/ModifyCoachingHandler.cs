@@ -50,6 +50,7 @@ public class ModifyCoachingHandler : IRequestHandler<ModifyCoachingCommand>
         coaching.CoachId = request.CoachId;
         coaching.FoodId = request.FoodId;
         coaching.UnixExpireTime = request.AccessDays;
+        coaching.AdditionalIcon = request.Icon;
 
         await _context.SaveChangesAsync(cancellationToken);
 
