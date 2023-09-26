@@ -32,16 +32,16 @@ public class AddNewCoachHandler : IRequestHandler<AddNewCoachCommand>
             LastName = request.LastName,
             BirthDate = request.BirthDate,
             InstagramLink = request.InstagramLink,
-            Description = request.Description,
+            Description = "",
             Coachings = request.CoachingIds is null ? null :
                         await _context.Coachings.Where(t => request.CoachingIds.Contains(t.Id)).ToListAsync(cancellationToken)
         };
 
-        foreach (var photo in request.Photos)
-        {
-            var resPhoto = await _fileService.UploadFileAsync(new AppFile { CoachId = newCoach.Id }, photo, cancellationToken);
-            await _context.Files.AddAsync(resPhoto, cancellationToken);
-        }
+        // foreach (var photo in request.Photos)
+        // {
+        //     var resPhoto = await _fileService.UploadFileAsync(new AppFile { CoachId = newCoach.Id }, photo, cancellationToken);
+        //     await _context.Files.AddAsync(resPhoto, cancellationToken);
+        // }
 
         await _context.Coaches.AddAsync(newCoach, cancellationToken);
         await _context.SaveChangesAsync(cancellationToken);

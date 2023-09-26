@@ -11,13 +11,13 @@ namespace FYB.BL.Behaviors.Admin.Coaches.AddNewCoach;
 
 public class AddNewCoachCommand : IRequest
 {
-    public List<IFormFile> Photos { get; set; }
+    // public List<IFormFile> Photos { get; set; }
 
     public string FirstName { get; set; }
 
     public string LastName { get; set; }
 
-    public string Description { get; set; }
+    // public string Description { get; set; }
 
     public string InstagramLink { get; set; }
 

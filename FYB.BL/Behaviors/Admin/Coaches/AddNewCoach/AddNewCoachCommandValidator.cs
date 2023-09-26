@@ -28,13 +28,13 @@ public class AddNewCoachCommandValidator : AbstractValidator<AddNewCoachCommand>
             .NotEmpty()
             .WithMessage(ValidationMessages.LastNameRequired);
 
-        RuleFor(t => t.Description)
-            .MinimumLength(50)
-            .WithMessage(ValidationMessages.DescriptionTooShort)
-            .MaximumLength(500)
-            .WithMessage(ValidationMessages.DescriptionTooLong)
-            .NotEmpty()
-            .WithMessage(ValidationMessages.DescriptionRequired);
+        // RuleFor(t => t.Description)
+        //     .MinimumLength(50)
+        //     .WithMessage(ValidationMessages.DescriptionTooShort)
+        //     .MaximumLength(500)
+        //     .WithMessage(ValidationMessages.DescriptionTooLong)
+        //     .NotEmpty()
+        //     .WithMessage(ValidationMessages.DescriptionRequired);
 
         RuleFor(t => t.InstagramLink)
             .NotEmpty()
