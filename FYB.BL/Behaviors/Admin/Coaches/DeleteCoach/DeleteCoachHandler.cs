@@ -30,6 +30,8 @@ public class DeleteCoachHandler : IRequestHandler<DeleteCoachCommand>
             .Include(t => t.Coachings)
                 .ThenInclude(t => t.Feedbacks)
                 .ThenInclude(t => t.Photos)
+            .Include(t => t.Coachings)
+                .ThenInclude(t => t.ExamplePhotos)
             .FirstOrDefaultAsync(t => t.Id == request.Id, cancellationToken);
 
         if (coach is null)
@@ -39,9 +41,12 @@ public class DeleteCoachHandler : IRequestHandler<DeleteCoachCommand>
 
         coach.Photos.ForEach(t => t.CoachId = null);
         foreach (var coaching in coach.Coachings)
+        {
+            coaching.ExamplePhotos.ForEach(t => t.CoachingListId = null);
             foreach (var feedback in coaching.Feedbacks)
                 foreach (var photo in feedback.Photos)
                     photo.FeedBackId = null;
+        }
         _context.Coaches.Remove(coach);
         await _context.SaveChangesAsync(cancellationToken);
 
