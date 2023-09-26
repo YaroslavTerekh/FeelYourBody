@@ -26,7 +26,7 @@ public class CoachingConfiguration : IEntityTypeConfiguration<Coaching>
         builder.HasMany(t => t.CoachingDetailParents)
             .WithOne(t => t.Coaching)
             .HasForeignKey(t => t.CoachingId)
-            .OnDelete(DeleteBehavior.NoAction);
+            .OnDelete(DeleteBehavior.Cascade);
 
         builder.HasOne(t => t.Food)
             .WithOne(t => t.Coaching)

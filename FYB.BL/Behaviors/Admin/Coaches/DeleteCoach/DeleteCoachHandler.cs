@@ -27,6 +27,7 @@ public class DeleteCoachHandler : IRequestHandler<DeleteCoachCommand>
     {
         var coach = await _context.Coaches
             .Include(t => t.Photos)
+            .Include(t => t.CoachDetails)
             .Include(t => t.Coachings)
                 .ThenInclude(t => t.Feedbacks)
                 .ThenInclude(t => t.Photos)
