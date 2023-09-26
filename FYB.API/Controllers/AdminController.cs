@@ -1,6 +1,7 @@
 ﻿using FYB.BL.Behaviors.Admin;
 using FYB.BL.Behaviors.Admin.Coaches.AddCoachDetails;
 using FYB.BL.Behaviors.Admin.Coaches.AddNewCoach;
+using FYB.BL.Behaviors.Admin.Coaches.AddPhotoToCoach;
 using FYB.BL.Behaviors.Admin.Coaches.DeleteCoach;
 using FYB.BL.Behaviors.Admin.Coaches.DeleteCoachDetail;
 using FYB.BL.Behaviors.Admin.Coaches.ModifyCoach;
@@ -507,4 +508,11 @@ public class AdminController : BaseController
         [FromRoute] Guid id,
         CancellationToken cancellationToken = default
     ) => Ok(await _mediatr.Send(new DeleteCoachDetailCommand(id), cancellationToken));
+
+    [HttpPut("coaches/photos/add")]
+    public async Task<IActionResult> AddPhotosToCoachAsync
+    (
+        [FromForm] AddPhotoToCoachCommand command,
+        CancellationToken cancellationToken = default
+    ) => Ok(await _mediatr.Send(command, cancellationToken));
 }
