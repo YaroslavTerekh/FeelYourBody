@@ -44,7 +44,7 @@ public class ModifyCoachHandler : IRequestHandler<ModifyCoachCommand>
 
             foreach (var photo in request.Photos)
             {
-                await _context.Files.AddAsync(await _fileService.UploadFileAsync(new AppFile { CoachId = coach.Id }, photo, cancellationToken), cancellationToken);
+                await _context.Files.AddAsync(await _fileService.UploadFileAsync(new AppFile { CoachId = coach.Id }, photo, cancellationToken, null), cancellationToken);
             }
         }
 

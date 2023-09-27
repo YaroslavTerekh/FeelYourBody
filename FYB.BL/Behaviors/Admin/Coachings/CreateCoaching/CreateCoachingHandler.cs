@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace FYB.BL.Behaviors.Admin.Coachings.CreateCoaching;
 
-internal class CreateCoachingHandler : IRequestHandler<CreateCoachingCommand>
+internal class CreateCoachingHandler : IRequestHandler<CreateCoachingCommand, Coaching>
 {
     private readonly DataContext _context;
     private readonly IFileService _fileService;
@@ -23,7 +23,7 @@ internal class CreateCoachingHandler : IRequestHandler<CreateCoachingCommand>
         _unixService = unixService;
     }
 
-    public async Task<Unit> Handle(CreateCoachingCommand request, CancellationToken cancellationToken)
+    public async Task<Coaching> Handle(CreateCoachingCommand request, CancellationToken cancellationToken)
     {
         var coaching = new Coaching
         {
@@ -35,10 +35,10 @@ internal class CreateCoachingHandler : IRequestHandler<CreateCoachingCommand>
             AdditionalIcon = request.Icon
         };
 
-        coaching.CoachingPhoto = await _fileService.UploadFileAsync(new AppFile { CoachingId = coaching.Id, OrderId = 0 }, request.CoachingPhoto, cancellationToken);
+        coaching.CoachingPhoto = await _fileService.UploadFileAsync(new AppFile { CoachingId = coaching.Id, OrderId = 0 }, request.CoachingPhoto, cancellationToken, null);
         await _context.Coachings.AddAsync(coaching, cancellationToken);
         await _context.SaveChangesAsync(cancellationToken);
 
-        return Unit.Value;
+        return coaching;
     }
 }

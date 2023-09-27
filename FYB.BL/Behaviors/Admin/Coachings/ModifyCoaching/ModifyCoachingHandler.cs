@@ -46,7 +46,7 @@ public class ModifyCoachingHandler : IRequestHandler<ModifyCoachingCommand>
         coaching.Title = request.Title;
         coaching.Description = request.Description;
         coaching.Price = request.Price;
-        coaching.CoachingPhoto = request.CoachingPhoto is not null ? await _fileService.UploadFileAsync(new AppFile { CoachingId = coaching.Id }, request.CoachingPhoto, cancellationToken) : coaching.CoachingPhoto;
+        coaching.CoachingPhoto = request.CoachingPhoto is not null ? await _fileService.UploadFileAsync(new AppFile { CoachingId = coaching.Id }, request.CoachingPhoto, cancellationToken, null) : coaching.CoachingPhoto;
         coaching.CoachId = request.CoachId;
         coaching.FoodId = request.FoodId;
         coaching.UnixExpireTime = request.AccessDays;

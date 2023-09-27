@@ -29,7 +29,7 @@ public class FileService : IFileService
         _env = env;
     }
 
-    public async Task<AppFile> UploadFileAsync(AppFile fileModel, IFormFile file, CancellationToken cancellationToken)
+    public async Task<AppFile> UploadFileAsync(AppFile fileModel, IFormFile file, CancellationToken cancellationToken, string? fileName)
     {
         var extension = Path.GetExtension(file.ContentType).ToLower();
 
@@ -39,8 +39,8 @@ public class FileService : IFileService
         //    extension.Contains(".png")
         //)
         //{
-            var fileName = Path.GetFileName(fileModel.FileName);
-            var filePathName = Guid.NewGuid() + Path.GetExtension(fileModel.FileName);
+            var fullFileName = Path.GetFileName(fileName ?? file.FileName);
+            var filePathName = Guid.NewGuid() + Path.GetExtension(fileName ?? file.FileName);
             var path = Path.Combine("uploads", filePathName);
             var uploadPath = Path.Combine(_env.ContentRootPath, "uploads", filePathName);
 
@@ -48,7 +48,7 @@ public class FileService : IFileService
             {
                 fileModel.FilePath = path;
                 fileModel.FileExtension = file.ContentType;
-                fileModel.FileName = fileName;
+                fileModel.FileName = fullFileName;
 
                 using (var fs = new FileStream(uploadPath, FileMode.CreateNew))
                 {

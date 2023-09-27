@@ -21,7 +21,7 @@ public class CreateCoachingCommandValidator : AbstractValidator<CreateCoachingCo
             .WithMessage(ValidationMessages.TitleRequired);
 
         RuleFor(t => t.Description)
-            .MinimumLength(100)
+            .MinimumLength(10)
             .WithMessage(ValidationMessages.DescriptionTooShort)
             .MaximumLength(1000)
             .WithMessage(ValidationMessages.DescriptionTooLong)

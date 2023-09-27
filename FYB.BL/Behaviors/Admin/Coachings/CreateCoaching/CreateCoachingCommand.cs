@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace FYB.BL.Behaviors.Admin.Coachings.CreateCoaching;
 
-public class CreateCoachingCommand : IRequest
+public class CreateCoachingCommand : IRequest<Coaching>
 {
     public IFormFile CoachingPhoto { get; set; }
 

@@ -32,7 +32,7 @@ public class AddFeedbackHandler : IRequestHandler<AddFeedbackCommand>
 
         foreach (var file in request.Photos)
         {
-            var result = await _fileService.UploadFileAsync(new AppFile { FeedBackId = feedback.Id }, file, cancellationToken);
+            var result = await _fileService.UploadFileAsync(new AppFile { FeedBackId = feedback.Id }, file, cancellationToken, null);
 
             feedback.Photos.Add(result);
         }

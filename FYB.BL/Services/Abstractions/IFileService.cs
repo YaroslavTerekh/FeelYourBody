@@ -10,7 +10,7 @@ namespace FYB.BL.Services.Abstractions;
 
 public interface IFileService
 {
-    public Task<AppFile> UploadFileAsync(AppFile fileModel, IFormFile file, CancellationToken cancellationToken);
+    public Task<AppFile> UploadFileAsync(AppFile fileModel, IFormFile file, CancellationToken cancellationToken, string? fileName);
 
     public Task DeleteFileAsync(Guid id, CancellationToken cancellationToken);
 
