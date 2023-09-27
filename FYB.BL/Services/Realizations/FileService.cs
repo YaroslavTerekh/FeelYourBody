@@ -39,8 +39,8 @@ public class FileService : IFileService
         //    extension.Contains(".png")
         //)
         //{
-            var fileName = Path.GetFileName(file.FileName);
-            var filePathName = Guid.NewGuid() + Path.GetExtension(file.FileName);
+            var fileName = Path.GetFileName(fileModel.FileName);
+            var filePathName = Guid.NewGuid() + Path.GetExtension(fileModel.FileName);
             var path = Path.Combine("uploads", filePathName);
             var uploadPath = Path.Combine(_env.ContentRootPath, "uploads", filePathName);
 

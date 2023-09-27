@@ -36,7 +36,7 @@ public class AddPhotoToCoachHandler : IRequestHandler<AddPhotoToCoachCommand>
         coach.Photos.ForEach(t => t.CoachId = null);
         foreach (var photo in request.Files)
         {
-            var resPhoto = await _fileService.UploadFileAsync(new AppFile { CoachId = request.Id }, photo, cancellationToken);
+            var resPhoto = await _fileService.UploadFileAsync(new AppFile { CoachId = request.Id, FileName = request.FileName }, photo, cancellationToken);
             await _context.Files.AddAsync(resPhoto, cancellationToken);
         }
 

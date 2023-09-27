@@ -11,6 +11,7 @@ namespace FYB.BL.Behaviors.Admin.Coaches.AddPhotoToCoach;
 public class AddPhotoToCoachCommand : IRequest
 {
     public Guid Id { get; set; }
+    public string FileName { get; set; }
 
     public List<IFormFile> Files { get; set; }
 }
