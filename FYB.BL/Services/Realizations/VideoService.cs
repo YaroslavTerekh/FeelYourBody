@@ -25,13 +25,13 @@ public class VideoService : IVideoService
         _env = env;
     }
 
-    public async Task UploadVideoAsync(IFormFile file, Guid coachingId, bool isPreview = false, CancellationToken cancellationToken = default)
+    public async Task UploadVideoAsync(IFormFile file, Guid coachingId, bool isPreview = false, string? name = null, CancellationToken cancellationToken = default)
     {
-        var extension = Path.GetExtension(file.FileName);
+        var extension = Path.GetExtension(name ?? file.FileName);
 
         //if (extension == ".mp4")
         //{
-            var fileName = Path.GetFileName(file.FileName);
+            var fileName = Path.GetFileName(name ?? file.FileName);
             var filePathName = fileName + "_" + Guid.NewGuid() + extension;
             var path = Path.Combine("uploads", filePathName);
             var uploadPath = Path.Combine(_env.ContentRootPath, "uploads", filePathName);
