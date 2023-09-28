@@ -135,7 +135,7 @@ public class AdminController : BaseController
         CancellationToken cancellationToken = default
     )
     {
-        var appFile = await _fileService.UploadFileAsync(new AppFile(), file, cancellationToken);
+        var appFile = await _fileService.UploadFileAsync(new AppFile(), file, cancellationToken, file.FileName);
 
         return Ok(appFile.Id);
     }
