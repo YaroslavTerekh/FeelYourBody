@@ -36,7 +36,7 @@ public class AddPhotosToCoachingHandler : IRequestHandler<AddPhotosToCoachingCom
             throw new NotFoundException(ErrorMessages.CoachingNotFound);
         }
 
-        coaching.ExamplePhotos.Add(await _fileService.UploadFileAsync(new AppFile { CoachingListId = coaching.Id, OrderId = request.OrderId }, request.PhotoFile, cancellationToken, null));
+        coaching.ExamplePhotos.Add(await _fileService.UploadFileAsync(new AppFile { CoachingListId = coaching.Id, OrderId = request.OrderId }, request.PhotoFile, cancellationToken, request.FileName));
 
         await _context.SaveChangesAsync(cancellationToken);
 

@@ -13,6 +13,7 @@ public class AddPhotosToCoachingCommand : IRequest
     public Guid Id { get; set; }
 
     public IFormFile PhotoFile { get; set; }
+    public string FileName { get; set; }
 
     public int OrderId { get; set; }
 }
