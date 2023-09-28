@@ -26,6 +26,8 @@ public class DeleteCoachingHandler : IRequestHandler<DeleteCoachingCommand>
     public async Task<Unit> Handle(DeleteCoachingCommand request, CancellationToken cancellationToken)
     {
         var coaching = await _context.Coachings
+            .Include(t => t.Feedbacks)
+                .ThenInclude(t => t.Photos)
             .Include(t => t.ExamplePhotos)
             .Include(t => t.CoachingPhoto)
             .FirstOrDefaultAsync(t => t.Id == request.Id, cancellationToken);
@@ -36,6 +38,10 @@ public class DeleteCoachingHandler : IRequestHandler<DeleteCoachingCommand>
         }
 
         foreach (var file in coaching.ExamplePhotos) file.CoachingListId = null;
+        foreach (var feedback in coaching.Feedbacks)
+            foreach (var file in feedback.Photos) 
+                file.FeedBackId = null;
+
         coaching.CoachingPhoto.CoachingId = null;
         _context.Coachings.Remove(coaching);
         await _context.SaveChangesAsync(cancellationToken);
