@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace FYB.BL.Behaviors.Admin.Foods.AddFoodPointParent;
 
-public class AddFoodPointParentCommand : IRequest
+public class AddFoodPointParentCommand : IRequest<Guid>
 {
     [JsonIgnore]
     public Guid FoodId { get; set; }

@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace FYB.BL.Behaviors.Admin.Foods.AddFoodPointParent;
 
-public class AddFoodPointParentHandler : IRequestHandler<AddFoodPointParentCommand>
+public class AddFoodPointParentHandler : IRequestHandler<AddFoodPointParentCommand, Guid>
 {
     private readonly DataContext _context;
 
@@ -21,7 +21,7 @@ public class AddFoodPointParentHandler : IRequestHandler<AddFoodPointParentComma
         _context = context;
     }
 
-    public async Task<Unit> Handle(AddFoodPointParentCommand request, CancellationToken cancellationToken)
+    public async Task<Guid> Handle(AddFoodPointParentCommand request, CancellationToken cancellationToken)
     {
         var food = await _context.Food
             .FirstOrDefaultAsync(t => t.Id == request.FoodId, cancellationToken);
@@ -38,6 +38,6 @@ public class AddFoodPointParentHandler : IRequestHandler<AddFoodPointParentComma
         await _context.FoodPointParents.AddAsync(foodPointParent, cancellationToken);
         await _context.SaveChangesAsync(cancellationToken);
 
-        return Unit.Value;
+        return foodPointParent.Id;
     }
 }

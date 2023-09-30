@@ -33,8 +33,7 @@ public class GetFoodHandler : IRequestHandler<GetFoodQuery, FoodDTO>
 
         var food = await _context.Food
             .Include(t => t.Users)
-            .Include(t => t.FoodPointParents.OrderBy(t => t.DayNumber))
-                .ThenInclude(t => t.FoodPoints)
+            .Include(t => t.FoodPoints)
             .FirstOrDefaultAsync(t => t.Id == request.Id, cancellationToken);
 
         if (food is null) throw new NotFoundException(ErrorMessages.FoodNotFound);

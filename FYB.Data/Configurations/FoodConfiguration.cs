@@ -18,7 +18,7 @@ public class FoodConfiguration : IEntityTypeConfiguration<Food>
             .HasForeignKey<Food>(t => t.CoachingId)
             .OnDelete(DeleteBehavior.SetNull);
 
-        builder.HasMany(t => t.FoodPointParents)
+        builder.HasMany(t => t.FoodPoints)
             .WithOne(t => t.Food)
             .HasForeignKey(t => t.FoodId)
             .OnDelete(DeleteBehavior.Cascade);

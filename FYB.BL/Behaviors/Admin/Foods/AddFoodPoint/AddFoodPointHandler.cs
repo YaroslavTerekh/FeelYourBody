@@ -23,19 +23,19 @@ public class AddFoodPointHandler : IRequestHandler<AddFoodPointCommand>
 
     public async Task<Unit> Handle(AddFoodPointCommand request, CancellationToken cancellationToken)
     {
-        var foodPointsParent = await _context.FoodPointParents
-            .Include(t => t.FoodPoints)
-            .FirstOrDefaultAsync(t => t.Id == request.FoodPointParentId, cancellationToken);
+        var food = await _context.Food
+            .FirstOrDefaultAsync(t => t.Id == request.FoodId, cancellationToken);
 
-        if (foodPointsParent is null) throw new NotFoundException(ErrorMessages.FoodNotFound);
-
+        if (food is null)
+            throw new NotFoundException(ErrorMessages.FoodNotFound);
+        
         var foodPoint = new FoodPoint
         {
             Title = request.Title,
             Description = request.Description,
             PortionMass = request.PortionMass,
-            FoodPointsParentId = foodPointsParent.Id,
-            CoockingMethod = request.CoockingMethod
+            CoockingMethod = request.CoockingMethod,
+            FoodId = request.FoodId,
         };
 
         await _context.FoodPoints.AddAsync(foodPoint, cancellationToken);

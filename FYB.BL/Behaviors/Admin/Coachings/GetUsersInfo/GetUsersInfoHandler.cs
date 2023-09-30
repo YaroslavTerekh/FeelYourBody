@@ -45,8 +45,7 @@ public class GetUsersInfoHandler : IRequestHandler<GetUsersInfoQuery, List<UserD
                 .Include(t => t.Coachings)
                     .ThenInclude(t => t.Videos)
                 .Include(t => t.Foods)
-                    .ThenInclude(t => t.FoodPointParents)
-                    .ThenInclude(t => t.FoodPoints)
+                .ThenInclude(t => t.FoodPoints)
                 .Include(t => t.FoodPurchases)
                 .Select(t => new UserDTO
                 {

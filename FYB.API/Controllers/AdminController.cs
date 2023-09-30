@@ -148,7 +148,7 @@ public class AdminController : BaseController
         CancellationToken cancellationToken = default
     )
     {
-        await _videoService.UploadVideoAsync(command.File, id, command.IsPreview, cancellationToken);
+        await _videoService.UploadVideoAsync(command.File, id, command.IsPreview, command.FileName, cancellationToken);
 
         return Ok();
     }

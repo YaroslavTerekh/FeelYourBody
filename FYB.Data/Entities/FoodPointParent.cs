@@ -10,7 +10,7 @@ public class FoodPointParent : BaseEntity
 {
     public int DayNumber { get; set; }
 
-    public List<FoodPoint> FoodPoints { get; set; }
+    // public List<FoodPoint> FoodPoints { get; set; }
 
     public Guid FoodId { get; set; }
 
