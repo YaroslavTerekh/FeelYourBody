@@ -26,6 +26,11 @@ using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.Configure<IISServerOptions>(options =>
+{
+    options.MaxRequestBodySize = int.MaxValue;
+});
+
 // Add services to the container.
 builder.Services.AddDataContext(builder.Configuration);
 
