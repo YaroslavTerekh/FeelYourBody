@@ -40,6 +40,8 @@ public class DataContext : IdentityDbContext<User, ApplicationRole, Guid>
 
     public DbSet<FoodPointParent> FoodPointParents { get; set; }
 
+    public DbSet<FoodDetail> FoodDetail { get; set; }
+
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);

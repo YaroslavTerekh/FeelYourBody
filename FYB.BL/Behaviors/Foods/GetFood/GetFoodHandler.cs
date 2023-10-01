@@ -33,6 +33,7 @@ public class GetFoodHandler : IRequestHandler<GetFoodQuery, FoodDTO>
 
         var food = await _context.Food
             .Include(t => t.Users)
+            .Include(t => t.FoodDetails)
             .Include(t => t.FoodPoints)
             .FirstOrDefaultAsync(t => t.Id == request.Id, cancellationToken);
 

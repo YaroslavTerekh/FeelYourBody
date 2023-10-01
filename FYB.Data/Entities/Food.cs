@@ -12,5 +12,7 @@ public class Food : BaseProduct
 
     public Coaching? Coaching { get; set; }
 
+	public List<FoodDetail> FoodDetails { get; set; } = new();
+    
     public List<FoodPoint> FoodPoints { get; set; } = new();
 }
