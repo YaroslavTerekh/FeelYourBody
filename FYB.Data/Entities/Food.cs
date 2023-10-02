@@ -15,4 +15,6 @@ public class Food : BaseProduct
 	public List<FoodDetail> FoodDetails { get; set; } = new();
     
     public List<FoodPoint> FoodPoints { get; set; } = new();
+
+    public List<FoodPhoto> Photos { get; set; } = new();
 }

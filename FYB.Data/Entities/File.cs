@@ -6,14 +6,8 @@ using System.Threading.Tasks;
 
 namespace FYB.Data.Entities;
 
-public class AppFile : BaseEntity
+public class AppFile : BaseFile
 {
-    public string FileName { get; set; }
-
-    public string FileExtension { get; set; }
-
-    public string FilePath { get; set; }
-
     public int? OrderId { get; set; }
 
     public Guid? FeedBackId { get; set; }

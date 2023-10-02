@@ -35,6 +35,7 @@ public class GetFoodHandler : IRequestHandler<GetFoodQuery, FoodDTO>
             .Include(t => t.Users)
             .Include(t => t.FoodDetails)
             .Include(t => t.FoodPoints)
+            .Include(t => t.Photos)
             .FirstOrDefaultAsync(t => t.Id == request.Id, cancellationToken);
 
         if (food is null) throw new NotFoundException(ErrorMessages.FoodNotFound);

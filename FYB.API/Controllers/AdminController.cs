@@ -28,11 +28,14 @@ using FYB.BL.Behaviors.Admin.Feedbacks.ModifyFeedback;
 using FYB.BL.Behaviors.Admin.Foods.AddFoodDetail;
 using FYB.BL.Behaviors.Admin.Foods.AddFoodPoint;
 using FYB.BL.Behaviors.Admin.Foods.AddFoodPointParent;
+using FYB.BL.Behaviors.Admin.Foods.AddPhotosToFood;
+using FYB.BL.Behaviors.Admin.Foods.AddPhotoToFood;
 using FYB.BL.Behaviors.Admin.Foods.CreateFood;
 using FYB.BL.Behaviors.Admin.Foods.DeleteFood;
 using FYB.BL.Behaviors.Admin.Foods.DeleteFoodDetail;
 using FYB.BL.Behaviors.Admin.Foods.DeleteFoodPoint;
 using FYB.BL.Behaviors.Admin.Foods.DeleteFoodPointParent;
+using FYB.BL.Behaviors.Admin.Foods.DeletePhotoFromFoodPhotosList;
 using FYB.BL.Behaviors.Admin.Foods.GetFoodPointParents;
 using FYB.BL.Behaviors.Admin.Foods.ModifyFood;
 using FYB.BL.Behaviors.Admin.Foods.ModifyFoodPoint;
@@ -537,4 +540,18 @@ public class AdminController : BaseController
         [FromRoute] Guid id,
         CancellationToken cancellationToken = default
     ) => Ok(await _mediatr.Send(new DeleteFoodDetailCommand(id), cancellationToken));
+
+    [HttpPatch("foods/photos/add")]
+    public async Task<IActionResult> AddPhotosToFoodAsync
+    (
+        [FromForm] AddPhotosToFoodCommand command,
+        CancellationToken cancellationToken = default
+    ) => Ok(await _mediatr.Send(command, cancellationToken));
+
+    [HttpDelete("foods/photos/{id:guid}/remove")]
+    public async Task<IActionResult> DeletePhotosFromFoodAsync
+    (
+        [FromRoute] Guid id,
+        CancellationToken cancellationToken = default
+    ) => Ok(await _mediatr.Send(new DeletePhotoFromFoodPhotosListCommand(id), cancellationToken));
 }

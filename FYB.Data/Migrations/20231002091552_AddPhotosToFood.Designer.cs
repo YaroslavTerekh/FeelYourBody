@@ -4,6 +4,7 @@ using FYB.Data.DbConnection;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FYB.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20231002091552_AddPhotosToFood")]
+    partial class AddPhotosToFood
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -393,6 +395,8 @@ namespace FYB.Data.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("AvatarId");
+
                     b.HasIndex("CoachingId")
                         .IsUnique()
                         .HasFilter("[CoachingId] IS NOT NULL");
@@ -476,9 +480,6 @@ namespace FYB.Data.Migrations
 
                     b.Property<Guid>("FoodId")
                         .HasColumnType("uniqueidentifier");
-
-                    b.Property<int?>("OrderId")
-                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -933,10 +934,18 @@ namespace FYB.Data.Migrations
 
             modelBuilder.Entity("FYB.Data.Entities.Food", b =>
                 {
+                    b.HasOne("FYB.Data.Entities.FoodAvatar", "Avatar")
+                        .WithMany()
+                        .HasForeignKey("AvatarId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("FYB.Data.Entities.Coaching", "Coaching")
                         .WithOne("Food")
                         .HasForeignKey("FYB.Data.Entities.Food", "CoachingId")
                         .OnDelete(DeleteBehavior.Cascade);
+
+                    b.Navigation("Avatar");
 
                     b.Navigation("Coaching");
                 });

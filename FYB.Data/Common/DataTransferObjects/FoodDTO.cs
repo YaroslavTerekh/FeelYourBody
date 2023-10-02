@@ -23,4 +23,6 @@ public class FoodDTO
     public List<FoodPointDTO> FoodPoints { get; set; } = new();
 
     public List<FoodDetailDTO> FoodDetails { get; set; } = new();
+
+    public List<BaseFileDTO> Photos { get; set; }
 }

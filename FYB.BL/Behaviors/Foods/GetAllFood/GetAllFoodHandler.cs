@@ -27,6 +27,7 @@ public class GetAllFoodHandler : IRequestHandler<GetAllFoodQuery, List<FoodDTO>>
         return await _context.Food
             .Include(t => t.FoodPoints)
             .Include(t => t.FoodDetails)
+            .Include(t => t.Photos)
             .Select(t => _mapper.Map<FoodDTO>(t))
             .ToListAsync(cancellationToken);
     }

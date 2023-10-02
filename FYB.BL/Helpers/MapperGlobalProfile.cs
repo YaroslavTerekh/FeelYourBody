@@ -31,5 +31,9 @@ public class MapperGlobalProfile : Profile
         CreateMap<CoachingVideo, CoachingVideoDTO>()
             .ForMember(dest => dest.FilePath, opt => opt.MapFrom(src => String.Concat(hostSettings.ApplicationUrl, src.Path.Replace(@"\", "/"))));
         CreateMap<FoodDetail, FoodDetailDTO>();
+        CreateMap<FoodAvatar, BaseFileDTO> ()
+            .ForMember(dest => dest.FilePath, opt => opt.MapFrom(src => String.Concat(hostSettings.ApplicationUrl, src.FilePath.Replace(@"\", "/"))));
+        CreateMap<FoodPhoto, BaseFileDTO> ()
+            .ForMember(dest => dest.FilePath, opt => opt.MapFrom(src => String.Concat(hostSettings.ApplicationUrl, src.FilePath.Replace(@"\", "/"))));
     }
 }
