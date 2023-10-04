@@ -20,13 +20,13 @@ public class AddFoodPointCommandValidator : AbstractValidator<AddFoodPointComman
             .NotEmpty()
             .WithMessage(ValidationMessages.TitleRequired);
 
-        RuleFor(t => t.Description)
-            .MinimumLength(50)
-            .WithMessage(ValidationMessages.DescriptionTooShort)
-            .MaximumLength(200)
-            .WithMessage(ValidationMessages.DescriptionTooLong)
-            .NotEmpty()
-            .WithMessage(ValidationMessages.DescriptionRequired);
+        // RuleFor(t => t.Description)
+        //     .MinimumLength(50)
+        //     .WithMessage(ValidationMessages.DescriptionTooShort)
+        //     .MaximumLength(200)
+        //     .WithMessage(ValidationMessages.DescriptionTooLong)
+        //     .NotEmpty()
+        //     .WithMessage(ValidationMessages.DescriptionRequired);
 
         RuleFor(t => t.PortionMass)
             .GreaterThan(0)
