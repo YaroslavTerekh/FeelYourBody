@@ -8,6 +8,7 @@ namespace FYB.Data.Common.DataTransferObjects;
 
 public class CoachingVideoDTO
 {
+    public Guid Id { get; set; }
     public string FileName { get; set; }
 
     public string ContentFileType { get; set; }
