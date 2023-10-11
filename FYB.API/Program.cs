@@ -169,6 +169,9 @@ builder.Services.AddCors(options =>
 var app = builder.Build();
 var scope = app.Services.CreateScope();
 
+var path = Path.Combine(app.Services.GetRequiredService<IWebHostEnvironment>().ContentRootPath, "uploads", "videos");
+Directory.CreateDirectory(path);
+
 app.UseFileServer(new FileServerOptions
 {
     FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "uploads")),
@@ -182,9 +185,6 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
-var path = Path.Combine(app.Services.GetRequiredService<IWebHostEnvironment>().ContentRootPath, "uploads", "videos");
-Directory.CreateDirectory(path);
 
 var dataContext = scope.ServiceProvider.GetRequiredService<DataContext>();
 dataContext.Database.Migrate();
