@@ -159,7 +159,7 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("CORS", builder =>
     {
-        builder.WithOrigins("http://localhost:3000") // Replace with your React app's URL
+        builder.WithOrigins("https://fyb-front-ff5259550b47.herokuapp.com/") // Replace with your React app's URL
                     .AllowAnyMethod()
                     .AllowAnyHeader()
                     .AllowCredentials();
