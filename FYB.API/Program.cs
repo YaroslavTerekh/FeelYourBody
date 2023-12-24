@@ -67,7 +67,11 @@ builder.Services.AddScoped<ContextInitializer>();
 var hostConfig = builder.Configuration
         .GetSection("HostSettings")
         .Get<HostSettings>();
+var firebaseConfig = builder.Configuration
+        .GetSection("FirebaseSettings")
+        .Get<FirebaseSettings>();
 builder.Services.AddSingleton(hostConfig);
+builder.Services.AddSingleton(firebaseConfig);
 builder.Services.AddCustomServices();
 
 builder.Services.AddSingleton(provider => new MapperConfiguration(cfg =>

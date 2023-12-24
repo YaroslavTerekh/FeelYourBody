@@ -2,6 +2,7 @@
 using Firebase.Storage;
 using FYB.BL.Exceptions;
 using FYB.BL.Services.Abstractions;
+using FYB.BL.Settings.Realizations;
 using FYB.Data.Constants;
 using FYB.Data.DbConnection;
 using FYB.Data.Entities;
@@ -20,13 +21,11 @@ public class VideoService : IVideoService
 {
     private readonly DataContext _context;
     private readonly IWebHostEnvironment _env;
-    private static string ApiKey = "AIzaSyC0cG4x8WTL1X-2uiLIcp-IYBT2u7zO-_E";
-    private static string Bucket = "feelyourbody-b444f.appspot.com";
-    private static string AuthEmail = "feelbodycom@body.com";
-    private static string AuthPassword = "Pa$$word313!";
+    private readonly FirebaseSettings _firebaseSettings;
 
-    public VideoService(DataContext context, IWebHostEnvironment env)
+    public VideoService(DataContext context, IWebHostEnvironment env, FirebaseSettings firebaseSettings)
     {
+        _firebaseSettings = firebaseSettings;
         _context = context;
         _env = env;
     }
@@ -43,13 +42,13 @@ public class VideoService : IVideoService
 
         var stream = file.OpenReadStream();
 
-        var auth = new FirebaseAuthProvider(new FirebaseConfig(ApiKey));
-        var a = await auth.SignInWithEmailAndPasswordAsync(AuthEmail, AuthPassword);
+        var auth = new FirebaseAuthProvider(new FirebaseConfig(_firebaseSettings.ApiKey));
+        var a = await auth.SignInWithEmailAndPasswordAsync(_firebaseSettings.Email, _firebaseSettings.Password);
 
         var cancellation = new CancellationTokenSource();
 
         var task = new FirebaseStorage(
-            Bucket,
+            _firebaseSettings.StorageLink,
             new FirebaseStorageOptions
             {
                 AuthTokenAsyncFactory = () => Task.FromResult(a.FirebaseToken),
