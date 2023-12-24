@@ -20,7 +20,7 @@ public class ModifyCoachCommand : IRequest
 
     public string LastName { get; set; }
 
-    public string Description { get; set; }
+    //public string Description { get; set; }
 
     public string InstagramLink { get; set; }
 

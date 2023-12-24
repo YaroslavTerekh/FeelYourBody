@@ -29,7 +29,7 @@ public class MapperGlobalProfile : Profile
         CreateMap<CoachingDetailsParent, CoachingDetailsParentDTO>();
         CreateMap<FoodPointParent, FoodPointsParentDTO>();
         CreateMap<CoachingVideo, CoachingVideoDTO>()
-            .ForMember(dest => dest.FilePath, opt => opt.MapFrom(src => String.Concat(hostSettings.ApplicationUrl, src.Path.Replace(@"\", "/"))));
+            .ForMember(dest => dest.FilePath, opt => opt.MapFrom(src => src.Path.Replace(@"\", "/")));
         CreateMap<FoodDetail, FoodDetailDTO>();
         CreateMap<FoodAvatar, BaseFileDTO> ()
             .ForMember(dest => dest.FilePath, opt => opt.MapFrom(src => String.Concat(hostSettings.ApplicationUrl, src.FilePath.Replace(@"\", "/"))));

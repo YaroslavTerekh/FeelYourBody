@@ -64,6 +64,13 @@ public class HangfireJobsService : IHangfireJobsService
     {
         var allFiles = Directory.GetFiles(Path.Combine(_webHostEnvironment.ContentRootPath, "uploads")).ToList();
         var allDbFiles = await _context.Files.Select(t => Path.Combine(_webHostEnvironment.ContentRootPath, t.FilePath)).ToListAsync();
+        var allFoodAvatars = await _context.FoodAvatars.Select(t => Path.Combine(_webHostEnvironment.ContentRootPath, t.FilePath)).ToListAsync();
+        var allFoodPhotos = await _context.FoodPhotos.Select(t => Path.Combine(_webHostEnvironment.ContentRootPath, t.FilePath)).ToListAsync();
+        var allCoachingVideos = await _context.CoachingVideos.Select(t => Path.Combine(_webHostEnvironment.ContentRootPath, t.Path)).ToListAsync();
+
+        allDbFiles.AddRange(allFoodAvatars);
+        allDbFiles.AddRange(allFoodPhotos);
+        allDbFiles.AddRange(allCoachingVideos);
 
         var invisibleFiles = allFiles.Except(allDbFiles).ToList();
 

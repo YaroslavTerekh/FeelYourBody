@@ -67,8 +67,6 @@ public class GetUserHandler : IRequestHandler<GetUserQuery, UserDTO>
                         ProductId = fp.ProductId,
                         Product = _mapper.Map<FoodDTO>(fp.Product),
                         ProductType = fp.ProductType,
-                        User = fp.User,
-                        UserId = fp.UserId,
                     }).ToList(),
                     CoachingPurchases = t.CoachingPurchases.Select(fp => new Purchase<CoachingDTO>
                     {
@@ -80,8 +78,6 @@ public class GetUserHandler : IRequestHandler<GetUserQuery, UserDTO>
                         ProductId = fp.ProductId,
                         Product = _mapper.Map<CoachingDTO>(fp.Product),
                         ProductType = fp.ProductType,
-                        User = fp.User,
-                        UserId = fp.UserId,
                     }).ToList()
                 })
                 .FirstOrDefaultAsync(t => t.Id == request.UserId, cancellationToken);

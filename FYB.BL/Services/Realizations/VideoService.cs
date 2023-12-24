@@ -1,4 +1,6 @@
-﻿using FYB.BL.Exceptions;
+﻿using Firebase.Auth;
+using Firebase.Storage;
+using FYB.BL.Exceptions;
 using FYB.BL.Services.Abstractions;
 using FYB.Data.Constants;
 using FYB.Data.DbConnection;
@@ -18,6 +20,10 @@ public class VideoService : IVideoService
 {
     private readonly DataContext _context;
     private readonly IWebHostEnvironment _env;
+    private static string ApiKey = "AIzaSyC0cG4x8WTL1X-2uiLIcp-IYBT2u7zO-_E";
+    private static string Bucket = "feelyourbody-b444f.appspot.com";
+    private static string AuthEmail = "feelbodycom@body.com";
+    private static string AuthPassword = "Pa$$word313!";
 
     public VideoService(DataContext context, IWebHostEnvironment env)
     {
@@ -27,53 +33,64 @@ public class VideoService : IVideoService
 
     public async Task UploadVideoAsync(IFormFile file, Guid coachingId, bool isPreview = false, string? name = null, CancellationToken cancellationToken = default)
     {
+
         var extension = Path.GetExtension(name ?? file.FileName);
 
-        //if (extension == ".mp4")
-        //{
-            var fileName = Path.GetFileName(name ?? file.FileName);
-            var filePathName = fileName + "_" + Guid.NewGuid() + extension;
-            var path = Path.Combine("uploads", filePathName);
-            var uploadPath = Path.Combine(_env.ContentRootPath, "uploads", filePathName);
+        var fileName = Path.GetFileName(name ?? file.FileName);
+        var filePathName = fileName + "_" + Guid.NewGuid() + extension;
+        var path = Path.Combine("uploads", filePathName);
+        var uploadPath = Path.Combine(_env.ContentRootPath, "uploads", filePathName);
 
-            try
+        var stream = file.OpenReadStream();
+
+        var auth = new FirebaseAuthProvider(new FirebaseConfig(ApiKey));
+        var a = await auth.SignInWithEmailAndPasswordAsync(AuthEmail, AuthPassword);
+
+        var cancellation = new CancellationTokenSource();
+
+        var task = new FirebaseStorage(
+            Bucket,
+            new FirebaseStorageOptions
             {
-                var coaching = await _context.Coachings
+                AuthTokenAsyncFactory = () => Task.FromResult(a.FirebaseToken),
+                ThrowOnCancel = true
+            })
+            .Child("videos")
+            .Child(fileName)
+            .PutAsync(stream, cancellation.Token);
+
+        task.Progress.ProgressChanged += (s, e) => Console.WriteLine($"Progress: {e.Percentage} %");
+
+        try
+        {
+            var videoLink = await task;
+
+            var coaching = await _context.Coachings
                     .Include(t => t.Videos)
                     .FirstOrDefaultAsync(t => t.Id == coachingId, cancellationToken);
 
-                if (coaching is null) 
-                    throw new NotFoundException(ErrorMessages.CoachingNotFound);
+            if (coaching is null)
+                throw new NotFoundException(ErrorMessages.CoachingNotFound);
 
-                if(coaching.Videos.Where(t => t.IsPreview == true).ToList().Count > 0 && isPreview) 
-                    throw new Exception(ErrorMessages.PreviewExists);
+            if (coaching.Videos.Where(t => t.IsPreview == true).ToList().Count > 0 && isPreview)
+                throw new Exception(ErrorMessages.PreviewExists);
 
-                var fileModel = new CoachingVideo
-                {
-                    CoachingId = coachingId,
-                    ContentFileType = file.ContentType,
-                    IsPreview = isPreview,
-                    FileName = fileName,
-                    Path = path
-                };
-
-                using (var fs = new FileStream(uploadPath, FileMode.CreateNew))
-                {
-                    await file.CopyToAsync(fs, cancellationToken);
-                }
-
-                await _context.CoachingVideos.AddAsync(fileModel, cancellationToken);
-                await _context.SaveChangesAsync(cancellationToken);
-            }
-            catch (Exception e)
+            var fileModel = new CoachingVideo
             {
-                File.Delete(uploadPath);
-                throw;
-            }
-        //} else
-        //{
-        //    throw new Exception(ErrorMessages.UnknownVideoType);
-        //}
+                CoachingId = coachingId,
+                ContentFileType = file.ContentType,
+                IsPreview = isPreview,
+                FileName = fileName,
+                Path = videoLink
+            };
+
+            await _context.CoachingVideos.AddAsync(fileModel, cancellationToken);
+            await _context.SaveChangesAsync(cancellationToken);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine("Exception was thrown: {0}", ex);
+        }
     }
 
     public async Task DeleteVideoAsync(Guid id, CancellationToken cancellationToken = default)

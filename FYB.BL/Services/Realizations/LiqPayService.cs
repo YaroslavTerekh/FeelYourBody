@@ -138,6 +138,30 @@ public class LiqPayService : ILiqPayService
 
             if (product is null) throw new NotFoundException(ErrorMessages.ProductNotFound("Продукту з замовлення"));
 
+            if(purchase.GetType() == typeof(Purchase<Coaching>))
+            {
+                var coaching = await _context.Coachings
+                    .FirstOrDefaultAsync(t => t.Id == purchase.ProductId);
+
+                if (coaching is null) throw new NotFoundException(ErrorMessages.ProductNotFound("Продукту з замовлення"));
+
+                if (coaching.FoodId != null)
+                {
+                    var user = await _context.Users
+                                .Include(t => t.CoachingPurchases)
+                                .Include(t => t.FoodPurchases)
+                                .FirstOrDefaultAsync(t => t.Id == purchase.UserId, cancellationToken);
+
+                    if (user is null) throw new NotFoundException(ErrorMessages.UserNotFound);
+
+                    var food = await _context.Food
+                        .Include(t => t.Users)
+                        .FirstOrDefaultAsync(t => t.Id == coaching.FoodId);
+
+                    food.Users.Add(user);
+                }
+            }
+
             await AssignProductToUserAsync(product, purchase.UserId, cancellationToken);
             _hangfireJobsService.CreateJobForExpiringProduct(product, purchase.UserId, purchase.OrderId);
         }

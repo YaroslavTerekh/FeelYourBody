@@ -50,7 +50,7 @@ public class ModifyCoachHandler : IRequestHandler<ModifyCoachCommand>
 
         coach.FirstName = request.FirstName;
         coach.LastName = request.LastName;
-        coach.Description = request.Description;
+        //coach.Description = request.Description;
         coach.InstagramLink = request.InstagramLink;
         coach.BirthDate = request.BirthDate;
 

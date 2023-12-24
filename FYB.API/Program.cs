@@ -155,16 +155,13 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy("CORS", builder =>
-    {
-        builder.WithOrigins("https://fyb-front-ff5259550b47.herokuapp.com/") // Replace with your React app's URL
-                    .AllowAnyMethod()
-                    .AllowAnyHeader()
-                    .AllowCredentials();
-    });
-});
+builder.Services.AddCors(options => options.AddPolicy(
+            "CORS",
+            builder => builder
+                .SetIsOriginAllowed(_ => true)
+                .AllowAnyHeader()
+                .AllowAnyMethod()
+                .AllowCredentials()));
 
 var app = builder.Build();
 var scope = app.Services.CreateScope();
