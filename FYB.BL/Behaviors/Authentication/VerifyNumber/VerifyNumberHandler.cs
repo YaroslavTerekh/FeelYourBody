@@ -11,21 +11,24 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using FYB.Data.Models;
 
 namespace FYB.BL.Behaviors.Authentication.VerifyNumber;
 
-public class VerifyNumberHandler : IRequestHandler<VerifyNumberCommand, bool>
+public class VerifyNumberHandler : IRequestHandler<VerifyNumberCommand, JWTResponse>
 {
     private readonly DataContext _context;
     private readonly IPhoneNumberService _phoneNumberService;
+    private readonly IJWTService _jwtService;
 
-    public VerifyNumberHandler(DataContext context, IPhoneNumberService phoneNumberService)
+    public VerifyNumberHandler(DataContext context, IPhoneNumberService phoneNumberService, IJWTService jwtService)
     {
         _context = context;
         _phoneNumberService = phoneNumberService;
+        _jwtService = jwtService;
     }
 
-    public async Task<bool> Handle(VerifyNumberCommand request, CancellationToken cancellationToken)
+    public async Task<JWTResponse> Handle(VerifyNumberCommand request, CancellationToken cancellationToken)
     {
         var user = await _context.Users.FirstOrDefaultAsync(t => t.PhoneNumber == _phoneNumberService.FormatPhoneNumber(request.PhoneNumber), cancellationToken);
 
@@ -40,6 +43,6 @@ public class VerifyNumberHandler : IRequestHandler<VerifyNumberCommand, bool>
         user.PhoneNumberConfirmed = true;
         await _context.SaveChangesAsync(cancellationToken);
 
-        return true;
+        return _jwtService.GenerateJWT(user);
     }
 }

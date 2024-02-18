@@ -4,10 +4,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using FYB.Data.Models;
 
 namespace FYB.BL.Behaviors.Authentication.VerifyNumber;
 
-public class VerifyNumberCommand : IRequest<bool>
+public class VerifyNumberCommand : IRequest<JWTResponse>
 {
     public string PhoneNumber { get; set; }
 
